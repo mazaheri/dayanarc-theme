@@ -67,4 +67,6 @@ function dayanarc_update_message( $theme_data, $response ) {
         '</strong>';
     }
 }
-add_action( 'in_theme_update_message-' . get_option( 'stylesheet' ), 'dayanarc_update_message', 10, 2 );
+add_action( 'admin_init', function () {
+    add_action( 'in_theme_update_message-' . get_option( 'stylesheet' ), 'dayanarc_update_message', 10, 2 );
+} );

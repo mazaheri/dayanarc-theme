@@ -1,7 +1,8 @@
 <?php
 
-require_once get_template_directory() . '/inc/updater.php';
-require_once get_template_directory() . '/inc/demo-importer.php';
+$_dayanarc_dir = dirname( __FILE__ );
+if ( file_exists( $_dayanarc_dir . '/inc/updater.php' ) )       require_once $_dayanarc_dir . '/inc/updater.php';
+if ( file_exists( $_dayanarc_dir . '/inc/demo-importer.php' ) ) require_once $_dayanarc_dir . '/inc/demo-importer.php';
 
 function dayanarc_setup() {
     add_theme_support( 'title-tag' );
