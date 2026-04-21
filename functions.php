@@ -1,5 +1,6 @@
 <?php
 
+require_once get_template_directory() . '/inc/updater.php';
 require_once get_template_directory() . '/inc/demo-importer.php';
 
 function dayanarc_setup() {
