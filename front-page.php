@@ -406,16 +406,16 @@
         </div>
 
         <!-- Footer -->
-        <footer class="fp-footer pt-8 pb-5 w-full flex flex-col relative">
-            <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+        <footer class="fp-footer pt-16 pb-6 w-full flex flex-col relative">
+            <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-12">
                 <div class="flex flex-col">
-                    <div class="title-text text-xl tracking-widest mb-4 font-medium">DAYAN ARC</div>
-                    <p class="text-[11px] leading-relaxed font-light max-w-[200px]"><?php echo esc_html( get_theme_mod( 'footer_tagline', 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.' ) ); ?></p>
+                    <div class="title-text text-2xl tracking-widest mb-6 font-medium">DAYAN ARC</div>
+                    <p class="text-[12px] leading-relaxed font-light max-w-[220px]"><?php echo esc_html( get_theme_mod( 'footer_tagline', 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.' ) ); ?></p>
                 </div>
 
-                <div class="grid grid-cols-[auto_1fr] gap-3 lg:gap-6">
-                    <div><span class="text-[9px] uppercase tracking-[0.15em] font-medium footer-muted">MENU</span></div>
-                    <div class="flex flex-col gap-3 text-[10px] font-semibold tracking-widest uppercase">
+                <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
+                    <div><span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted">MENU</span></div>
+                    <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase">
                         <a href="#" onclick="fullpage_api.moveTo(2); return false;" class="footer-link">ABOUT US</a>
                         <a href="#" onclick="fullpage_api.moveTo(3); return false;" class="footer-link">OUR SERVICE</a>
                         <a href="#" onclick="fullpage_api.moveTo(4); return false;" class="footer-link">SERVICES</a>
@@ -423,9 +423,9 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-[auto_1fr] gap-3 lg:gap-6">
-                    <div><span class="text-[9px] uppercase tracking-[0.15em] font-medium footer-muted">FOLLOW US</span></div>
-                    <div class="flex flex-col gap-3 text-[10px] font-semibold tracking-widest uppercase">
+                <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
+                    <div><span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted">FOLLOW US</span></div>
+                    <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase">
                         <a href="<?php echo esc_url( get_theme_mod( 'social_instagram', '#' ) ); ?>" class="footer-link">INSTAGRAM</a>
                         <a href="<?php echo esc_url( get_theme_mod( 'social_pinterest', '#' ) ); ?>" class="footer-link">PINTEREST</a>
                         <a href="<?php echo esc_url( get_theme_mod( 'social_behance',   '#' ) ); ?>" class="footer-link">BEHANCE</a>
@@ -433,9 +433,9 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-[auto_1fr] gap-3 lg:gap-6">
-                    <div><span class="text-[9px] uppercase tracking-[0.15em] font-medium footer-muted">CONTACT</span></div>
-                    <div class="flex flex-col gap-3 text-[10px] font-semibold tracking-widest uppercase leading-relaxed">
+                <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
+                    <div><span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted">CONTACT</span></div>
+                    <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase leading-relaxed">
                         <?php
                         $location        = get_theme_mod( 'contact_location', 'Business Bay, Dubai, UAE' );
                         $email           = get_theme_mod( 'contact_email',    'support@dayanarc.com' );
@@ -449,9 +449,26 @@
                 </div>
             </div>
 
+            <div class="marquee-container mb-6">
+                <div class="marquee-content title-text">
+                    <span class="marquee-text">
+                        GET IN TOUCH <div class="diamond"></div>
+                        <span class="fancy-marquee">GET IN TOUCH</span> <div class="diamond"></div>
+                        GET IN TOUCH <div class="diamond"></div>
+                        <span class="fancy-marquee">GET IN TOUCH</span> <div class="diamond"></div>
+                    </span>
+                    <span class="marquee-text">
+                        GET IN TOUCH <div class="diamond"></div>
+                        <span class="fancy-marquee">GET IN TOUCH</span> <div class="diamond"></div>
+                        GET IN TOUCH <div class="diamond"></div>
+                        <span class="fancy-marquee">GET IN TOUCH</span> <div class="diamond"></div>
+                    </span>
+                </div>
+            </div>
+
             <div class="flex flex-col items-center">
-                <div class="w-1/5 h-[1px] mb-3" style="background:rgba(246,240,218,0.2);"></div>
-                <div class="text-center text-[9px] tracking-widest uppercase font-medium footer-muted">
+                <div class="w-1/5 h-[1px] mb-4" style="background:rgba(246,240,218,0.2);"></div>
+                <div class="text-center text-[10px] tracking-widest uppercase font-medium footer-muted">
                     COPYRIGHT <?php echo esc_html( date( 'Y' ) ); ?> &copy; DESIGNED BY <a href="https://valasolution.com/" target="_blank" rel="noopener noreferrer" class="footer-link">VALASOLUTION</a>
                 </div>
             </div>
