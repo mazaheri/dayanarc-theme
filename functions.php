@@ -27,8 +27,11 @@ function dayanarc_enqueue() {
 
     if ( is_front_page() ) {
         wp_enqueue_style( 'fullpage-css', 'https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css', [], '4.0.20' );
-        wp_enqueue_style( 'dayanarc', get_stylesheet_uri(), [ 'fullpage-css' ], $ver );
+        wp_enqueue_style( 'glightbox', 'https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css', [], '3.2.0' );
+        wp_enqueue_style( 'dayanarc', get_stylesheet_uri(), [ 'fullpage-css', 'glightbox' ], $ver );
         wp_enqueue_script( 'fullpage-js', 'https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js', [], '4.0.20', true );
+        wp_enqueue_script( 'glightbox', 'https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js', [], '3.2.0', true );
+        wp_add_inline_script( 'glightbox', 'document.addEventListener("DOMContentLoaded",function(){GLightbox({selector:".glightbox",touchNavigation:true,loop:false});});' );
         wp_enqueue_script( 'dayanarc-main', $uri . '/assets/js/main.js', [ 'fullpage-js' ], $ver, true );
         wp_localize_script( 'dayanarc-main', 'dayanarcData', dayanarc_get_localized_data() );
     } else {
@@ -190,6 +193,7 @@ function dayanarc_get_localized_data() {
                 'palette'     => $palette,
                 'imgLarge'    => $img_large,
                 'imgSmall'    => $img_small,
+                'permalink'   => get_permalink( $post->ID ),
             ];
         }
     } else {
@@ -708,9 +712,74 @@ add_action( 'customize_register', function ( $wp_customize ) {
         'transport'         => 'refresh',
     ] );
     $wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'about_image_detail', [
-        'label'   => 'About Detail Image (desktop only)',
+        'label'   => 'About Detail Image (desktop only, opens in lightbox)',
         'section' => 'dayanarc_about',
     ] ) );
+    $wp_customize->add_setting( 'about_video_url', [
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( 'about_video_url', [
+        'label'       => 'About Video URL',
+        'description' => 'YouTube or Vimeo URL. When set, the main image becomes a video thumbnail with a play button.',
+        'section'     => 'dayanarc_about',
+        'type'        => 'url',
+    ] );
+    $wp_customize->add_setting( 'about_video_thumb', [
+        'default'           => '',
+        'sanitize_callback' => 'esc_url_raw',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'about_video_thumb', [
+        'label'       => 'About Video Thumbnail',
+        'description' => 'Thumbnail image shown before the video plays. Falls back to About Main Image if empty.',
+        'section'     => 'dayanarc_about',
+    ] ) );
+
+    // ── Our Service ───────────────────────────────────────────────────────
+    $wp_customize->add_section( 'dayanarc_our_service', [
+        'title'    => 'Our Service Section',
+        'panel'    => 'dayanarc_homepage',
+        'priority' => 23,
+    ] );
+    $wp_customize->add_setting( 'our_service_heading', [
+        'default'           => 'OUR SERVICE',
+        'sanitize_callback' => 'sanitize_text_field',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( 'our_service_heading', [
+        'label'   => 'Section Heading',
+        'section' => 'dayanarc_our_service',
+        'type'    => 'text',
+    ] );
+    $wp_customize->add_setting( 'our_service_description', [
+        'default'           => 'From architectural vision to flawless execution — our integrated services cover every discipline, every scale, and every geography.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( 'our_service_description', [
+        'label'   => 'Section Description',
+        'section' => 'dayanarc_our_service',
+        'type'    => 'textarea',
+    ] );
+    foreach ( [
+        'our_service_image_1'      => [ 'label' => 'Image 1', 'type' => 'image' ],
+        'our_service_image_2'      => [ 'label' => 'Image 2', 'type' => 'image' ],
+    ] as $key => $field ) {
+        $wp_customize->add_setting( $key, [ 'default' => '', 'sanitize_callback' => 'esc_url_raw', 'transport' => 'refresh' ] );
+        $wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, $key, [
+            'label'   => $field['label'],
+            'section' => 'dayanarc_our_service',
+        ] ) );
+    }
+    foreach ( [
+        'our_service_image_1_desc' => [ 'label' => 'Image 1 Description', 'default' => 'Concept development and schematic design services tailored to your architectural vision.' ],
+        'our_service_image_2_desc' => [ 'label' => 'Image 2 Description', 'default' => 'Comprehensive construction documentation and technical drawings executed with precision.' ],
+    ] as $key => $field ) {
+        $wp_customize->add_setting( $key, [ 'default' => $field['default'], 'sanitize_callback' => 'sanitize_textarea_field', 'transport' => 'refresh' ] );
+        $wp_customize->add_control( $key, [ 'label' => $field['label'], 'section' => 'dayanarc_our_service', 'type' => 'textarea' ] );
+    }
 
     // ── Portfolio ─────────────────────────────────────────────────────────
     $wp_customize->add_section( 'dayanarc_portfolio', [

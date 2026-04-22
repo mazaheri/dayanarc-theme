@@ -91,6 +91,18 @@ $image_map = [
         'option' => 'dayanarc_service_project_mgmt_id',
     ],
 
+    // Our Service section images (homepage section 3)
+    [
+        'file' => 'images/our-service/image-1.jpg',
+        'type' => 'theme_mod',
+        'key'  => 'our_service_image_1',
+    ],
+    [
+        'file' => 'images/our-service/image-2.jpg',
+        'type' => 'theme_mod',
+        'key'  => 'our_service_image_2',
+    ],
+
 ];
 
 // ══ APPLY ════════════════════════════════════════════════════════════════════

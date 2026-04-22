@@ -14,10 +14,10 @@
                     <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="hero-title text-xl md:text-2xl tracking-widest uppercase text-white no-underline" style="text-decoration:none; color:inherit;">DAYAN ARC</a>
                 </div>
                 <nav class="hidden md:flex space-x-12">
-                    <a href="#about"     class="nav-link" onclick="event.preventDefault(); fullpage_api.moveTo(2)">About Us</a>
-                    <a href="#portfolio" class="nav-link" onclick="event.preventDefault(); fullpage_api.moveTo(3)">Portfolio</a>
-                    <a href="#services"  class="nav-link" onclick="event.preventDefault(); fullpage_api.moveTo(4)">Services</a>
-                    <a href="#journal"   class="nav-link" onclick="event.preventDefault(); fullpage_api.moveTo(5)">Journal</a>
+                    <a href="#about"      class="nav-link" onclick="event.preventDefault(); fullpage_api.moveTo(2)">About Us</a>
+                    <a href="#ourservice" class="nav-link" onclick="event.preventDefault(); fullpage_api.moveTo(3)">Our Service</a>
+                    <a href="#services"   class="nav-link" onclick="event.preventDefault(); fullpage_api.moveTo(4)">Services</a>
+                    <a href="#journal"    class="nav-link" onclick="event.preventDefault(); fullpage_api.moveTo(5)">Journal</a>
                 </nav>
                 <div class="contact hidden md:block">
                     <a href="#contact" class="nav-link" onclick="event.preventDefault(); fullpage_api.moveTo(6)">Contact</a>
@@ -32,11 +32,11 @@
             </header>
 
             <div id="mobileMenu" class="mobile-menu">
-                <a href="#about"     class="nav-link text-xl" onclick="fullpage_api.moveTo(2)">About Us</a>
-                <a href="#portfolio" class="nav-link text-xl" onclick="fullpage_api.moveTo(3)">Portfolio</a>
-                <a href="#services"  class="nav-link text-xl" onclick="fullpage_api.moveTo(4)">Services</a>
-                <a href="#journal"   class="nav-link text-xl" onclick="fullpage_api.moveTo(5)">Journal</a>
-                <a href="#contact"   class="nav-link text-xl" onclick="fullpage_api.moveTo(6)">Contact</a>
+                <a href="#about"      class="nav-link text-xl" onclick="fullpage_api.moveTo(2)">About Us</a>
+                <a href="#ourservice" class="nav-link text-xl" onclick="fullpage_api.moveTo(3)">Our Service</a>
+                <a href="#services"   class="nav-link text-xl" onclick="fullpage_api.moveTo(4)">Services</a>
+                <a href="#journal"    class="nav-link text-xl" onclick="fullpage_api.moveTo(5)">Journal</a>
+                <a href="#contact"    class="nav-link text-xl" onclick="fullpage_api.moveTo(6)">Contact</a>
             </div>
             <div id="menuOverlay" class="menu-overlay"></div>
 
@@ -78,7 +78,7 @@
     </div>
 
     <!-- ===== SECTION 2: ABOUT ===== -->
-    <div class="section about-section relative w-full max-w-[1440px] mx-auto px-6 md:px-16 lg:px-20 pt-32 pb-20 flex flex-col justify-center">
+    <div class="section about-section relative w-full max-w-[1440px] mx-auto px-6 md:px-16 lg:px-20 pt-32 pb-20 flex flex-col justify-center" id="about">
         <div class="absolute top-10 md:top-20 left-6 md:left-16 lg:left-20 text-[10px] tracking-[0.15em] text-[#a9a39f] uppercase font-medium">
             <span class="reveal-mask block"><span class="reveal-text delay-100">ABOUT US</span></span>
         </div>
@@ -86,8 +86,8 @@
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center mt-12 lg:mt-16">
             <div class="col-span-1 lg:col-span-5 flex flex-col pt-8 lg:pt-0">
                 <?php
-                $ah1 = get_theme_mod( 'about_heading_line1', 'DESIGN WITH' );
-                $ah2 = get_theme_mod( 'about_heading_line2', 'PASSION' );
+                $ah1 = get_theme_mod( 'about_heading_line1', 'A VISION BEYOND' );
+                $ah2 = get_theme_mod( 'about_heading_line2', 'BORDERS' );
                 ?>
                 <h1 class="title-text text-4xl md:text-5xl lg:text-[4rem] leading-[1.05] tracking-tight mb-8">
                     <span class="reveal-mask block pb-1"><span class="reveal-text delay-200"><span class="fancy-d"><?php echo esc_html( mb_substr( $ah1, 0, 1 ) ); ?></span><?php echo esc_html( mb_substr( $ah1, 1 ) ); ?></span></span>
@@ -96,12 +96,12 @@
 
                 <div class="mb-12">
                     <p class="text-[14px] md:text-[15px] leading-relaxed text-[#68635f] font-light max-w-[420px] reveal-mask block">
-                        <span class="reveal-text delay-400"><?php echo esc_html( get_theme_mod( 'about_body', 'At Dayan Arc, our team brings together the best talent from around the world, combining creativity, expertise, and passion. Together, we strive to deliver exceptional design solutions that exceed expectations and create spaces that inspire and delight.' ) ); ?></span>
+                        <span class="reveal-text delay-400"><?php echo esc_html( get_theme_mod( 'about_body', 'At Dayan Arc, we believe that architecture is more than just designing structures; it is the art of crafting experiences and building legacies. With over 20 years of expertise and a track record of more than 400 global projects, my team and I have bridged the gap between German engineering precision and creative luxury.' ) ); ?></span>
                     </p>
                 </div>
 
-                <a href="#contact" class="link-wrapper mt-4" onclick="event.preventDefault(); fullpage_api.moveTo(6)">
-                    <span class="link-text"><?php echo esc_html( get_theme_mod( 'about_cta_label', 'LEARN MORE' ) ); ?></span>
+                <a href="<?php echo esc_url( dayanarc_contact_page_url() ); ?>" class="link-wrapper mt-4">
+                    <span class="link-text"><?php echo esc_html( get_theme_mod( 'about_cta_label', 'GET IN TOUCH' ) ); ?></span>
                     <div class="arrow-graphic">
                         <svg width="16" height="10" viewBox="0 0 16 10" fill="none">
                             <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -110,27 +110,84 @@
                 </a>
             </div>
 
-            <div class="col-span-1 lg:col-span-7 flex items-start gap-4 lg:gap-8 justify-end h-[500px] md:h-[600px] lg:h-[700px] relative lg:-mt-16">
-                <div class="w-full lg:w-[62%] h-[95%] curtain-container">
-                    <img src="<?php echo esc_url( get_theme_mod( 'about_image_main', 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80' ) ); ?>" alt="Main interior design view" class="curtain-img" style="transition-delay: 400ms, 400ms;">
+            <?php
+            $video_url   = get_theme_mod( 'about_video_url', '' );
+            $video_thumb = get_theme_mod( 'about_video_thumb', '' );
+            $main_img    = get_theme_mod( 'about_image_main', 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80' );
+            $detail_img  = get_theme_mod( 'about_image_detail', 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?q=80&w=800&auto=format&fit=crop' );
+            $thumb_src   = $video_thumb ?: $main_img;
+            ?>
+            <div class="col-span-1 lg:col-span-7 about-images-wrapper items-start justify-end h-[500px] md:h-[600px] lg:h-[700px] relative lg:-mt-16">
+
+                <!-- Big image / video thumbnail -->
+                <div class="about-img-big curtain-container">
+                    <?php if ( $video_url ) : ?>
+                    <a href="<?php echo esc_url( $video_url ); ?>" class="glightbox about-video-trigger" data-gallery="about-media" data-type="video" style="display:block;width:100%;height:100%;position:relative;">
+                        <img src="<?php echo esc_url( $thumb_src ); ?>" alt="<?php echo esc_attr( get_theme_mod( 'about_heading_line1', 'About us' ) ); ?>" class="curtain-img" style="transition-delay: 400ms, 400ms;">
+                        <div class="play-button-overlay">
+                            <div class="play-btn-pulse"></div>
+                            <div class="play-btn-icon">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="#2c221a">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                    <?php else : ?>
+                    <img src="<?php echo esc_url( $main_img ); ?>" alt="Main interior design view" class="curtain-img" style="transition-delay: 400ms, 400ms;">
+                    <?php endif; ?>
                 </div>
-                <div class="hidden lg:block w-[35%] h-[55%] curtain-container mt-24">
-                    <img src="<?php echo esc_url( get_theme_mod( 'about_image_detail', 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?q=80&w=800&auto=format&fit=crop' ) ); ?>" alt="Interior detail" class="curtain-img" style="transition-delay: 500ms, 500ms;">
-                </div>
+
+                <!-- Small detail image — opens in lightbox -->
+                <a href="<?php echo esc_url( $detail_img ); ?>" class="about-img-small curtain-container glightbox hidden lg:block" data-gallery="about-media" data-type="image" style="margin-top:6rem;">
+                    <img src="<?php echo esc_url( $detail_img ); ?>" alt="Interior detail" class="curtain-img" style="transition-delay: 500ms, 500ms;">
+                </a>
+
             </div>
         </div>
     </div>
 
-    <!-- ===== SECTION 3: PORTFOLIO ===== -->
-    <div class="section portfolio-section px-4 md:px-6 py-12 flex flex-col items-center justify-center">
-        <div class="text-center mb-12">
-            <span class="reveal-mask"><span class="reveal-text text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium mb-4 block">PORTFOLIO</span></span>
-            <?php $ph = get_theme_mod( 'portfolio_heading', 'OUR WORKS' ); ?>
-            <h1 class="title-text text-3xl md:text-4xl lg:text-5xl leading-tight text-[#2c221a]">
-                <span class="reveal-mask"><span class="reveal-text delay-100"><?php echo esc_html( mb_substr( $ph, 0, -1 ) ); ?><span class="fancy-e"><?php echo esc_html( mb_substr( $ph, -1 ) ); ?></span></span></span>
-            </h1>
+    <!-- ===== SECTION 3: OUR SERVICE ===== -->
+    <div class="section our-service-section relative flex flex-col justify-center" id="ourservice">
+        <div class="w-full max-w-[1440px] mx-auto px-6 md:px-16 lg:px-20 pt-24 pb-16">
+
+            <div class="absolute top-10 md:top-16 left-6 md:left-16 lg:left-20 text-[10px] tracking-[0.15em] text-[#a9a39f] uppercase font-medium">
+                <span class="reveal-mask block"><span class="reveal-text delay-100">OUR SERVICE</span></span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center mt-8 lg:mt-4">
+
+                <!-- Left: text -->
+                <div class="col-span-1 lg:col-span-5 flex flex-col pt-8 lg:pt-0">
+                    <?php $osh = get_theme_mod( 'our_service_heading', 'OUR SERVICE' ); ?>
+                    <h1 class="title-text text-4xl md:text-5xl lg:text-[4rem] leading-[1.05] tracking-tight mb-8 text-[#2c221a]">
+                        <span class="reveal-mask block pb-1"><span class="reveal-text delay-200"><?php echo esc_html( $osh ); ?></span></span>
+                    </h1>
+                    <p class="text-[14px] md:text-[15px] leading-relaxed text-[#68635f] font-light max-w-[400px] reveal-mask block">
+                        <span class="reveal-text delay-300"><?php echo esc_html( get_theme_mod( 'our_service_description', 'From architectural vision to flawless execution — our integrated services cover every discipline, every scale, and every geography.' ) ); ?></span>
+                    </p>
+                </div>
+
+                <!-- Right: two equal 9:16 images -->
+                <div class="col-span-1 lg:col-span-7 flex gap-6 lg:gap-10 items-start justify-end">
+                    <?php
+                    $fallback_svc = 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80';
+                    $svc_imgs = [
+                        [ 'img' => get_theme_mod( 'our_service_image_1', $fallback_svc ), 'desc' => get_theme_mod( 'our_service_image_1_desc', 'Concept development and schematic design services tailored to your architectural vision.' ) ],
+                        [ 'img' => get_theme_mod( 'our_service_image_2', $fallback_svc ), 'desc' => get_theme_mod( 'our_service_image_2_desc', 'Comprehensive construction documentation and technical drawings executed with precision.' ) ],
+                    ];
+                    foreach ( $svc_imgs as $si ) : ?>
+                    <div class="flex flex-col items-center flex-1">
+                        <div class="our-service-img curtain-container w-full">
+                            <img src="<?php echo esc_url( $si['img'] ); ?>" alt="" class="curtain-img" style="transition-delay:300ms,300ms;">
+                        </div>
+                        <p class="mt-4 text-[12px] leading-relaxed text-[#68635f] font-light text-center max-w-[240px]"><?php echo esc_html( $si['desc'] ); ?></p>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+
+            </div>
         </div>
-        <div id="portfolio-container" class="portfolio-slide w-full max-w-[1400px]"></div>
     </div>
 
     <!-- ===== SECTION 4: SERVICES ===== -->
@@ -145,15 +202,15 @@
                     <span class="reveal-text text-[10px] tracking-[0.2em] text-gray-400 uppercase font-medium">SERVICES</span>
                 </span>
                 <?php
-                $sh1 = get_theme_mod( 'services_heading_line1', 'COMPREHENSIVE' );
-                $sh2 = get_theme_mod( 'services_heading_line2', 'SOLUTIONS' );
+                $sh1 = get_theme_mod( 'services_heading_line1', 'CORE DESIGN' );
+                $sh2 = get_theme_mod( 'services_heading_line2', 'CONCEPTS' );
                 ?>
                 <h1 class="title-text text-4xl lg:text-[4.2rem] leading-[1.05] tracking-tight mb-6 text-white max-w-[90%]">
                     <span class="reveal-mask block pb-1"><span class="reveal-text delay-100"><?php echo esc_html( $sh1 ); ?></span></span>
                     <span class="reveal-mask block"><span class="reveal-text delay-200"><span class="fancy-r"><?php echo esc_html( mb_substr( $sh2, 0, 1 ) ); ?></span><?php echo esc_html( mb_substr( $sh2, 1 ) ); ?></span></span>
                 </h1>
                 <p class="text-[14px] md:text-[15px] leading-relaxed text-gray-300 font-light max-w-[340px] reveal-mask block mb-8">
-                    <span class="reveal-text delay-300"><?php echo esc_html( get_theme_mod( 'services_intro', 'At Dayan Arc, we offer comprehensive architectural and interior design services, from concept development to project management.' ) ); ?></span>
+                    <span class="reveal-text delay-300"><?php echo esc_html( get_theme_mod( 'services_intro', 'Our integrated design services are applied across a diverse range of sectors, ensuring that every concept is executed with unrivaled precision and global standards.' ) ); ?></span>
                 </p>
                 <div class="reveal-mask block">
                     <div class="reveal-text delay-400">
@@ -248,7 +305,7 @@
                 <span class="reveal-mask block mb-4">
                     <span class="reveal-text text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium">JOURNAL</span>
                 </span>
-                <?php $jh = get_theme_mod( 'journal_heading', 'DESIGN INSIGHTS' ); ?>
+                <?php $jh = get_theme_mod( 'journal_heading', 'OUR GLOBAL FOOTPRINT' ); ?>
                 <h1 class="title-text text-3xl md:text-4xl lg:text-5xl leading-tight text-[#2c221a]">
                     <span class="reveal-mask"><span class="reveal-text delay-100 uppercase tracking-tight"><?php echo esc_html( $jh ); ?></span></span>
                 </h1>
@@ -276,7 +333,7 @@
         </div>
     </div>
 
-    <!-- ===== SECTION 6: CONTACT + FOOTER ===== -->
+    <!-- ===== SECTION 6: CONTACT + PORTFOLIO + FOOTER ===== -->
     <div class="section fp-auto-height">
 
         <!-- Contact -->
@@ -317,27 +374,128 @@
             </div>
         </section>
 
+        <!-- Portfolio (moved from section 3) -->
+        <section class="fp-portfolio-bottom w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 py-20 lg:py-28">
+            <div class="text-center mb-16">
+                <span class="text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium mb-4 block">PORTFOLIO</span>
+                <?php $ph = get_theme_mod( 'portfolio_heading', 'OUR WORKS' ); ?>
+                <h2 class="title-text text-3xl md:text-4xl lg:text-5xl leading-tight text-[#2c221a]">
+                    <?php echo esc_html( mb_substr( $ph, 0, -1 ) ); ?><span class="fancy-e"><?php echo esc_html( mb_substr( $ph, -1 ) ); ?></span>
+                </h2>
+            </div>
+
+            <?php
+            $port_q = new WP_Query( [
+                'post_type'      => 'portfolio',
+                'posts_per_page' => 4,
+                'post_status'    => 'publish',
+                'no_found_rows'  => false,
+            ] );
+            $port_total = $port_q->found_posts;
+            $port_i     = 0;
+            $fallback_l = 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80';
+            $fallback_s = 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=600&q=80';
+
+            if ( $port_q->have_posts() ) :
+                while ( $port_q->have_posts() ) :
+                    $port_q->the_post();
+                    $pid        = get_the_ID();
+                    $location   = get_post_meta( $pid, '_portfolio_location', true ) ?: 'Dubai, UAE';
+                    $concept    = get_post_meta( $pid, '_portfolio_concept', true );
+                    $palette    = get_post_meta( $pid, '_portfolio_palette', true );
+                    $detail_id  = get_post_meta( $pid, '_portfolio_detail_image', true );
+                    $img_large  = get_the_post_thumbnail_url( $pid, 'large' ) ?: $fallback_l;
+                    $img_small  = $detail_id ? wp_get_attachment_image_url( $detail_id, 'medium' ) : $fallback_s;
+                    $num        = str_pad( $port_i + 1, 2, '0', STR_PAD_LEFT ) . '/' . str_pad( $port_total, 2, '0', STR_PAD_LEFT );
+                    $excerpt    = has_excerpt() ? get_the_excerpt() : wp_trim_words( get_the_content(), 25, '...' );
+                    $port_i++;
+            ?>
+            <div class="portfolio-slide" style="margin-bottom:4rem; padding-bottom:4rem; <?php echo $port_q->have_posts() ? 'border-bottom:1px solid #e5e5e5;' : ''; ?>">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8 items-start">
+                    <div>
+                        <div style="aspect-ratio:1/1; width:100%; overflow:hidden;">
+                            <img src="<?php echo esc_url( $img_large ); ?>"
+                                 alt="<?php echo esc_attr( get_the_title() ); ?>"
+                                 style="width:100%; height:100%; object-fit:cover;">
+                        </div>
+                    </div>
+                    <div class="flex flex-col" style="min-height:380px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+                            <span style="font-size:12px; color:#68635f; font-weight:300;"><?php echo esc_html( $location ); ?></span>
+                            <span style="font-size:12px; color:#68635f; font-weight:300; letter-spacing:0.15em;"><?php echo esc_html( $num ); ?></span>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" style="margin-bottom:auto;">
+                            <div class="flex flex-col">
+                                <h3 class="title-text" style="font-size:clamp(1.4rem,2.5vw,2rem); margin-bottom:1rem; color:#2c221a; font-weight:500; text-transform:uppercase; line-height:1.1;">
+                                    <?php the_title(); ?>
+                                </h3>
+                                <p style="font-size:13px; line-height:1.8; color:#68635f; font-weight:300;"><?php echo esc_html( $excerpt ); ?></p>
+                            </div>
+                            <div class="flex flex-col">
+                                <div style="aspect-ratio:1/1; width:100%; max-width:240px; margin-left:auto; overflow:hidden;">
+                                    <img src="<?php echo esc_url( $img_small ); ?>" alt="Detail" style="width:100%; height:100%; object-fit:cover;">
+                                </div>
+                                <?php if ( $palette ) : ?>
+                                <p style="font-size:11px; color:#68635f; font-weight:300; margin-top:0.75rem; text-align:right; max-width:240px; margin-left:auto; line-height:1.6;"><?php echo esc_html( $palette ); ?></p>
+                                <?php endif; ?>
+                                <a href="<?php the_permalink(); ?>" class="link-wrapper" style="opacity:1; transform:none; width:auto; gap:1rem; min-width:140px; margin-top:1.5rem; margin-left:auto;">
+                                    <span class="link-text" style="font-size:11px;">LEARN MORE</span>
+                                    <div class="arrow-graphic">
+                                        <svg width="14" height="9" viewBox="0 0 16 10" fill="none">
+                                            <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <?php if ( $concept ) : ?>
+                        <div style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid #e5e5e5;">
+                            <p style="font-size:12px; color:#68635f; font-weight:300; line-height:1.6; max-width:260px;"><?php echo esc_html( $concept ); ?></p>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+            <?php
+                endwhile;
+                wp_reset_postdata();
+            endif;
+            ?>
+
+            <!-- See More button -->
+            <div style="text-align:center; margin-top:3rem;">
+                <a href="<?php echo esc_url( dayanarc_portfolio_url() ); ?>" class="link-wrapper" style="display:inline-flex; opacity:1; transform:none; gap:1rem;">
+                    <span class="link-text">SEE MORE</span>
+                    <div class="arrow-graphic">
+                        <svg width="16" height="10" viewBox="0 0 16 10" fill="none">
+                            <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </a>
+            </div>
+        </section>
+
         <!-- Footer -->
-        <footer class="bg-[#f5f2ee] pt-16 pb-6 w-full flex flex-col relative">
+        <footer class="fp-footer pt-16 pb-6 w-full flex flex-col relative">
             <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-12">
                 <div class="flex flex-col">
-                    <div class="title-text text-2xl tracking-widest text-[#2c221a] mb-6 font-medium">DAYAN ARC</div>
-                    <p class="text-[12px] leading-relaxed text-[#68635f] font-light max-w-[220px]"><?php echo esc_html( get_theme_mod( 'footer_tagline', 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.' ) ); ?></p>
+                    <div class="title-text text-2xl tracking-widest mb-6 font-medium">DAYAN ARC</div>
+                    <p class="text-[12px] leading-relaxed font-light max-w-[220px]"><?php echo esc_html( get_theme_mod( 'footer_tagline', 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.' ) ); ?></p>
                 </div>
 
                 <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
-                    <div><span class="text-[10px] uppercase tracking-[0.15em] text-[#8c8783] font-medium">MENU</span></div>
-                    <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase text-[#2c221a]">
+                    <div><span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted">MENU</span></div>
+                    <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase">
                         <a href="#" onclick="fullpage_api.moveTo(2); return false;" class="footer-link">ABOUT US</a>
-                        <a href="#" onclick="fullpage_api.moveTo(3); return false;" class="footer-link">PORTFOLIO</a>
+                        <a href="#" onclick="fullpage_api.moveTo(3); return false;" class="footer-link">OUR SERVICE</a>
                         <a href="#" onclick="fullpage_api.moveTo(4); return false;" class="footer-link">SERVICES</a>
                         <a href="#" onclick="fullpage_api.moveTo(5); return false;" class="footer-link">JOURNAL</a>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
-                    <div><span class="text-[10px] uppercase tracking-[0.15em] text-[#8c8783] font-medium">FOLLOW US</span></div>
-                    <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase text-[#2c221a]">
+                    <div><span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted">FOLLOW US</span></div>
+                    <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase">
                         <a href="<?php echo esc_url( get_theme_mod( 'social_instagram', '#' ) ); ?>" class="footer-link">INSTAGRAM</a>
                         <a href="<?php echo esc_url( get_theme_mod( 'social_pinterest', '#' ) ); ?>" class="footer-link">PINTEREST</a>
                         <a href="<?php echo esc_url( get_theme_mod( 'social_behance',   '#' ) ); ?>" class="footer-link">BEHANCE</a>
@@ -346,12 +504,12 @@
                 </div>
 
                 <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
-                    <div><span class="text-[10px] uppercase tracking-[0.15em] text-[#8c8783] font-medium">CONTACT</span></div>
-                    <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase text-[#2c221a] leading-relaxed">
+                    <div><span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted">CONTACT</span></div>
+                    <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase leading-relaxed">
                         <?php
-                        $location        = get_theme_mod( 'contact_location', 'Riyadh, Saudi Arabia' );
-                        $email           = get_theme_mod( 'contact_email',    'dayanarc.co@gmail.com' );
-                        $website         = get_theme_mod( 'contact_website',  'https://www.dayanarc.com' );
+                        $location        = get_theme_mod( 'contact_location', 'Business Bay, Dubai, UAE' );
+                        $email           = get_theme_mod( 'contact_email',    'support@dayanarc.com' );
+                        $website         = get_theme_mod( 'contact_website',  'http://dayanarc.com' );
                         $website_display = preg_replace( '#^https?://#i', '', $website );
                         ?>
                         <p><?php echo esc_html( strtoupper( $location ) ); ?></p>
@@ -379,9 +537,9 @@
             </div>
 
             <div class="flex flex-col items-center">
-                <div class="w-1/5 h-[1px] bg-[#d1ccc8] mb-4"></div>
-                <div class="text-center text-[10px] tracking-widest uppercase text-[#8c8783] font-medium">
-                    COPYRIGHT <?php echo esc_html( date( 'Y' ) ); ?> &copy; DESIGNED BY <a href="https://valasolution.com/" target="_blank" rel="noopener noreferrer" class="vala-link">VALASOLUTION</a>
+                <div class="w-1/5 h-[1px] mb-4" style="background:rgba(246,240,218,0.2);"></div>
+                <div class="text-center text-[10px] tracking-widest uppercase font-medium footer-muted">
+                    COPYRIGHT <?php echo esc_html( date( 'Y' ) ); ?> &copy; DESIGNED BY <a href="https://valasolution.com/" target="_blank" rel="noopener noreferrer" class="footer-link">VALASOLUTION</a>
                 </div>
             </div>
         </footer>

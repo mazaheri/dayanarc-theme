@@ -1320,3 +1320,132 @@ html.admin-bar .inner-nav {
     cursor: not-allowed;
 }
 
+/* ── Footer (dark green) ─────────────────────────────────────────────────── */
+.fp-footer {
+    background-color: #465548;
+    color: #f6f0da;
+}
+.fp-footer .title-text,
+.fp-footer h1, .fp-footer h2, .fp-footer h3,
+.fp-footer p,
+.fp-footer span,
+.fp-footer div {
+    color: #f6f0da;
+}
+.fp-footer .footer-muted {
+    color: rgba(246, 240, 218, 0.5);
+}
+.fp-footer .footer-link {
+    color: #f6f0da;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+.fp-footer .footer-link:hover {
+    opacity: 0.65;
+}
+.fp-footer .marquee-container {
+    border-color: rgba(246, 240, 218, 0.15);
+}
+.fp-footer .fancy-marquee {
+    color: rgba(246, 240, 218, 0.35);
+}
+.fp-footer .diamond {
+    background-color: rgba(246, 240, 218, 0.4);
+}
+
+/* ── About section: image hover swap ────────────────────────────────────── */
+.about-images-wrapper {
+    display: flex;
+    gap: 1.5rem;
+}
+@media (min-width: 1024px) {
+    .about-images-wrapper {
+        gap: 2rem;
+    }
+}
+.about-img-big {
+    width: 62%;
+    height: 95%;
+    flex-shrink: 0;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.about-img-small {
+    width: 35%;
+    height: 55%;
+    flex-shrink: 0;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* When hovering the small image, swap sizes */
+.about-images-wrapper:has(.about-img-small:hover) .about-img-big {
+    width: 50%;
+}
+.about-images-wrapper:has(.about-img-small:hover) .about-img-small {
+    width: 47%;
+}
+
+/* ── Video play button ───────────────────────────────────────────────────── */
+.about-video-trigger {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+.play-button-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none;
+}
+.play-btn-pulse {
+    position: absolute;
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    animation: play-pulse 2s ease-out infinite;
+}
+.play-btn-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: play-blink 2.4s ease-in-out infinite;
+    z-index: 1;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+    padding-left: 4px;
+}
+@keyframes play-pulse {
+    0%   { transform: scale(1);   opacity: 0.7; }
+    50%  { transform: scale(1.5); opacity: 0.25; }
+    100% { transform: scale(2);   opacity: 0; }
+}
+@keyframes play-blink {
+    0%, 100% { opacity: 1;   transform: scale(1); }
+    50%       { opacity: 0.6; transform: scale(1.07); }
+}
+
+/* ── Our Service section ─────────────────────────────────────────────────── */
+.our-service-section {
+    background-color: #faf9f7;
+}
+.our-service-img {
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+}
+.our-service-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* ── Portfolio bottom section ────────────────────────────────────────────── */
+.fp-portfolio-bottom {
+    border-top: 1px solid #e5e5e5;
+}
+

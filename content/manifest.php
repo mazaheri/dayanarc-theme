@@ -24,8 +24,6 @@
  */
 
 // ══ HOMEPAGE — HERO SECTION ══════════════════════════════════════════════════
-// The three large words stacked on the hero screen.
-// Word 2 first letter gets italic decoration (keep it a single meaningful word).
 
 $customizer = [];
 
@@ -39,46 +37,57 @@ $customizer['hero_tagline']   =
     . 'we bring spaces to life with innovation, precision, and a passion for design excellence.';
 
 // ══ HOMEPAGE — ABOUT SECTION ═════════════════════════════════════════════════
-// Heading is split across two lines for the reveal animation.
-// Line 1 first letter gets fancy-d decoration.
 
-$customizer['about_heading_line1'] = 'DESIGN WITH';
-$customizer['about_heading_line2'] = 'PASSION';
-$customizer['about_cta_label']     = 'LEARN MORE';
+$customizer['about_heading_line1'] = 'A VISION BEYOND';
+$customizer['about_heading_line2'] = 'BORDERS';
+$customizer['about_cta_label']     = 'GET IN TOUCH';
 $customizer['about_body']          =
-    'At Dayan Arc, our team brings together the best talent from around the world, '
-    . 'combining creativity, expertise, and passion. Together, we strive to deliver '
-    . 'exceptional design solutions that exceed expectations and create spaces that inspire and delight.';
+    'At Dayan Arc, we believe that architecture is more than just designing '
+    . 'structures; it is the art of crafting experiences and building legacies. With '
+    . 'over 20 years of expertise and a track record of more than 400 global '
+    . 'projects, my team and I have bridged the gap between German engineering '
+    . 'precision and creative luxury. From our strategic hubs in Germany, Dubai, '
+    . 'and Georgia, we personally ensure that every project — whether a bespoke '
+    . 'villa or a complex international airport — meets the highest global standards '
+    . 'of excellence.';
 
-// Images are managed separately in import-images.php.
-// These keys are listed here for reference — their values come from the media library.
-// $customizer['about_image_main']   = '';  // set by import-images.php
-// $customizer['about_image_detail'] = '';  // set by import-images.php
+// about_video_url and about_video_thumb are set via the Customizer or import-images.php
+// $customizer['about_video_url']   = '';  // set in Customizer
+// $customizer['about_video_thumb'] = '';  // set by import-images.php
+
+// ══ HOMEPAGE — OUR SERVICE SECTION ═══════════════════════════════════════════
+
+$customizer['our_service_heading']     = 'OUR SERVICE';
+$customizer['our_service_description'] =
+    'From architectural vision to flawless execution — our integrated services '
+    . 'cover every discipline, every scale, and every geography.';
+$customizer['our_service_image_1_desc'] =
+    'Concept development and schematic design services tailored to your architectural vision.';
+$customizer['our_service_image_2_desc'] =
+    'Comprehensive construction documentation and technical drawings executed with precision.';
+
+// our_service_image_1 and our_service_image_2 are set by import-images.php
 
 // ══ HOMEPAGE — PORTFOLIO SECTION ═════════════════════════════════════════════
-// Heading last letter gets fancy-e decoration.
-// Also used on the portfolio archive page (/portfolio/).
 
 $customizer['portfolio_heading'] = 'OUR WORKS';
 
 // ══ HOMEPAGE — SERVICES SECTION ══════════════════════════════════════════════
-// Two-line heading. Line 2 first letter gets fancy-r decoration.
 
-$customizer['services_heading_line1'] = 'COMPREHENSIVE';
-$customizer['services_heading_line2'] = 'SOLUTIONS';
+$customizer['services_heading_line1'] = 'CORE DESIGN';
+$customizer['services_heading_line2'] = 'CONCEPTS';
 $customizer['services_cta_label']     = 'GET IN TOUCH';
 $customizer['services_intro']         =
-    'At Dayan Arc, we offer comprehensive architectural and interior design services, '
-    . 'from concept development to project management.';
+    'Our integrated design services are applied across a diverse range of sectors, '
+    . 'ensuring that every concept — from private luxury to public infrastructure — '
+    . 'is executed with unrivaled precision and global standards.';
 $customizer['services_tagline']       = 'Transforming ideas into inspiring, functional spaces.';
 
 // ══ HOMEPAGE — JOURNAL SECTION ═══════════════════════════════════════════════
-// Also used on the journal archive page (/journal/).
 
-$customizer['journal_heading'] = 'DESIGN INSIGHTS';
+$customizer['journal_heading'] = 'OUR GLOBAL FOOTPRINT';
 
 // ══ HOMEPAGE — CONTACT SECTION ═══════════════════════════════════════════════
-// Two-line heading. Line 2 first letter gets fancy-c decoration.
 
 $customizer['fp_contact_heading_line1'] = "LET'S BEGIN A";
 $customizer['fp_contact_heading_line2'] = 'CONVERSATION';
@@ -112,15 +121,14 @@ $customizer['social_behance']   = '#';
 $customizer['social_linkedin']  = '#';
 
 // ══ SERVICE PAGES ════════════════════════════════════════════════════════════
-// Per-page meta for each service. option_key resolves to the post ID.
-// features: one item per line (newline-separated string).
 
 $services = [
 
     'architecture' => [
         'option_key'       => 'dayanarc_service_architecture_id',
-        'card_description' => 'Complete architectural design from concept to execution, tailored to your unique vision and functional needs.',
-        'card_label'       => 'Consultation',
+        'new_title'        => 'Residential Excellence',
+        'card_description' => 'Crafting bespoke luxury villas and high-end residential complexes that redefine modern living through elegance and comfort.',
+        'card_label'       => 'Residential',
         'what_we_offer'    => 'WHAT WE OFFER',
         'cta_heading'      => 'READY TO START YOUR PROJECT?',
         'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
@@ -137,8 +145,9 @@ $services = [
 
     'interior_design' => [
         'option_key'       => 'dayanarc_service_interior_design_id',
-        'card_description' => 'Comprehensive interior design services from space planning to material selection and 3D visualization.',
-        'card_label'       => 'Full Service',
+        'new_title'        => 'Commercial & Hospitality',
+        'card_description' => 'Designing dynamic corporate offices, retail spaces, and world-class restaurants that enhance brand identity and user experience.',
+        'card_label'       => 'Commercial',
         'what_we_offer'    => 'WHAT WE OFFER',
         'cta_heading'      => 'READY TO START YOUR PROJECT?',
         'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
@@ -155,8 +164,9 @@ $services = [
 
     '3d_visualization' => [
         'option_key'       => 'dayanarc_service_3d_viz_id',
-        'card_description' => 'High-quality 3D renderings and visualization to help you see your vision before construction begins.',
-        'card_label'       => 'Rendering',
+        'new_title'        => 'Public & Institutional',
+        'card_description' => 'Creating functional and inspiring public environments, including cultural centers and educational facilities, tailored for community engagement.',
+        'card_label'       => 'Public',
         'what_we_offer'    => 'WHAT WE OFFER',
         'cta_heading'      => 'READY TO START YOUR PROJECT?',
         'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
@@ -173,8 +183,9 @@ $services = [
 
     'project_management' => [
         'option_key'       => 'dayanarc_service_project_mgmt_id',
-        'card_description' => 'End-to-end project management ensuring every detail is executed with precision and attention.',
-        'card_label'       => 'Management',
+        'new_title'        => 'Infrastructure & Large-Scale',
+        'card_description' => 'Specialized engineering and design for high-complexity projects, such as international airports and major transportation hubs.',
+        'card_label'       => 'Infrastructure',
         'what_we_offer'    => 'WHAT WE OFFER',
         'cta_heading'      => 'READY TO START YOUR PROJECT?',
         'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
@@ -192,7 +203,6 @@ $services = [
 ];
 
 // ══ APPLY ════════════════════════════════════════════════════════════════════
-// Everything below this line executes the updates. Do not edit below here.
 
 echo "\n=== Applying content manifest ===\n\n";
 
@@ -204,13 +214,19 @@ foreach ( $customizer as $key => $value ) {
 }
 echo "✓ Customizer: $updated settings applied\n";
 
-// Service page meta
+// Service page meta + rename page titles
 foreach ( $services as $slug => $data ) {
     $post_id = (int) get_option( $data['option_key'] );
     if ( ! $post_id || ! get_post( $post_id ) ) {
         echo "✗ Service not found: $slug (option: {$data['option_key']})\n";
         continue;
     }
+
+    // Rename the page title
+    if ( ! empty( $data['new_title'] ) ) {
+        wp_update_post( [ 'ID' => $post_id, 'post_title' => $data['new_title'] ] );
+    }
+
     update_post_meta( $post_id, '_service_card_description', $data['card_description'] );
     update_post_meta( $post_id, '_service_card_tagline',     $data['card_label'] );
     update_post_meta( $post_id, '_service_what_we_offer',    $data['what_we_offer'] );
@@ -218,7 +234,7 @@ foreach ( $services as $slug => $data ) {
     update_post_meta( $post_id, '_service_cta_description',  $data['cta_description'] );
     update_post_meta( $post_id, '_service_cta_label',        $data['cta_label'] );
     update_post_meta( $post_id, '_service_features',         $data['features'] );
-    echo "✓ Service: $slug (post $post_id)\n";
+    echo "✓ Service: {$data['new_title']} (post $post_id)\n";
 }
 
 echo "\n=== Done ===\n";
