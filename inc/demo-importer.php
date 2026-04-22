@@ -100,7 +100,13 @@ function dayanarc_run_import() {
     // 8. Service pages
     dayanarc_import_service_pages( $image_ids );
 
-    // 9. Primary nav menu (runs last so Contact URL is available)
+    // 9. Apply all text theme mods from content manifest
+    dayanarc_apply_content_theme_mods();
+
+    // 10. Import content/images/ (about, our-service thumbnails)
+    dayanarc_import_content_images();
+
+    // 11. Primary nav menu (runs last so Contact URL is available)
     dayanarc_import_nav_menu();
 
     // Rebuild rewrite rules so /portfolio/ archive URL resolves immediately.
@@ -533,95 +539,110 @@ function dayanarc_import_contact_page() {
 function dayanarc_import_service_pages( $image_ids ) {
     $services = [
         [
-            'title'      => 'Architecture',
+            'title'      => 'Residential Excellence',
+            'old_title'  => 'Architecture',
             'slug'       => 'architecture',
             'number'     => '01',
-            'card_label' => 'Consultation',
+            'card_label' => 'Residential',
             'option'     => 'dayanarc_service_architecture_id',
-            'excerpt'    => 'Complete architectural design from concept to execution, tailored to your unique vision and functional needs.',
-            'content'  => 'At Dayan Arc, our architectural services span the full design journey — from initial concept through schematic design, design development, construction documentation, and project administration. We work closely with each client to understand their vision, program requirements, and site conditions, delivering spaces that are both beautiful and precisely functional.
+            'excerpt'    => 'Crafting bespoke luxury villas and high-end residential complexes that redefine modern living through elegance and comfort.',
+            'content'    => 'At Dayan Arc, our architectural services span the full design journey — from initial concept through schematic design, design development, construction documentation, and project administration. We work closely with each client to understand their vision, program requirements, and site conditions, delivering spaces that are both beautiful and precisely functional.
 
 Our architects bring deep expertise in residential, commercial, and hospitality projects across the region, blending innovative design thinking with a rigorous attention to detail and technical excellence.',
-            'features' => "Concept Development\nSchematic Design\nDesign Development\nConstruction Documentation\nProject Administration\nSite Supervision",
-            'image'    => 'interior1.jpg',
+            'features'   => "Concept Development\nSchematic Design\nDesign Development\nConstruction Documentation\nProject Administration\nSite Supervision",
+            'image'      => 'interior1.jpg',
+            'thumb_slug' => 'architecture',
         ],
         [
-            'title'      => 'Interior Design',
+            'title'      => 'Commercial & Hospitality',
+            'old_title'  => 'Interior Design',
             'slug'       => 'interior-design',
             'number'     => '02',
-            'card_label' => 'Full Service',
+            'card_label' => 'Commercial',
             'option'     => 'dayanarc_service_interior_design_id',
-            'excerpt'    => 'Comprehensive interior design services from space planning to material selection and 3D visualization.',
-            'content'  => 'Our interior design team transforms spaces into experiences. Working from a deep understanding of light, material, proportion, and the human scale, we craft interiors that feel both intentional and alive. Every project begins with listening — understanding how a space will be lived in, worked in, or experienced — then translating that into a coherent design language.
+            'excerpt'    => 'Designing dynamic corporate offices, retail spaces, and world-class restaurants that enhance brand identity and user experience.',
+            'content'    => 'Our interior design team transforms spaces into experiences. Working from a deep understanding of light, material, proportion, and the human scale, we craft interiors that feel both intentional and alive. Every project begins with listening — understanding how a space will be lived in, worked in, or experienced — then translating that into a coherent design language.
 
 From concept mood boards through furniture selection, lighting design, and final installation, Dayan Arc manages the complete interior design process with precision and care.',
-            'features' => "Space Planning\nConcept & Mood Boards\nMaterial & Finish Selection\nFurniture & FF&E Procurement\nLighting Design\n3D Visualization",
-            'image'    => 'interior2.jpg',
+            'features'   => "Space Planning\nConcept & Mood Boards\nMaterial & Finish Selection\nFurniture & FF&E Procurement\nLighting Design\n3D Visualization",
+            'image'      => 'interior2.jpg',
+            'thumb_slug' => 'interior-design',
         ],
         [
-            'title'      => '3D Visualization',
+            'title'      => 'Public & Institutional',
+            'old_title'  => '3D Visualization',
             'slug'       => '3d-visualization',
             'number'     => '03',
-            'card_label' => 'Rendering',
+            'card_label' => 'Public',
             'option'     => 'dayanarc_service_3d_viz_id',
-            'excerpt'    => 'High-quality 3D renderings and visualization to help you see your vision before construction begins.',
-            'content'  => 'Seeing a space before it is built changes everything. Our 3D visualization studio produces photorealistic still renders, animated walkthroughs, and interactive virtual tours that allow clients, contractors, and stakeholders to fully understand a design before a single wall is raised.
+            'excerpt'    => 'Creating functional and inspiring public environments, including cultural centers and educational facilities, tailored for community engagement.',
+            'content'    => 'Seeing a space before it is built changes everything. Our 3D visualization studio produces photorealistic still renders, animated walkthroughs, and interactive virtual tours that allow clients, contractors, and stakeholders to fully understand a design before a single wall is raised.
 
 Using the latest rendering technology, we capture light, texture, and atmosphere with a level of realism that blurs the line between the designed and the built — helping clients make confident decisions at every stage.',
-            'features' => "Photorealistic Still Renders\nArchitectural Walkthroughs\nVirtual Reality Tours\nExterior & Interior Renders\nMaterial Studies\nPresentation Boards",
-            'image'    => 'project10.png',
+            'features'   => "Photorealistic Still Renders\nArchitectural Walkthroughs\nVirtual Reality Tours\nExterior & Interior Renders\nMaterial Studies\nPresentation Boards",
+            'image'      => 'project10.png',
+            'thumb_slug' => '3d-visualization',
         ],
         [
-            'title'      => 'Project Management',
+            'title'      => 'Infrastructure & Large-Scale',
+            'old_title'  => 'Project Management',
             'slug'       => 'project-management',
             'number'     => '04',
-            'card_label' => 'Management',
+            'card_label' => 'Infrastructure',
             'option'     => 'dayanarc_service_project_mgmt_id',
-            'excerpt'    => 'End-to-end project management ensuring every detail is executed with precision and attention.',
-            'content'  => 'Great design is only realised through great execution. Dayan Arc offers comprehensive project management services that bridge the gap between the design studio and the construction site. Our project managers coordinate all parties — contractors, consultants, suppliers, and authorities — ensuring the project stays on schedule, within budget, and true to design intent.
+            'excerpt'    => 'Specialized engineering and design for high-complexity projects, such as international airports and major transportation hubs.',
+            'content'    => 'Great design is only realised through great execution. Dayan Arc offers comprehensive project management services that bridge the gap between the design studio and the construction site. Our project managers coordinate all parties — contractors, consultants, suppliers, and authorities — ensuring the project stays on schedule, within budget, and true to design intent.
 
 We are on-site when it matters most, resolving issues proactively and maintaining the quality standards that define every Dayan Arc project.',
-            'features' => "Timeline & Schedule Planning\nBudget Management\nContractor Coordination\nQuality Control & Inspection\nAuthority Approvals\nHandover & Close-out",
-            'image'    => 'project9.png',
+            'features'   => "Timeline & Schedule Planning\nBudget Management\nContractor Coordination\nQuality Control & Inspection\nAuthority Approvals\nHandover & Close-out",
+            'image'      => 'project9.png',
+            'thumb_slug' => 'project-management',
         ],
     ];
 
-    foreach ( $services as $svc ) {
-        // Check if already created
-        $existing_id = (int) get_option( $svc['option'], 0 );
-        if ( $existing_id && get_post( $existing_id ) ) continue;
+    $theme_dir = get_template_directory();
 
-        if ( dayanarc_post_exists( $svc['title'], 'page' ) ) {
-            $q = new WP_Query( [
-                'post_type'      => 'page',
-                'title'          => $svc['title'],
-                'post_status'    => 'any',
-                'posts_per_page' => 1,
-                'fields'         => 'ids',
-                'no_found_rows'  => true,
-            ] );
-            if ( $q->have_posts() ) {
-                $id = $q->posts[0];
-                update_post_meta( $id, '_wp_page_template',        'page-service.php' );
-                update_post_meta( $id, '_service_number',          $svc['number'] );
-                update_post_meta( $id, '_service_card_description', $svc['excerpt'] );
-                update_post_meta( $id, '_service_card_tagline',    $svc['card_label'] );
-                update_post_meta( $id, '_service_features',        $svc['features'] );
-                update_option( $svc['option'], $id );
+    foreach ( $services as $svc ) {
+        $existing_id = (int) get_option( $svc['option'], 0 );
+
+        if ( $existing_id && get_post( $existing_id ) ) {
+            // Update existing page with new title
+            $page_id = $existing_id;
+            wp_update_post( [ 'ID' => $page_id, 'post_title' => $svc['title'] ] );
+        } else {
+            // Search by new title, then old title
+            $page_id = 0;
+            foreach ( [ $svc['title'], $svc['old_title'] ] as $search_title ) {
+                if ( dayanarc_post_exists( $search_title, 'page' ) ) {
+                    $q = new WP_Query( [
+                        'post_type'      => 'page',
+                        'title'          => $search_title,
+                        'post_status'    => 'any',
+                        'posts_per_page' => 1,
+                        'fields'         => 'ids',
+                        'no_found_rows'  => true,
+                    ] );
+                    if ( $q->have_posts() ) {
+                        $page_id = $q->posts[0];
+                        wp_update_post( [ 'ID' => $page_id, 'post_title' => $svc['title'] ] );
+                        break;
+                    }
+                }
             }
-            continue;
+
+            if ( ! $page_id ) {
+                $page_id = wp_insert_post( [
+                    'post_title'   => $svc['title'],
+                    'post_content' => $svc['content'],
+                    'post_excerpt' => $svc['excerpt'],
+                    'post_status'  => 'publish',
+                    'post_type'    => 'page',
+                    'post_name'    => $svc['slug'],
+                ] );
+            }
         }
 
-        $page_id = wp_insert_post( [
-            'post_title'   => $svc['title'],
-            'post_content' => $svc['content'],
-            'post_excerpt' => $svc['excerpt'],
-            'post_status'  => 'publish',
-            'post_type'    => 'page',
-            'post_name'    => $svc['slug'],
-        ] );
-
-        if ( is_wp_error( $page_id ) || ! $page_id ) continue;
+        if ( ! $page_id || is_wp_error( $page_id ) ) continue;
 
         update_post_meta( $page_id, '_wp_page_template',         'page-service.php' );
         update_post_meta( $page_id, '_service_number',           $svc['number'] );
@@ -629,11 +650,170 @@ We are on-site when it matters most, resolving issues proactively and maintainin
         update_post_meta( $page_id, '_service_card_tagline',     $svc['card_label'] );
         update_post_meta( $page_id, '_service_features',         $svc['features'] );
 
-        if ( isset( $image_ids[ $svc['image'] ] ) ) {
+        // Import thumbnail from content/images/services/ if available
+        $thumb_file = $theme_dir . '/content/images/services/' . $svc['thumb_slug'] . '/thumbnail.jpg';
+        if ( file_exists( $thumb_file ) ) {
+            $upload = wp_upload_bits( basename( $thumb_file ), null, file_get_contents( $thumb_file ) );
+            if ( empty( $upload['error'] ) ) {
+                $mime   = wp_check_filetype( $upload['file'] );
+                $att_id = wp_insert_attachment( [
+                    'guid'           => $upload['url'],
+                    'post_mime_type' => $mime['type'],
+                    'post_title'     => sanitize_file_name( basename( $thumb_file ) ),
+                    'post_status'    => 'inherit',
+                ], $upload['file'] );
+                if ( ! is_wp_error( $att_id ) ) {
+                    wp_update_attachment_metadata( $att_id, wp_generate_attachment_metadata( $att_id, $upload['file'] ) );
+                    set_post_thumbnail( $page_id, $att_id );
+                }
+            }
+        } elseif ( isset( $image_ids[ $svc['image'] ] ) ) {
             set_post_thumbnail( $page_id, $image_ids[ $svc['image'] ] );
         }
 
         update_option( $svc['option'], $page_id );
+    }
+}
+
+// ── Apply all text theme mods (mirrors content/manifest.php) ─────────────────
+function dayanarc_apply_content_theme_mods() {
+    $mods = [
+        // Hero
+        'hero_word_1'               => 'VISION.',
+        'hero_word_2'               => 'DESIGN.',
+        'hero_word_3'               => 'REALITY.',
+        'hero_cta_label'            => 'Get in touch',
+        'hero_tagline'              => 'At Dayan Arc, we blend creativity and expertise to craft exceptional architectural and interior design experiences. From concept to completion, we bring spaces to life with innovation, precision, and a passion for design excellence.',
+        // About
+        'about_heading_line1'       => 'A VISION BEYOND',
+        'about_heading_line2'       => 'BORDERS',
+        'about_cta_label'           => 'GET IN TOUCH',
+        'about_body'                => 'At Dayan Arc, we believe that architecture is more than just designing structures; it is the art of crafting experiences and building legacies. With over 20 years of expertise and a track record of more than 400 global projects, my team and I have bridged the gap between German engineering precision and creative luxury. From our strategic hubs in Germany, Dubai, and Georgia, we personally ensure that every project — whether a bespoke villa or a complex international airport — meets the highest global standards of excellence.',
+        // Our Service
+        'our_service_heading'       => 'OUR SERVICE',
+        'our_service_description'   => 'From architectural vision to flawless execution — our integrated services cover every discipline, every scale, and every geography.',
+        'our_service_image_1_desc'  => 'Concept development and schematic design services tailored to your architectural vision.',
+        'our_service_image_2_desc'  => 'Comprehensive construction documentation and technical drawings executed with precision.',
+        // Portfolio
+        'portfolio_heading'         => 'OUR WORKS',
+        // Services
+        'services_heading_line1'    => 'CORE DESIGN',
+        'services_heading_line2'    => 'CONCEPTS',
+        'services_cta_label'        => 'GET IN TOUCH',
+        'services_intro'            => 'Our integrated design services are applied across a diverse range of sectors, ensuring that every concept — from private luxury to public infrastructure — is executed with unrivaled precision and global standards.',
+        'services_tagline'          => 'Transforming ideas into inspiring, functional spaces.',
+        // Journal
+        'journal_heading'           => 'OUR GLOBAL FOOTPRINT',
+        // Contact
+        'fp_contact_heading_line1'  => "LET'S BEGIN A",
+        'fp_contact_heading_line2'  => 'CONVERSATION',
+        'fp_contact_description'    => "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention.",
+        'contact_page_heading'      => "LET'S BEGIN A CONVERSATION",
+        'contact_page_description'  => "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention.",
+        // Footer / Brand
+        'footer_tagline'            => 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.',
+        'contact_location'          => 'Business Bay, Dubai, UAE',
+        'contact_email'             => 'support@dayanarc.com',
+        'contact_website'           => 'http://dayanarc.com',
+        // Social
+        'social_instagram'          => '#',
+        'social_pinterest'          => '#',
+        'social_behance'            => '#',
+        'social_linkedin'           => '#',
+    ];
+
+    foreach ( $mods as $key => $value ) {
+        set_theme_mod( $key, $value );
+    }
+
+    // Also update service page meta for the new card descriptions / titles
+    $service_meta = [
+        'dayanarc_service_architecture_id'   => [
+            'title'            => 'Residential Excellence',
+            'card_description' => 'Crafting bespoke luxury villas and high-end residential complexes that redefine modern living through elegance and comfort.',
+            'card_tagline'     => 'Residential',
+            'what_we_offer'    => 'WHAT WE OFFER',
+            'cta_heading'      => 'READY TO START YOUR PROJECT?',
+            'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
+            'cta_label'        => 'CONTACT US',
+            'features'         => "Concept Development\nSchematic Design\nDesign Development\nConstruction Documentation\nProject Administration\nSite Supervision",
+        ],
+        'dayanarc_service_interior_design_id' => [
+            'title'            => 'Commercial & Hospitality',
+            'card_description' => 'Designing dynamic corporate offices, retail spaces, and world-class restaurants that enhance brand identity and user experience.',
+            'card_tagline'     => 'Commercial',
+            'what_we_offer'    => 'WHAT WE OFFER',
+            'cta_heading'      => 'READY TO START YOUR PROJECT?',
+            'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
+            'cta_label'        => 'CONTACT US',
+            'features'         => "Space Planning\nConcept & Mood Boards\nMaterial & Finish Selection\nFurniture & FF&E Procurement\nLighting Design\n3D Visualization",
+        ],
+        'dayanarc_service_3d_viz_id' => [
+            'title'            => 'Public & Institutional',
+            'card_description' => 'Creating functional and inspiring public environments, including cultural centers and educational facilities, tailored for community engagement.',
+            'card_tagline'     => 'Public',
+            'what_we_offer'    => 'WHAT WE OFFER',
+            'cta_heading'      => 'READY TO START YOUR PROJECT?',
+            'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
+            'cta_label'        => 'CONTACT US',
+            'features'         => "Photorealistic Still Renders\nArchitectural Walkthroughs\nVirtual Reality Tours\nExterior & Interior Renders\nMaterial Studies\nPresentation Boards",
+        ],
+        'dayanarc_service_project_mgmt_id' => [
+            'title'            => 'Infrastructure & Large-Scale',
+            'card_description' => 'Specialized engineering and design for high-complexity projects, such as international airports and major transportation hubs.',
+            'card_tagline'     => 'Infrastructure',
+            'what_we_offer'    => 'WHAT WE OFFER',
+            'cta_heading'      => 'READY TO START YOUR PROJECT?',
+            'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
+            'cta_label'        => 'CONTACT US',
+            'features'         => "Timeline & Schedule Planning\nBudget Management\nContractor Coordination\nQuality Control & Inspection\nAuthority Approvals\nHandover & Close-out",
+        ],
+    ];
+
+    foreach ( $service_meta as $option_key => $data ) {
+        $post_id = (int) get_option( $option_key );
+        if ( ! $post_id || ! get_post( $post_id ) ) continue;
+        wp_update_post( [ 'ID' => $post_id, 'post_title' => $data['title'] ] );
+        update_post_meta( $post_id, '_service_card_description', $data['card_description'] );
+        update_post_meta( $post_id, '_service_card_tagline',     $data['card_tagline'] );
+        update_post_meta( $post_id, '_service_what_we_offer',    $data['what_we_offer'] );
+        update_post_meta( $post_id, '_service_cta_heading',      $data['cta_heading'] );
+        update_post_meta( $post_id, '_service_cta_description',  $data['cta_description'] );
+        update_post_meta( $post_id, '_service_cta_label',        $data['cta_label'] );
+        update_post_meta( $post_id, '_service_features',         $data['features'] );
+    }
+}
+
+// ── Import content/images/ (about + our-service) ──────────────────────────────
+function dayanarc_import_content_images() {
+    $content_dir = get_template_directory() . '/content/images/';
+
+    $map = [
+        [ 'file' => 'about/main.jpg',       'type' => 'theme_mod', 'key' => 'about_image_main' ],
+        [ 'file' => 'about/detail.jpg',     'type' => 'theme_mod', 'key' => 'about_image_detail' ],
+        [ 'file' => 'our-service/image-1.jpg', 'type' => 'theme_mod', 'key' => 'our_service_image_1' ],
+        [ 'file' => 'our-service/image-2.jpg', 'type' => 'theme_mod', 'key' => 'our_service_image_2' ],
+    ];
+
+    foreach ( $map as $entry ) {
+        $full_path = $content_dir . $entry['file'];
+        if ( ! file_exists( $full_path ) ) continue;
+
+        $upload = wp_upload_bits( basename( $full_path ), null, file_get_contents( $full_path ) );
+        if ( ! empty( $upload['error'] ) ) continue;
+
+        $mime   = wp_check_filetype( $upload['file'] );
+        $att_id = wp_insert_attachment( [
+            'guid'           => $upload['url'],
+            'post_mime_type' => $mime['type'],
+            'post_title'     => sanitize_file_name( basename( $full_path ) ),
+            'post_status'    => 'inherit',
+        ], $upload['file'] );
+
+        if ( is_wp_error( $att_id ) ) continue;
+
+        wp_update_attachment_metadata( $att_id, wp_generate_attachment_metadata( $att_id, $upload['file'] ) );
+        set_theme_mod( $entry['key'], $upload['url'] );
     }
 }
 

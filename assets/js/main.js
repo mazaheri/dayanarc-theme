@@ -168,6 +168,7 @@
                                 '<img src="' + escHtml(data.imgSmall) + '" class="curtain-img-portfolio active" alt="Detail">' +
                             '</div>' +
                             '<p class="text-[11px] leading-relaxed text-[#68635f] font-light mt-4 text-right max-w-[280px] ml-auto">' + escHtml(data.palette) + '</p>' +
+                            (data.permalink ? '<a href="' + escHtml(data.permalink) + '" class="link-wrapper" style="opacity:1;transform:none;width:auto;gap:0.75rem;min-width:100px;margin-top:1rem;margin-left:auto;"><span class="link-text" style="font-size:11px;">LEARN MORE</span><div class="arrow-graphic"><svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></a>' : '') +
                         '</div>' +
                     '</div>' +
                     '<div class="mt-12 lg:mt-auto pt-8 flex flex-col md:flex-row justify-between items-end gap-8">' +

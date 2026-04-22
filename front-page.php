@@ -119,10 +119,13 @@
             ?>
             <div class="col-span-1 lg:col-span-7 about-images-wrapper items-start justify-end h-[500px] md:h-[600px] lg:h-[700px] relative lg:-mt-16">
 
-                <!-- Big image / video thumbnail -->
+                <!-- Big image / video thumbnail — play button always visible -->
                 <div class="about-img-big curtain-container">
-                    <?php if ( $video_url ) : ?>
-                    <a href="<?php echo esc_url( $video_url ); ?>" class="glightbox about-video-trigger" data-gallery="about-media" data-type="video" style="display:block;width:100%;height:100%;position:relative;">
+                    <a href="<?php echo $video_url ? esc_url( $video_url ) : esc_url( $thumb_src ); ?>"
+                       class="glightbox about-video-trigger"
+                       data-gallery="about-media"
+                       data-type="<?php echo $video_url ? 'video' : 'image'; ?>"
+                       style="display:block;width:100%;height:100%;position:relative;">
                         <img src="<?php echo esc_url( $thumb_src ); ?>" alt="<?php echo esc_attr( get_theme_mod( 'about_heading_line1', 'About us' ) ); ?>" class="curtain-img" style="transition-delay: 400ms, 400ms;">
                         <div class="play-button-overlay">
                             <div class="play-btn-pulse"></div>
@@ -133,9 +136,6 @@
                             </div>
                         </div>
                     </a>
-                    <?php else : ?>
-                    <img src="<?php echo esc_url( $main_img ); ?>" alt="Main interior design view" class="curtain-img" style="transition-delay: 400ms, 400ms;">
-                    <?php endif; ?>
                 </div>
 
                 <!-- Small detail image — opens in lightbox -->
@@ -148,45 +148,43 @@
     </div>
 
     <!-- ===== SECTION 3: OUR SERVICE ===== -->
-    <div class="section our-service-section relative flex flex-col justify-center" id="ourservice">
-        <div class="w-full max-w-[1440px] mx-auto px-6 md:px-16 lg:px-20 pt-24 pb-16">
+    <div class="section our-service-section relative w-full max-w-[1440px] mx-auto px-6 md:px-16 lg:px-20 pt-24 pb-16 flex flex-col justify-center" id="ourservice">
 
-            <div class="absolute top-10 md:top-16 left-6 md:left-16 lg:left-20 text-[10px] tracking-[0.15em] text-[#a9a39f] uppercase font-medium">
-                <span class="reveal-mask block"><span class="reveal-text delay-100">OUR SERVICE</span></span>
+        <div class="absolute top-10 md:top-20 left-6 md:left-16 lg:left-20 text-[10px] tracking-[0.15em] text-[#a9a39f] uppercase font-medium">
+            <span class="reveal-mask block"><span class="reveal-text delay-100">OUR SERVICE</span></span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center mt-12 lg:mt-16">
+
+            <!-- Left: text -->
+            <div class="col-span-1 lg:col-span-5 flex flex-col pt-8 lg:pt-0">
+                <?php $osh = get_theme_mod( 'our_service_heading', 'OUR SERVICE' ); ?>
+                <h1 class="title-text text-4xl md:text-5xl lg:text-[4rem] leading-[1.05] tracking-tight mb-8 text-[#2c221a]">
+                    <span class="reveal-mask block pb-1"><span class="reveal-text delay-200"><?php echo esc_html( $osh ); ?></span></span>
+                </h1>
+                <p class="text-[14px] md:text-[15px] leading-relaxed text-[#68635f] font-light max-w-[400px] reveal-mask block">
+                    <span class="reveal-text delay-300"><?php echo esc_html( get_theme_mod( 'our_service_description', 'From architectural vision to flawless execution — our integrated services cover every discipline, every scale, and every geography.' ) ); ?></span>
+                </p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center mt-8 lg:mt-4">
-
-                <!-- Left: text -->
-                <div class="col-span-1 lg:col-span-5 flex flex-col pt-8 lg:pt-0">
-                    <?php $osh = get_theme_mod( 'our_service_heading', 'OUR SERVICE' ); ?>
-                    <h1 class="title-text text-4xl md:text-5xl lg:text-[4rem] leading-[1.05] tracking-tight mb-8 text-[#2c221a]">
-                        <span class="reveal-mask block pb-1"><span class="reveal-text delay-200"><?php echo esc_html( $osh ); ?></span></span>
-                    </h1>
-                    <p class="text-[14px] md:text-[15px] leading-relaxed text-[#68635f] font-light max-w-[400px] reveal-mask block">
-                        <span class="reveal-text delay-300"><?php echo esc_html( get_theme_mod( 'our_service_description', 'From architectural vision to flawless execution — our integrated services cover every discipline, every scale, and every geography.' ) ); ?></span>
-                    </p>
-                </div>
-
-                <!-- Right: two equal 9:16 images -->
-                <div class="col-span-1 lg:col-span-7 flex gap-6 lg:gap-10 items-start justify-end">
-                    <?php
-                    $fallback_svc = 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80';
-                    $svc_imgs = [
-                        [ 'img' => get_theme_mod( 'our_service_image_1', $fallback_svc ), 'desc' => get_theme_mod( 'our_service_image_1_desc', 'Concept development and schematic design services tailored to your architectural vision.' ) ],
-                        [ 'img' => get_theme_mod( 'our_service_image_2', $fallback_svc ), 'desc' => get_theme_mod( 'our_service_image_2_desc', 'Comprehensive construction documentation and technical drawings executed with precision.' ) ],
-                    ];
-                    foreach ( $svc_imgs as $si ) : ?>
-                    <div class="flex flex-col items-center flex-1">
-                        <div class="our-service-img curtain-container w-full">
-                            <img src="<?php echo esc_url( $si['img'] ); ?>" alt="" class="curtain-img" style="transition-delay:300ms,300ms;">
-                        </div>
-                        <p class="mt-4 text-[12px] leading-relaxed text-[#68635f] font-light text-center max-w-[240px]"><?php echo esc_html( $si['desc'] ); ?></p>
+            <!-- Right: two equal 9:16 images -->
+            <div class="col-span-1 lg:col-span-7 flex gap-6 lg:gap-10 items-start justify-end">
+                <?php
+                $fallback_svc = 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80';
+                $svc_imgs = [
+                    [ 'img' => get_theme_mod( 'our_service_image_1', $fallback_svc ), 'desc' => get_theme_mod( 'our_service_image_1_desc', 'Concept development and schematic design services tailored to your architectural vision.' ) ],
+                    [ 'img' => get_theme_mod( 'our_service_image_2', $fallback_svc ), 'desc' => get_theme_mod( 'our_service_image_2_desc', 'Comprehensive construction documentation and technical drawings executed with precision.' ) ],
+                ];
+                foreach ( $svc_imgs as $si ) : ?>
+                <div class="flex flex-col items-center flex-1">
+                    <div class="our-service-img curtain-container w-full">
+                        <img src="<?php echo esc_url( $si['img'] ); ?>" alt="" class="curtain-img" style="transition-delay:300ms,300ms;">
                     </div>
-                    <?php endforeach; ?>
+                    <p class="mt-4 text-[12px] leading-relaxed text-[#68635f] font-light text-center max-w-[240px]"><?php echo esc_html( $si['desc'] ); ?></p>
                 </div>
-
+                <?php endforeach; ?>
             </div>
+
         </div>
     </div>
 
@@ -333,7 +331,7 @@
         </div>
     </div>
 
-    <!-- ===== SECTION 6: CONTACT + PORTFOLIO + FOOTER ===== -->
+    <!-- ===== SECTION 6: CONTACT + FOOTER ===== -->
     <div class="section fp-auto-height">
 
         <!-- Contact -->
@@ -371,112 +369,6 @@
                         <?php endif; ?>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Portfolio (moved from section 3) -->
-        <section class="fp-portfolio-bottom w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 py-20 lg:py-28">
-            <div class="text-center mb-16">
-                <span class="text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium mb-4 block">PORTFOLIO</span>
-                <?php $ph = get_theme_mod( 'portfolio_heading', 'OUR WORKS' ); ?>
-                <h2 class="title-text text-3xl md:text-4xl lg:text-5xl leading-tight text-[#2c221a]">
-                    <?php echo esc_html( mb_substr( $ph, 0, -1 ) ); ?><span class="fancy-e"><?php echo esc_html( mb_substr( $ph, -1 ) ); ?></span>
-                </h2>
-            </div>
-
-            <?php
-            $port_q = new WP_Query( [
-                'post_type'               => 'portfolio',
-                'posts_per_page'          => 4,
-                'post_status'             => 'publish',
-                'no_found_rows'           => true,
-                'update_post_term_cache'  => false,
-                'update_post_meta_cache'  => false,
-            ] );
-            $port_posts = $port_q->posts;
-            $port_total = count( $port_posts );
-            $port_i     = 0;
-            $fallback_l = 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80';
-            $fallback_s = 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=600&q=80';
-
-            if ( ! empty( $port_posts ) ) :
-                foreach ( $port_posts as $port_post ) :
-                    setup_postdata( $GLOBALS['post'] = $port_post );
-                    $pid        = $port_post->ID;
-                    $location   = get_post_meta( $pid, '_portfolio_location', true ) ?: 'Dubai, UAE';
-                    $concept    = get_post_meta( $pid, '_portfolio_concept', true );
-                    $palette    = get_post_meta( $pid, '_portfolio_palette', true );
-                    $detail_id  = get_post_meta( $pid, '_portfolio_detail_image', true );
-                    $img_large  = get_the_post_thumbnail_url( $pid, 'large' ) ?: $fallback_l;
-                    $img_small  = $detail_id ? wp_get_attachment_image_url( $detail_id, 'medium' ) : $fallback_s;
-                    $num        = str_pad( $port_i + 1, 2, '0', STR_PAD_LEFT ) . '/' . str_pad( $port_total, 2, '0', STR_PAD_LEFT );
-                    $raw_exc    = $port_post->post_excerpt ?: wp_strip_all_tags( $port_post->post_content );
-                    $excerpt    = wp_trim_words( $raw_exc, 25, '...' );
-                    $is_last    = ( $port_i === $port_total - 1 );
-                    $port_i++;
-            ?>
-            <div class="portfolio-slide" style="margin-bottom:4rem; padding-bottom:4rem; <?php echo $is_last ? '' : 'border-bottom:1px solid #e5e5e5;'; ?>">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8 items-start">
-                    <div>
-                        <div style="aspect-ratio:1/1; width:100%; overflow:hidden;">
-                            <img src="<?php echo esc_url( $img_large ); ?>"
-                                 alt="<?php echo esc_attr( get_the_title() ); ?>"
-                                 style="width:100%; height:100%; object-fit:cover;">
-                        </div>
-                    </div>
-                    <div class="flex flex-col" style="min-height:380px;">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
-                            <span style="font-size:12px; color:#68635f; font-weight:300;"><?php echo esc_html( $location ); ?></span>
-                            <span style="font-size:12px; color:#68635f; font-weight:300; letter-spacing:0.15em;"><?php echo esc_html( $num ); ?></span>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8" style="margin-bottom:auto;">
-                            <div class="flex flex-col">
-                                <h3 class="title-text" style="font-size:clamp(1.4rem,2.5vw,2rem); margin-bottom:1rem; color:#2c221a; font-weight:500; text-transform:uppercase; line-height:1.1;">
-                                    <?php the_title(); ?>
-                                </h3>
-                                <p style="font-size:13px; line-height:1.8; color:#68635f; font-weight:300;"><?php echo esc_html( $excerpt ); ?></p>
-                            </div>
-                            <div class="flex flex-col">
-                                <div style="aspect-ratio:1/1; width:100%; max-width:240px; margin-left:auto; overflow:hidden;">
-                                    <img src="<?php echo esc_url( $img_small ); ?>" alt="Detail" style="width:100%; height:100%; object-fit:cover;">
-                                </div>
-                                <?php if ( $palette ) : ?>
-                                <p style="font-size:11px; color:#68635f; font-weight:300; margin-top:0.75rem; text-align:right; max-width:240px; margin-left:auto; line-height:1.6;"><?php echo esc_html( $palette ); ?></p>
-                                <?php endif; ?>
-                                <a href="<?php the_permalink(); ?>" class="link-wrapper" style="opacity:1; transform:none; width:auto; gap:1rem; min-width:140px; margin-top:1.5rem; margin-left:auto;">
-                                    <span class="link-text" style="font-size:11px;">LEARN MORE</span>
-                                    <div class="arrow-graphic">
-                                        <svg width="14" height="9" viewBox="0 0 16 10" fill="none">
-                                            <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        <?php if ( $concept ) : ?>
-                        <div style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid #e5e5e5;">
-                            <p style="font-size:12px; color:#68635f; font-weight:300; line-height:1.6; max-width:260px;"><?php echo esc_html( $concept ); ?></p>
-                        </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-            <?php
-                endforeach;
-                wp_reset_postdata();
-            endif;
-            ?>
-
-            <!-- See More button -->
-            <div style="text-align:center; margin-top:3rem;">
-                <a href="<?php echo esc_url( dayanarc_portfolio_url() ); ?>" class="link-wrapper" style="display:inline-flex; opacity:1; transform:none; gap:1rem;">
-                    <span class="link-text">SEE MORE</span>
-                    <div class="arrow-graphic">
-                        <svg width="16" height="10" viewBox="0 0 16 10" fill="none">
-                            <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                </a>
             </div>
         </section>
 
@@ -550,6 +442,34 @@
         </footer>
 
     </div><!-- end section 6 -->
+
+    <!-- ===== SECTION 7: PORTFOLIO ===== -->
+    <div class="section portfolio-section relative w-full px-6 md:px-12 lg:px-20 py-16 lg:py-24 flex flex-col justify-center" id="portfolio-section">
+        <div class="w-full max-w-[1440px] mx-auto">
+            <div class="text-center mb-12 lg:mb-16">
+                <span class="reveal-mask block mb-4">
+                    <span class="reveal-text text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium">PORTFOLIO</span>
+                </span>
+                <?php $ph = get_theme_mod( 'portfolio_heading', 'OUR WORKS' ); ?>
+                <h1 class="title-text text-3xl md:text-4xl lg:text-5xl leading-tight text-[#2c221a]">
+                    <span class="reveal-mask"><span class="reveal-text delay-100 uppercase tracking-tight"><?php echo esc_html( mb_substr( $ph, 0, -1 ) ); ?><span class="fancy-s"><?php echo esc_html( mb_substr( $ph, -1 ) ); ?></span></span></span>
+                </h1>
+            </div>
+
+            <div id="portfolio-container"></div>
+
+            <div class="mt-12 text-center">
+                <a href="<?php echo esc_url( dayanarc_portfolio_url() ); ?>" class="link-wrapper" style="display:inline-flex; opacity:1; transform:none; gap:1rem;">
+                    <span class="link-text">SEE MORE</span>
+                    <div class="arrow-graphic">
+                        <svg width="16" height="10" viewBox="0 0 16 10" fill="none">
+                            <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div><!-- end section 7 -->
 
 </div><!-- end #fullpage -->
 

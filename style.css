@@ -1375,12 +1375,12 @@ html.admin-bar .inner-nav {
     flex-shrink: 0;
     transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
-/* When hovering the small image, swap sizes */
+/* When hovering the small image, swap sizes — full size exchange */
 .about-images-wrapper:has(.about-img-small:hover) .about-img-big {
-    width: 50%;
+    width: 35%;
 }
 .about-images-wrapper:has(.about-img-small:hover) .about-img-small {
-    width: 47%;
+    width: 62%;
 }
 
 /* ── Video play button ───────────────────────────────────────────────────── */
