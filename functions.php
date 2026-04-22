@@ -55,7 +55,7 @@ function dayanarc_breadcrumb() {
     echo '<nav class="inner-breadcrumb" aria-label="' . esc_attr__( 'Breadcrumb', 'dayanarc' ) . '">';
     echo '<a href="' . $home . '">HOME</a>';
 
-    if ( is_post_type_archive( 'portfolio' ) ) {
+    if ( is_post_type_archive( 'portfolio' ) || is_page_template( 'page-portfolio.php' ) ) {
         echo '<span class="breadcrumb-sep"> — </span>';
         echo '<span class="breadcrumb-current">PORTFOLIO</span>';
     } elseif ( is_home() ) {
@@ -63,7 +63,7 @@ function dayanarc_breadcrumb() {
         echo '<span class="breadcrumb-current">JOURNAL</span>';
     } elseif ( is_singular( 'portfolio' ) ) {
         echo '<span class="breadcrumb-sep"> — </span>';
-        echo '<a href="' . esc_url( get_post_type_archive_link( 'portfolio' ) ) . '">PORTFOLIO</a>';
+        echo '<a href="' . esc_url( dayanarc_portfolio_url() ) . '">PORTFOLIO</a>';
         echo '<span class="breadcrumb-sep"> — </span>';
         echo '<span class="breadcrumb-current">' . esc_html( strtoupper( get_the_title() ) ) . '</span>';
     } elseif ( is_single() ) {
@@ -102,6 +102,10 @@ function dayanarc_maybe_flush_rewrites() {
 add_action( 'init', 'dayanarc_maybe_flush_rewrites', 25 );
 
 function dayanarc_portfolio_url() {
+    $id = (int) get_option( 'dayanarc_portfolio_page_id', 0 );
+    if ( $id && get_post( $id ) ) {
+        return get_permalink( $id );
+    }
     $url = get_post_type_archive_link( 'portfolio' );
     return $url ?: home_url( '/portfolio/' );
 }

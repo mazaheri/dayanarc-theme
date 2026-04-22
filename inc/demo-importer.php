@@ -49,6 +49,7 @@ function dayanarc_demo_page() {
                 <li><strong>12 Journal posts</strong> with featured images and excerpts</li>
                 <li><strong>Home page</strong> set as the static front page</li>
                 <li><strong>Journal page</strong> set as the blog posts page</li>
+                <li><strong>Portfolio page</strong> at /portfolio/ with portfolio listing template</li>
                 <li><strong>Contact Form 7</strong> form created (configure reCAPTCHA v3 keys in Contact → Integration)</li>
                 <li><strong>Contact page</strong> at /contact/</li>
                 <li><strong>4 Service pages</strong>: Architecture, Interior Design, 3D Visualization, Project Management</li>
@@ -86,6 +87,9 @@ function dayanarc_run_import() {
 
     // 5. Journal page + blog posts page setting
     dayanarc_import_journal_page();
+
+    // 5b. Portfolio page
+    dayanarc_import_portfolio_page();
 
     // 6. Contact Form 7 form
     dayanarc_import_contact_form();
@@ -319,10 +323,48 @@ function dayanarc_import_journal_page() {
     update_option( 'show_on_front', 'page' );
 }
 
+// ── 5b. Portfolio page ────────────────────────────────────────────────────────
+function dayanarc_import_portfolio_page() {
+    $existing_id = (int) get_option( 'dayanarc_portfolio_page_id', 0 );
+    if ( $existing_id && get_post( $existing_id ) ) return $existing_id;
+
+    if ( dayanarc_post_exists( 'Portfolio', 'page' ) ) {
+        $q = new WP_Query( [
+            'post_type'      => 'page',
+            'title'          => 'Portfolio',
+            'post_status'    => 'any',
+            'posts_per_page' => 1,
+            'fields'         => 'ids',
+            'no_found_rows'  => true,
+        ] );
+        if ( $q->have_posts() ) {
+            $id = $q->posts[0];
+            update_post_meta( $id, '_wp_page_template', 'page-portfolio.php' );
+            update_option( 'dayanarc_portfolio_page_id', $id );
+            return $id;
+        }
+    }
+
+    $page_id = wp_insert_post( [
+        'post_title'   => 'Portfolio',
+        'post_content' => '',
+        'post_status'  => 'publish',
+        'post_type'    => 'page',
+        'post_name'    => 'portfolio',
+    ] );
+
+    if ( is_wp_error( $page_id ) || ! $page_id ) return 0;
+
+    update_post_meta( $page_id, '_wp_page_template', 'page-portfolio.php' );
+    update_option( 'dayanarc_portfolio_page_id', $page_id );
+
+    return $page_id;
+}
+
 // ── 9. Primary navigation menu ────────────────────────────────────────────────
 function dayanarc_import_nav_menu() {
     $menu_name     = 'Primary Menu';
-    $portfolio_url = get_post_type_archive_link( 'portfolio' ) ?: home_url( '/portfolio/' );
+    $portfolio_url = dayanarc_portfolio_url();
     $journal_id    = (int) get_option( 'page_for_posts' );
     $journal_url   = $journal_id ? get_permalink( $journal_id ) : home_url( '/journal/' );
     $contact_url   = dayanarc_contact_page_url();
