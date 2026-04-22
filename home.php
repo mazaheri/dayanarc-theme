@@ -19,7 +19,7 @@ $journal_query = new WP_Query( [
 $total_posts = $journal_query->found_posts;
 ?>
 
-<main style="max-width:1600px; margin:0 auto; padding:8rem 1.5rem 6rem;">
+<main style="max-width:1400px; margin:0 auto; padding:8rem 1.5rem 6rem;">
 
     <!-- Header -->
     <div style="margin-bottom:2rem;">

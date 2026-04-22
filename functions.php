@@ -330,7 +330,7 @@ function dayanarc_register_cpts() {
             'add_new_item'  => __( 'Add New Portfolio Item', 'dayanarc' ),
         ],
         'public'        => true,
-        'has_archive'   => true,
+        'has_archive'   => false,
         'supports'      => [ 'title', 'editor', 'thumbnail', 'excerpt' ],
         'menu_icon'     => 'dashicons-portfolio',
         'show_in_rest'  => true,

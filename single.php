@@ -1,42 +1,27 @@
 <?php get_header( 'inner' ); ?>
 
-<main>
+<main style="max-width:860px; margin:0 auto; padding:8rem 2rem 6rem;">
 <?php if ( have_posts() ) : the_post(); ?>
 
+    <!-- Title & date above image -->
+    <div style="margin-bottom:1.75rem;">
+        <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500; display:block; margin-bottom:0.75rem;">
+            JOURNAL &mdash; <?php echo esc_html( get_the_date( 'F j, Y' ) ); ?>
+        </span>
+        <h1 class="title-text" style="font-size:clamp(2rem,5vw,3.5rem); line-height:1.1; letter-spacing:-0.02em; text-transform:uppercase; color:#2c221a; margin:0;">
+            <?php echo esc_html( strtoupper( get_the_title() ) ); ?>
+        </h1>
+    </div>
+
     <?php if ( has_post_thumbnail() ) : ?>
-        <!-- Hero image with title + date overlaid -->
-        <div class="single-hero">
-            <?php the_post_thumbnail( 'full', [ 'class' => 'single-hero-img', 'alt' => esc_attr( get_the_title() ) ] ); ?>
-            <div class="single-hero-overlay">
-                <div class="single-hero-content">
-                    <span class="single-hero-meta">
-                        JOURNAL &mdash; <?php echo esc_html( get_the_date( 'F j, Y' ) ); ?>
-                    </span>
-                    <h1 class="single-hero-title title-text">
-                        <?php echo esc_html( strtoupper( get_the_title() ) ); ?>
-                    </h1>
-                </div>
-            </div>
-        </div>
-    <?php else : ?>
-        <!-- No featured image: text-only header -->
-        <div class="single-no-hero">
-            <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500; display:block; margin-bottom:0.75rem;">
-                JOURNAL &mdash; <?php echo esc_html( get_the_date( 'F j, Y' ) ); ?>
-            </span>
-            <h1 style="font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.5rem); line-height:1.1; letter-spacing:-0.02em; text-transform:uppercase; color:#2c221a; margin-bottom:0;">
-                <?php echo esc_html( strtoupper( get_the_title() ) ); ?>
-            </h1>
+        <div style="width:100%; aspect-ratio:16/9; overflow:hidden; margin-bottom:2rem;">
+            <?php the_post_thumbnail( 'full', [ 'style' => 'width:100%; height:100%; object-fit:cover; display:block;', 'alt' => esc_attr( get_the_title() ) ] ); ?>
         </div>
     <?php endif; ?>
 
-    <!-- Breadcrumb -->
-    <div style="max-width:860px; margin:0 auto; padding:1.5rem 2rem 0;">
-        <?php dayanarc_breadcrumb(); ?>
-    </div>
+    <?php dayanarc_breadcrumb(); ?>
 
-    <!-- Article content -->
-    <article style="max-width:860px; margin:0 auto; padding:2.5rem 2rem 6rem;">
+    <article style="margin-top:2.5rem;">
         <div style="font-size:15px; line-height:1.9; color:#4a4540; font-weight:300;">
             <?php the_content(); ?>
         </div>

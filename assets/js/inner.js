@@ -49,7 +49,8 @@
 
             fetch(dayanarcInner.ajaxUrl, { method: 'POST', body: formData })
                 .then(function (res) { return res.json(); })
-                .then(function (data) {
+                .then(function (res) {
+                    var data = res.data || {};
                     if (data.html) {
                         mosaicGrid.insertAdjacentHTML('beforeend', data.html);
                     }

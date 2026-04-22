@@ -4,7 +4,7 @@ Theme URI: https://www.dayanarc.com
 Author: Dayan Arc
 Author URI: https://www.dayanarc.com
 Description: Premium architecture and interior design WordPress theme with fullPage.js single-page layout.
-Version: 1.3.0
+Version: 2.0.0
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 8.0
@@ -1204,8 +1204,8 @@ html.admin-bar .inner-nav {
     /* aspect-ratio set per class below */
 }
 
-.journal-mosaic-item.mosaic-wide  { aspect-ratio: 16 / 9; }
-.journal-mosaic-item.mosaic-tall  { aspect-ratio: 3 / 4; }
+.journal-mosaic-item.mosaic-wide  { aspect-ratio: 16 / 9; max-height: 420px; }
+.journal-mosaic-item.mosaic-tall  { aspect-ratio: 3 / 4;  max-height: 480px; }
 
 /* On tablet, tall portrait cards become square to avoid very tall columns */
 @media (max-width: 1023px) {
@@ -1320,59 +1320,3 @@ html.admin-bar .inner-nav {
     cursor: not-allowed;
 }
 
-/* ── Blog single — hero image with overlaid title ───────────────────────────── */
-.single-hero {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 7;
-    overflow: hidden;
-    max-height: 75vh;
-}
-
-.single-hero-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.single-hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(10,8,6,0.88) 0%, rgba(10,8,6,0.3) 50%, transparent 100%);
-    display: flex;
-    align-items: flex-end;
-}
-
-.single-hero-content {
-    width: 100%;
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 2rem 2rem 2.5rem;
-}
-
-.single-hero-meta {
-    display: block;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.6);
-    font-weight: 500;
-    margin-bottom: 0.625rem;
-}
-
-.single-hero-title {
-    font-size: clamp(1.75rem, 4vw, 3.25rem);
-    line-height: 1.1;
-    letter-spacing: 0.02em;
-    color: #fff;
-    text-transform: uppercase;
-    margin: 0;
-    font-weight: 400;
-}
-
-.single-no-hero {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 8rem 2rem 3rem;
-}

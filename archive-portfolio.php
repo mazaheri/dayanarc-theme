@@ -1,4 +1,7 @@
-<?php get_header( 'inner' ); ?>
+<?php
+// CPT archive is disabled (has_archive => false). Redirect to the Portfolio page as fallback.
+wp_redirect( home_url( '/portfolio/' ), 301 );
+exit;
 
 <main style="max-width:1400px; margin:0 auto; padding:8rem 1.5rem 6rem;">
 
