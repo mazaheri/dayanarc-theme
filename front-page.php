@@ -386,20 +386,23 @@
 
             <?php
             $port_q = new WP_Query( [
-                'post_type'      => 'portfolio',
-                'posts_per_page' => 4,
-                'post_status'    => 'publish',
-                'no_found_rows'  => false,
+                'post_type'               => 'portfolio',
+                'posts_per_page'          => 4,
+                'post_status'             => 'publish',
+                'no_found_rows'           => true,
+                'update_post_term_cache'  => false,
+                'update_post_meta_cache'  => false,
             ] );
-            $port_total = $port_q->found_posts;
+            $port_posts = $port_q->posts;
+            $port_total = count( $port_posts );
             $port_i     = 0;
             $fallback_l = 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80';
             $fallback_s = 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=600&q=80';
 
-            if ( $port_q->have_posts() ) :
-                while ( $port_q->have_posts() ) :
-                    $port_q->the_post();
-                    $pid        = get_the_ID();
+            if ( ! empty( $port_posts ) ) :
+                foreach ( $port_posts as $port_post ) :
+                    setup_postdata( $GLOBALS['post'] = $port_post );
+                    $pid        = $port_post->ID;
                     $location   = get_post_meta( $pid, '_portfolio_location', true ) ?: 'Dubai, UAE';
                     $concept    = get_post_meta( $pid, '_portfolio_concept', true );
                     $palette    = get_post_meta( $pid, '_portfolio_palette', true );
@@ -407,10 +410,12 @@
                     $img_large  = get_the_post_thumbnail_url( $pid, 'large' ) ?: $fallback_l;
                     $img_small  = $detail_id ? wp_get_attachment_image_url( $detail_id, 'medium' ) : $fallback_s;
                     $num        = str_pad( $port_i + 1, 2, '0', STR_PAD_LEFT ) . '/' . str_pad( $port_total, 2, '0', STR_PAD_LEFT );
-                    $excerpt    = has_excerpt() ? get_the_excerpt() : wp_trim_words( get_the_content(), 25, '...' );
+                    $raw_exc    = $port_post->post_excerpt ?: wp_strip_all_tags( $port_post->post_content );
+                    $excerpt    = wp_trim_words( $raw_exc, 25, '...' );
+                    $is_last    = ( $port_i === $port_total - 1 );
                     $port_i++;
             ?>
-            <div class="portfolio-slide" style="margin-bottom:4rem; padding-bottom:4rem; <?php echo $port_q->have_posts() ? 'border-bottom:1px solid #e5e5e5;' : ''; ?>">
+            <div class="portfolio-slide" style="margin-bottom:4rem; padding-bottom:4rem; <?php echo $is_last ? '' : 'border-bottom:1px solid #e5e5e5;'; ?>">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8 items-start">
                     <div>
                         <div style="aspect-ratio:1/1; width:100%; overflow:hidden;">
@@ -457,7 +462,7 @@
                 </div>
             </div>
             <?php
-                endwhile;
+                endforeach;
                 wp_reset_postdata();
             endif;
             ?>
