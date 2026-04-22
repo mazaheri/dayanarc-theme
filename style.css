@@ -1398,6 +1398,12 @@ html.admin-bar .inner-nav {
     justify-content: center;
     z-index: 10;
     pointer-events: none;
+    opacity: 0;
+}
+/* Reveal play button only after the image curtain animation completes (~1.9s) */
+.fp-section.active .about-img-big .play-button-overlay {
+    opacity: 1;
+    transition: opacity 0.4s ease 1.9s;
 }
 .play-btn-pulse {
     position: absolute;
@@ -1436,13 +1442,13 @@ html.admin-bar .inner-nav {
     background-color: #ffffff;
 }
 .our-service-img {
-    aspect-ratio: 9 / 16;
     overflow: hidden;
-}
-.our-service-img img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+}
+/* Override curtain-img's height:100% and object-fit:cover — show full image at natural height */
+.our-service-img .curtain-img {
+    height: auto;
+    object-fit: initial;
 }
 
 /* ── Portfolio compact image sizes (section 7 combined with footer) ────────── */
