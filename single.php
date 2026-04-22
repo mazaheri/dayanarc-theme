@@ -11,7 +11,7 @@
 
         <?php dayanarc_breadcrumb(); ?>
 
-        <div style="margin-bottom:1.5rem; margin-top:1.5rem;">
+        <div style="margin-bottom:1.5rem;">
             <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500;">
                 JOURNAL &mdash; <?php echo esc_html( get_the_date( 'F j, Y' ) ); ?>
             </span>
@@ -26,7 +26,7 @@
         </div>
 
         <!-- Previous / Next navigation -->
-        <div style="margin-top:5rem; padding-top:2.5rem; border-top:1px solid #e5e5e5; display:flex; justify-content:space-between; align-items:center; gap:2rem; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;">
+        <div style="margin-top:5rem; padding-top:3rem; border-top:1px solid #e5e5e5; display:flex; justify-content:space-between; gap:2rem; font-size:11px; letter-spacing:0.1em; text-transform:uppercase;">
             <?php
             $prev = get_previous_post();
             $next = get_next_post();
@@ -46,7 +46,7 @@
 
             <?php if ( $next ) : ?>
                 <a href="<?php echo esc_url( get_permalink( $next->ID ) ); ?>"
-                   style="text-decoration:none; color:#8c8783; display:flex; align-items:center; gap:0.75rem; transition:color 0.3s; text-align:right;"
+                   style="text-decoration:none; color:#8c8783; display:flex; align-items:center; gap:0.75rem; transition:color 0.3s;"
                    onmouseover="this.style.color='#2c221a'" onmouseout="this.style.color='#8c8783'">
                     <?php echo esc_html( strtoupper( $next->post_title ) ); ?>
                     <svg width="14" height="10" viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.5">
