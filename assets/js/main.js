@@ -275,42 +275,7 @@
         }, 500);
     };
 
-    // ── Contact form (WordPress AJAX) ───────────────────────────────────────────
-    const contactForm = document.querySelector('.contact-form');
-    const msgEl       = document.getElementById('contact-message');
-
-    if (contactForm) {
-        contactForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const formData = new FormData(contactForm);
-            formData.append('action', 'dayanarc_contact');
-            formData.append('nonce',  dayanarcData.nonce);
-
-            const submitBtn = contactForm.querySelector('[type="submit"] span');
-            if (submitBtn) submitBtn.textContent = 'SENDING...';
-
-            fetch(dayanarcData.ajaxUrl, { method: 'POST', body: formData })
-                .then(function (r) { return r.json(); })
-                .then(function (data) {
-                    if (msgEl) {
-                        msgEl.textContent  = data.data && data.data.message ? data.data.message : (data.success ? 'Message sent!' : 'An error occurred.');
-                        msgEl.className    = data.success ? 'success' : 'error';
-                        msgEl.style.display = 'block';
-                    }
-                    if (data.success) contactForm.reset();
-                    if (submitBtn) submitBtn.textContent = 'SEND REQUEST';
-                })
-                .catch(function () {
-                    if (msgEl) {
-                        msgEl.textContent   = 'Connection error. Please try again.';
-                        msgEl.className     = 'error';
-                        msgEl.style.display = 'block';
-                    }
-                    if (submitBtn) submitBtn.textContent = 'SEND REQUEST';
-                });
-        });
-    }
+    // Contact form is now handled by Contact Form 7.
 
     // ── Utility ─────────────────────────────────────────────────────────────────
     function escHtml(str) {

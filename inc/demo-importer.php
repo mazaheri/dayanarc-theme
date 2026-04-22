@@ -48,7 +48,11 @@ function dayanarc_demo_page() {
                 <li><strong>3 Portfolio items</strong> with featured images and meta data</li>
                 <li><strong>12 Journal posts</strong> with featured images and excerpts</li>
                 <li><strong>Home page</strong> set as the static front page</li>
-                <li><strong>Primary navigation menu</strong></li>
+                <li><strong>Journal page</strong> set as the blog posts page</li>
+                <li><strong>Contact Form 7</strong> form created (configure reCAPTCHA v3 keys in Contact → Integration)</li>
+                <li><strong>Contact page</strong> at /contact/</li>
+                <li><strong>4 Service pages</strong>: Architecture, Interior Design, 3D Visualization, Project Management</li>
+                <li><strong>Primary navigation menu</strong> with all links</li>
             </ul>
             <p style="color:#856404; background:#fff3cd; padding:.75rem 1rem; border-left:4px solid #ffc107; margin-top:1rem;">
                 Existing posts/pages with the same title will be skipped — safe to run more than once.
@@ -77,11 +81,28 @@ function dayanarc_run_import() {
     // 3. Journal posts
     dayanarc_import_journal_posts( $image_ids );
 
-    // 4. Home page + front page settings
+    // 4. Home page + static front page
     dayanarc_import_home_page();
 
-    // 5. Primary nav menu
+    // 5. Journal page + blog posts page setting
+    dayanarc_import_journal_page();
+
+    // 6. Contact Form 7 form
+    dayanarc_import_contact_form();
+
+    // 7. Contact page
+    dayanarc_import_contact_page();
+
+    // 8. Service pages
+    dayanarc_import_service_pages( $image_ids );
+
+    // 9. Primary nav menu (runs last so Contact URL is available)
     dayanarc_import_nav_menu();
+
+    // Rebuild rewrite rules so /portfolio/ archive URL resolves immediately.
+    flush_rewrite_rules( false );
+    // Set flag so the next page load also flushes (more reliable in Studio/Playground).
+    update_option( 'dayanarc_flush_rewrites_pending', '1' );
 
     return true;
 }
@@ -229,7 +250,26 @@ function dayanarc_import_journal_posts( $image_ids ) {
 
 // ── 4. Home page + static front page ─────────────────────────────────────────
 function dayanarc_import_home_page() {
-    if ( dayanarc_post_exists( 'Home', 'page' ) ) return;
+    // Already configured
+    $existing_front = (int) get_option( 'page_on_front' );
+    if ( $existing_front && get_post( $existing_front ) ) return;
+
+    if ( dayanarc_post_exists( 'Home', 'page' ) ) {
+        // Page exists but option not set — look it up and re-apply
+        $q = new WP_Query( [
+            'post_type'      => 'page',
+            'title'          => 'Home',
+            'post_status'    => 'any',
+            'posts_per_page' => 1,
+            'fields'         => 'ids',
+            'no_found_rows'  => true,
+        ] );
+        if ( $q->have_posts() ) {
+            update_option( 'show_on_front', 'page' );
+            update_option( 'page_on_front', $q->posts[0] );
+        }
+        return;
+    }
 
     $home_id = wp_insert_post( [
         'post_title'   => 'Home',
@@ -244,28 +284,307 @@ function dayanarc_import_home_page() {
     }
 }
 
-// ── 5. Primary navigation menu ────────────────────────────────────────────────
+// ── 5. Journal page + set as blog posts page ─────────────────────────────────
+function dayanarc_import_journal_page() {
+    // Already configured to a valid page — skip
+    $existing_posts_page = (int) get_option( 'page_for_posts' );
+    if ( $existing_posts_page && get_post( $existing_posts_page ) ) return;
+
+    // Find or create the Journal page
+    $journal_id = null;
+
+    $q = new WP_Query( [
+        'post_type'      => 'page',
+        'title'          => 'Journal',
+        'post_status'    => 'any',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'no_found_rows'  => true,
+    ] );
+
+    if ( $q->have_posts() ) {
+        $journal_id = $q->posts[0];
+    } else {
+        $journal_id = wp_insert_post( [
+            'post_title'   => 'Journal',
+            'post_content' => '',
+            'post_status'  => 'publish',
+            'post_type'    => 'page',
+        ] );
+        if ( is_wp_error( $journal_id ) ) return;
+    }
+
+    update_option( 'page_for_posts', $journal_id );
+    // Ensure static front page mode is still active
+    update_option( 'show_on_front', 'page' );
+}
+
+// ── 9. Primary navigation menu ────────────────────────────────────────────────
 function dayanarc_import_nav_menu() {
-    $menu_name = 'Primary Menu';
+    $menu_name     = 'Primary Menu';
+    $portfolio_url = get_post_type_archive_link( 'portfolio' ) ?: home_url( '/portfolio/' );
+    $journal_id    = (int) get_option( 'page_for_posts' );
+    $journal_url   = $journal_id ? get_permalink( $journal_id ) : home_url( '/journal/' );
+    $contact_url   = dayanarc_contact_page_url();
 
-    if ( wp_get_nav_menu_object( $menu_name ) ) return;
+    $desired_urls = [
+        'Portfolio' => $portfolio_url,
+        'Journal'   => $journal_url,
+        'Contact'   => $contact_url,
+    ];
 
+    $existing_menu = wp_get_nav_menu_object( $menu_name );
+
+    if ( $existing_menu ) {
+        // Menu already exists — update stale URLs
+        $items = wp_get_nav_menu_items( $existing_menu->term_id );
+        if ( $items ) {
+            foreach ( $items as $item ) {
+                if ( isset( $desired_urls[ $item->title ] ) && $item->url !== $desired_urls[ $item->title ] ) {
+                    wp_update_nav_menu_item( $existing_menu->term_id, $item->ID, [
+                        'menu-item-title'  => $item->title,
+                        'menu-item-url'    => $desired_urls[ $item->title ],
+                        'menu-item-status' => 'publish',
+                        'menu-item-type'   => 'custom',
+                    ] );
+                }
+            }
+        }
+        return;
+    }
+
+    // Create fresh menu
     $menu_id = wp_create_nav_menu( $menu_name );
     if ( is_wp_error( $menu_id ) ) return;
 
-    $items = [ 'About Us', 'Portfolio', 'Services', 'Journal', 'Contact' ];
-    foreach ( $items as $label ) {
+    $items = [
+        [ 'label' => 'About Us',  'url' => home_url( '/' ) ],
+        [ 'label' => 'Portfolio', 'url' => $portfolio_url ],
+        [ 'label' => 'Services',  'url' => home_url( '/' ) ],
+        [ 'label' => 'Journal',   'url' => $journal_url ],
+        [ 'label' => 'Contact',   'url' => $contact_url ],
+    ];
+
+    foreach ( $items as $item ) {
         wp_update_nav_menu_item( $menu_id, 0, [
-            'menu-item-title'  => $label,
-            'menu-item-url'    => home_url( '/' ),
+            'menu-item-title'  => $item['label'],
+            'menu-item-url'    => $item['url'],
             'menu-item-status' => 'publish',
             'menu-item-type'   => 'custom',
         ] );
     }
 
-    $locations             = get_theme_mod( 'nav_menu_locations', [] );
-    $locations['primary']  = $menu_id;
+    $locations            = get_theme_mod( 'nav_menu_locations', [] );
+    $locations['primary'] = $menu_id;
     set_theme_mod( 'nav_menu_locations', $locations );
+}
+
+// ── 6. Contact Form 7 form ────────────────────────────────────────────────────
+function dayanarc_import_contact_form() {
+    // Already exists and valid
+    $existing_id = (int) get_option( 'dayanarc_contact_form_id', 0 );
+    if ( $existing_id && get_post( $existing_id ) && get_post_type( $existing_id ) === 'wpcf7_contact_form' ) {
+        return $existing_id;
+    }
+
+    // CF7 not installed
+    if ( ! post_type_exists( 'wpcf7_contact_form' ) ) {
+        return 0;
+    }
+
+    $form_id = wp_insert_post( [
+        'post_title'  => 'Dayan Arc Contact',
+        'post_type'   => 'wpcf7_contact_form',
+        'post_status' => 'publish',
+        'post_name'   => 'dayan-arc-contact',
+    ] );
+
+    if ( is_wp_error( $form_id ) || ! $form_id ) return 0;
+
+    $form_body = '<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<div>[text* your-name class:form-input placeholder "Name"]</div>
+<div>[tel your-phone class:form-input placeholder "Phone"]</div>
+</div>
+<div>[email* your-email class:form-input placeholder "Email"]</div>
+<div>[textarea* your-message rows:5 class:form-textarea placeholder "Message"]</div>
+<div style="margin-top:0.25rem;">
+<button type="submit" style="border:none;background:transparent;cursor:pointer;padding:0;margin:0;display:inline-flex;align-items:center;gap:0.75rem;">
+<span style="font-size:11px;text-transform:uppercase;letter-spacing:0.15em;font-weight:600;color:#2c221a;">SEND REQUEST</span>
+<svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+</div>';
+
+    $mail = [
+        'active'             => true,
+        'recipient'          => '[_site_admin_email]',
+        'sender'             => get_bloginfo( 'name' ) . ' <[_site_admin_email]>',
+        'subject'            => 'New contact request from [your-name]',
+        'body'               => "Name: [your-name]\nPhone: [your-phone]\nEmail: [your-email]\n\nMessage:\n[your-message]\n\n---\nSent from: [_site_title] ([_site_url])",
+        'additional_headers' => 'Reply-To: [your-email]',
+        'attachments'        => '',
+        'use_html'           => false,
+        'exclude_blank'      => false,
+    ];
+
+    $mail_2 = [
+        'active'             => false,
+        'recipient'          => '',
+        'sender'             => '',
+        'subject'            => '',
+        'body'               => '',
+        'additional_headers' => '',
+        'attachments'        => '',
+        'use_html'           => false,
+        'exclude_blank'      => false,
+    ];
+
+    update_post_meta( $form_id, '_form',                $form_body );
+    update_post_meta( $form_id, '_mail',                $mail );
+    update_post_meta( $form_id, '_mail_2',              $mail_2 );
+    update_post_meta( $form_id, '_messages',            [] );
+    update_post_meta( $form_id, '_additional_settings', '' );
+
+    update_option( 'dayanarc_contact_form_id', $form_id );
+
+    return $form_id;
+}
+
+// ── 7. Contact page ───────────────────────────────────────────────────────────
+function dayanarc_import_contact_page() {
+    $existing_id = (int) get_option( 'dayanarc_contact_page_id', 0 );
+    if ( $existing_id && get_post( $existing_id ) ) return $existing_id;
+
+    if ( dayanarc_post_exists( 'Contact', 'page' ) ) {
+        $q = new WP_Query( [
+            'post_type'      => 'page',
+            'title'          => 'Contact',
+            'post_status'    => 'any',
+            'posts_per_page' => 1,
+            'fields'         => 'ids',
+            'no_found_rows'  => true,
+        ] );
+        if ( $q->have_posts() ) {
+            $id = $q->posts[0];
+            update_post_meta( $id, '_wp_page_template', 'page-contact.php' );
+            update_option( 'dayanarc_contact_page_id', $id );
+            return $id;
+        }
+    }
+
+    $page_id = wp_insert_post( [
+        'post_title'   => 'Contact',
+        'post_content' => '',
+        'post_status'  => 'publish',
+        'post_type'    => 'page',
+        'post_name'    => 'contact',
+    ] );
+
+    if ( is_wp_error( $page_id ) || ! $page_id ) return 0;
+
+    update_post_meta( $page_id, '_wp_page_template', 'page-contact.php' );
+    update_option( 'dayanarc_contact_page_id', $page_id );
+
+    return $page_id;
+}
+
+// ── 8. Service pages ──────────────────────────────────────────────────────────
+function dayanarc_import_service_pages( $image_ids ) {
+    $services = [
+        [
+            'title'    => 'Architecture',
+            'slug'     => 'architecture',
+            'number'   => '01',
+            'option'   => 'dayanarc_service_architecture_id',
+            'excerpt'  => 'Complete architectural design from concept to execution, tailored to your unique vision and functional needs.',
+            'content'  => 'At Dayan Arc, our architectural services span the full design journey — from initial concept through schematic design, design development, construction documentation, and project administration. We work closely with each client to understand their vision, program requirements, and site conditions, delivering spaces that are both beautiful and precisely functional.
+
+Our architects bring deep expertise in residential, commercial, and hospitality projects across the region, blending innovative design thinking with a rigorous attention to detail and technical excellence.',
+            'features' => "Concept Development\nSchematic Design\nDesign Development\nConstruction Documentation\nProject Administration\nSite Supervision",
+            'image'    => 'interior1.jpg',
+        ],
+        [
+            'title'    => 'Interior Design',
+            'slug'     => 'interior-design',
+            'number'   => '02',
+            'option'   => 'dayanarc_service_interior_design_id',
+            'excerpt'  => 'Comprehensive interior design services from space planning to material selection and 3D visualization.',
+            'content'  => 'Our interior design team transforms spaces into experiences. Working from a deep understanding of light, material, proportion, and the human scale, we craft interiors that feel both intentional and alive. Every project begins with listening — understanding how a space will be lived in, worked in, or experienced — then translating that into a coherent design language.
+
+From concept mood boards through furniture selection, lighting design, and final installation, Dayan Arc manages the complete interior design process with precision and care.',
+            'features' => "Space Planning\nConcept & Mood Boards\nMaterial & Finish Selection\nFurniture & FF&E Procurement\nLighting Design\n3D Visualization",
+            'image'    => 'interior2.jpg',
+        ],
+        [
+            'title'    => '3D Visualization',
+            'slug'     => '3d-visualization',
+            'number'   => '03',
+            'option'   => 'dayanarc_service_3d_viz_id',
+            'excerpt'  => 'High-quality 3D renderings and visualization to help you see your vision before construction begins.',
+            'content'  => 'Seeing a space before it is built changes everything. Our 3D visualization studio produces photorealistic still renders, animated walkthroughs, and interactive virtual tours that allow clients, contractors, and stakeholders to fully understand a design before a single wall is raised.
+
+Using the latest rendering technology, we capture light, texture, and atmosphere with a level of realism that blurs the line between the designed and the built — helping clients make confident decisions at every stage.',
+            'features' => "Photorealistic Still Renders\nArchitectural Walkthroughs\nVirtual Reality Tours\nExterior & Interior Renders\nMaterial Studies\nPresentation Boards",
+            'image'    => 'project10.png',
+        ],
+        [
+            'title'    => 'Project Management',
+            'slug'     => 'project-management',
+            'number'   => '04',
+            'option'   => 'dayanarc_service_project_mgmt_id',
+            'excerpt'  => 'End-to-end project management ensuring every detail is executed with precision and attention.',
+            'content'  => 'Great design is only realised through great execution. Dayan Arc offers comprehensive project management services that bridge the gap between the design studio and the construction site. Our project managers coordinate all parties — contractors, consultants, suppliers, and authorities — ensuring the project stays on schedule, within budget, and true to design intent.
+
+We are on-site when it matters most, resolving issues proactively and maintaining the quality standards that define every Dayan Arc project.',
+            'features' => "Timeline & Schedule Planning\nBudget Management\nContractor Coordination\nQuality Control & Inspection\nAuthority Approvals\nHandover & Close-out",
+            'image'    => 'project9.png',
+        ],
+    ];
+
+    foreach ( $services as $svc ) {
+        // Check if already created
+        $existing_id = (int) get_option( $svc['option'], 0 );
+        if ( $existing_id && get_post( $existing_id ) ) continue;
+
+        if ( dayanarc_post_exists( $svc['title'], 'page' ) ) {
+            $q = new WP_Query( [
+                'post_type'      => 'page',
+                'title'          => $svc['title'],
+                'post_status'    => 'any',
+                'posts_per_page' => 1,
+                'fields'         => 'ids',
+                'no_found_rows'  => true,
+            ] );
+            if ( $q->have_posts() ) {
+                $id = $q->posts[0];
+                update_post_meta( $id, '_wp_page_template',  'page-service.php' );
+                update_post_meta( $id, '_service_number',    $svc['number'] );
+                update_post_meta( $id, '_service_features',  $svc['features'] );
+                update_option( $svc['option'], $id );
+            }
+            continue;
+        }
+
+        $page_id = wp_insert_post( [
+            'post_title'   => $svc['title'],
+            'post_content' => $svc['content'],
+            'post_excerpt' => $svc['excerpt'],
+            'post_status'  => 'publish',
+            'post_type'    => 'page',
+            'post_name'    => $svc['slug'],
+        ] );
+
+        if ( is_wp_error( $page_id ) || ! $page_id ) continue;
+
+        update_post_meta( $page_id, '_wp_page_template', 'page-service.php' );
+        update_post_meta( $page_id, '_service_number',   $svc['number'] );
+        update_post_meta( $page_id, '_service_features', $svc['features'] );
+
+        if ( isset( $image_ids[ $svc['image'] ] ) ) {
+            set_post_thumbnail( $page_id, $image_ids[ $svc['image'] ] );
+        }
+
+        update_option( $svc['option'], $page_id );
+    }
 }
 
 // ── Helper: check if post exists ──────────────────────────────────────────────

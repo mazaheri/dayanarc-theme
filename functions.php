@@ -24,15 +24,140 @@ function dayanarc_enqueue() {
     $uri = get_template_directory_uri();
 
     wp_enqueue_style( 'google-fonts', 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap', [], null );
-    wp_enqueue_style( 'fullpage-css', 'https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css', [], '4.0.20' );
-    wp_enqueue_style( 'dayanarc', get_stylesheet_uri(), [ 'fullpage-css' ], $ver );
 
-    wp_enqueue_script( 'fullpage-js', 'https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js', [], '4.0.20', true );
-    wp_enqueue_script( 'dayanarc-main', $uri . '/assets/js/main.js', [ 'fullpage-js' ], $ver, true );
-
-    wp_localize_script( 'dayanarc-main', 'dayanarcData', dayanarc_get_localized_data() );
+    if ( is_front_page() ) {
+        wp_enqueue_style( 'fullpage-css', 'https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.css', [], '4.0.20' );
+        wp_enqueue_style( 'dayanarc', get_stylesheet_uri(), [ 'fullpage-css' ], $ver );
+        wp_enqueue_script( 'fullpage-js', 'https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.20/fullpage.min.js', [], '4.0.20', true );
+        wp_enqueue_script( 'dayanarc-main', $uri . '/assets/js/main.js', [ 'fullpage-js' ], $ver, true );
+        wp_localize_script( 'dayanarc-main', 'dayanarcData', dayanarc_get_localized_data() );
+    } else {
+        wp_enqueue_style( 'dayanarc', get_stylesheet_uri(), [], $ver );
+        wp_enqueue_script( 'dayanarc-main', $uri . '/assets/js/main.js', [], $ver, true );
+        wp_localize_script( 'dayanarc-main', 'dayanarcData', [
+            'themeUrl'      => $uri,
+            'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
+            'nonce'         => wp_create_nonce( 'dayanarc_contact' ),
+            'portfolioData' => [],
+            'journalPages'  => [],
+        ] );
+        wp_enqueue_script( 'dayanarc-inner', $uri . '/assets/js/inner.js', [], $ver, true );
+        wp_localize_script( 'dayanarc-inner', 'dayanarcInner', [
+            'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+            'nonce'   => wp_create_nonce( 'dayanarc_load_more' ),
+        ] );
+    }
 }
 add_action( 'wp_enqueue_scripts', 'dayanarc_enqueue' );
+
+function dayanarc_breadcrumb() {
+    $home = esc_url( home_url( '/' ) );
+    echo '<nav class="inner-breadcrumb" aria-label="' . esc_attr__( 'Breadcrumb', 'dayanarc' ) . '">';
+    echo '<a href="' . $home . '">HOME</a>';
+
+    if ( is_post_type_archive( 'portfolio' ) ) {
+        echo '<span class="breadcrumb-sep"> — </span>';
+        echo '<span class="breadcrumb-current">PORTFOLIO</span>';
+    } elseif ( is_home() ) {
+        echo '<span class="breadcrumb-sep"> — </span>';
+        echo '<span class="breadcrumb-current">JOURNAL</span>';
+    } elseif ( is_singular( 'portfolio' ) ) {
+        echo '<span class="breadcrumb-sep"> — </span>';
+        echo '<a href="' . esc_url( get_post_type_archive_link( 'portfolio' ) ) . '">PORTFOLIO</a>';
+        echo '<span class="breadcrumb-sep"> — </span>';
+        echo '<span class="breadcrumb-current">' . esc_html( strtoupper( get_the_title() ) ) . '</span>';
+    } elseif ( is_single() ) {
+        echo '<span class="breadcrumb-sep"> — </span>';
+        echo '<a href="' . esc_url( dayanarc_journal_url() ) . '">JOURNAL</a>';
+        echo '<span class="breadcrumb-sep"> — </span>';
+        echo '<span class="breadcrumb-current">' . esc_html( strtoupper( get_the_title() ) ) . '</span>';
+    } elseif ( is_page_template( 'page-contact.php' ) ) {
+        echo '<span class="breadcrumb-sep"> — </span>';
+        echo '<span class="breadcrumb-current">CONTACT</span>';
+    } elseif ( is_page_template( 'page-service.php' ) ) {
+        echo '<span class="breadcrumb-sep"> — </span>';
+        echo '<a href="' . esc_url( home_url( '/' ) ) . '">SERVICES</a>';
+        echo '<span class="breadcrumb-sep"> — </span>';
+        echo '<span class="breadcrumb-current">' . esc_html( strtoupper( get_the_title() ) ) . '</span>';
+    } elseif ( is_404() ) {
+        echo '<span class="breadcrumb-sep"> — </span>';
+        echo '<span class="breadcrumb-current">404</span>';
+    }
+
+    echo '</nav>';
+}
+
+function dayanarc_flush_rewrites() {
+    flush_rewrite_rules();
+}
+add_action( 'after_switch_theme', 'dayanarc_flush_rewrites' );
+
+// Deferred rewrite flush — demo importer sets this option; the next page load flushes properly.
+function dayanarc_maybe_flush_rewrites() {
+    if ( get_option( 'dayanarc_flush_rewrites_pending' ) ) {
+        delete_option( 'dayanarc_flush_rewrites_pending' );
+        flush_rewrite_rules( false );
+    }
+}
+add_action( 'init', 'dayanarc_maybe_flush_rewrites', 25 );
+
+function dayanarc_portfolio_url() {
+    $url = get_post_type_archive_link( 'portfolio' );
+    return $url ?: home_url( '/portfolio/' );
+}
+
+function dayanarc_journal_url() {
+    $page_id = (int) get_option( 'page_for_posts' );
+    return $page_id ? get_permalink( $page_id ) : home_url( '/journal/' );
+}
+
+function dayanarc_contact_page_url() {
+    $id = (int) get_option( 'dayanarc_contact_page_id', 0 );
+    if ( $id && get_post( $id ) ) {
+        return get_permalink( $id );
+    }
+    return home_url( '/contact/' );
+}
+
+function dayanarc_service_url( $slug ) {
+    $map = [
+        'architecture'       => 'dayanarc_service_architecture_id',
+        'interior-design'    => 'dayanarc_service_interior_design_id',
+        '3d-visualization'   => 'dayanarc_service_3d_viz_id',
+        'project-management' => 'dayanarc_service_project_mgmt_id',
+    ];
+    if ( isset( $map[ $slug ] ) ) {
+        $id = (int) get_option( $map[ $slug ], 0 );
+        if ( $id && get_post( $id ) ) {
+            return get_permalink( $id );
+        }
+    }
+    return home_url( '/' . $slug . '/' );
+}
+
+// Returns the stored CF7 form ID for "Dayan Arc Contact", or 0 if not found.
+function dayanarc_get_contact_form_id() {
+    $id = (int) get_option( 'dayanarc_contact_form_id', 0 );
+    if ( $id && get_post( $id ) && get_post_type( $id ) === 'wpcf7_contact_form' ) {
+        return $id;
+    }
+    // Fallback: return first available CF7 form
+    if ( post_type_exists( 'wpcf7_contact_form' ) ) {
+        $forms = get_posts( [
+            'post_type'      => 'wpcf7_contact_form',
+            'post_status'    => 'publish',
+            'posts_per_page' => 1,
+            'orderby'        => 'date',
+            'order'          => 'ASC',
+            'fields'         => 'ids',
+        ] );
+        if ( $forms ) {
+            update_option( 'dayanarc_contact_form_id', $forms[0] );
+            return $forms[0];
+        }
+    }
+    return 0;
+}
 
 function dayanarc_get_localized_data() {
     $uri = get_template_directory_uri();
@@ -201,7 +326,7 @@ function dayanarc_register_cpts() {
             'add_new_item'  => __( 'Add New Portfolio Item', 'dayanarc' ),
         ],
         'public'        => true,
-        'has_archive'   => false,
+        'has_archive'   => true,
         'supports'      => [ 'title', 'editor', 'thumbnail', 'excerpt' ],
         'menu_icon'     => 'dashicons-portfolio',
         'show_in_rest'  => true,
@@ -246,3 +371,138 @@ function dayanarc_save_portfolio_meta( $post_id ) {
     }
 }
 add_action( 'save_post_portfolio', 'dayanarc_save_portfolio_meta' );
+
+// ── Service page meta box ─────────────────────────────────────────────────────
+function dayanarc_add_service_meta_box() {
+    add_meta_box(
+        'service_details',
+        __( 'Service Details', 'dayanarc' ),
+        'dayanarc_render_service_meta',
+        'page',
+        'normal',
+        'default'
+    );
+}
+add_action( 'add_meta_boxes', 'dayanarc_add_service_meta_box' );
+
+function dayanarc_render_service_meta( $post ) {
+    if ( get_page_template_slug( $post->ID ) !== 'page-service.php' ) {
+        echo '<p style="color:#999;font-size:12px;">Only visible on pages using the <em>Service Page</em> template.</p>';
+        return;
+    }
+    wp_nonce_field( 'dayanarc_service_nonce', 'service_nonce' );
+    $number   = get_post_meta( $post->ID, '_service_number', true );
+    $features = get_post_meta( $post->ID, '_service_features', true );
+    ?>
+    <table class="form-table">
+        <tr>
+            <th><label for="service_number"><?php _e( 'Service Number', 'dayanarc' ); ?></label></th>
+            <td>
+                <input type="text" id="service_number" name="service_number"
+                       value="<?php echo esc_attr( $number ); ?>"
+                       class="regular-text" placeholder="e.g. 01">
+            </td>
+        </tr>
+        <tr>
+            <th><label for="service_features"><?php _e( 'Features (one per line)', 'dayanarc' ); ?></label></th>
+            <td>
+                <textarea id="service_features" name="service_features"
+                          rows="8" class="large-text"><?php echo esc_textarea( $features ); ?></textarea>
+                <p class="description"><?php _e( 'Each line becomes one bullet point in the "What We Offer" list.', 'dayanarc' ); ?></p>
+            </td>
+        </tr>
+    </table>
+    <?php
+}
+
+function dayanarc_save_service_meta( $post_id ) {
+    if ( ! isset( $_POST['service_nonce'] ) || ! wp_verify_nonce( $_POST['service_nonce'], 'dayanarc_service_nonce' ) ) return;
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+    if ( ! current_user_can( 'edit_post', $post_id ) ) return;
+
+    if ( isset( $_POST['service_number'] ) ) {
+        update_post_meta( $post_id, '_service_number', sanitize_text_field( $_POST['service_number'] ) );
+    }
+    if ( isset( $_POST['service_features'] ) ) {
+        update_post_meta( $post_id, '_service_features', sanitize_textarea_field( $_POST['service_features'] ) );
+    }
+}
+add_action( 'save_post_page', 'dayanarc_save_service_meta' );
+
+// ── Journal mosaic card renderer ──────────────────────────────────────────────
+// Pattern: 4-item cycle — [wide landscape, tall portrait, tall portrait, wide landscape]
+// This creates a natural brick mosaic when rows alternate wide+narrow items.
+function dayanarc_render_journal_card( $post, $index ) {
+    static $fallback = 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80';
+
+    $slot_map = [
+        0 => [ 'cols' => 2, 'aspect' => '16/9',  'class' => 'mosaic-wide' ],
+        1 => [ 'cols' => 1, 'aspect' => '3/4',   'class' => 'mosaic-tall' ],
+        2 => [ 'cols' => 1, 'aspect' => '3/4',   'class' => 'mosaic-tall' ],
+        3 => [ 'cols' => 2, 'aspect' => '16/9',  'class' => 'mosaic-wide' ],
+    ];
+    $slot  = $index % 4;
+    $p     = $slot_map[ $slot ];
+
+    $img     = get_the_post_thumbnail_url( $post->ID, 'large' ) ?: $fallback;
+    $title   = get_the_title( $post );
+    $url     = get_permalink( $post );
+    $date    = get_the_date( 'M j, Y', $post );
+    $excerpt = has_excerpt( $post->ID )
+        ? get_the_excerpt( $post )
+        : wp_trim_words( $post->post_content, 18, '...' );
+
+    ob_start();
+    ?>
+    <a href="<?php echo esc_url( $url ); ?>"
+       class="journal-mosaic-item <?php echo esc_attr( $p['class'] ); ?>"
+       style="grid-column: span <?php echo $p['cols']; ?>;">
+        <img src="<?php echo esc_url( $img ); ?>"
+             alt="<?php echo esc_attr( $title ); ?>"
+             loading="lazy">
+        <div class="journal-mosaic-overlay">
+            <span class="journal-mosaic-date"><?php echo esc_html( $date ); ?></span>
+            <h3 class="journal-mosaic-title title-text"><?php echo esc_html( strtoupper( $title ) ); ?></h3>
+            <div class="journal-mosaic-excerpt">
+                <p><?php echo esc_html( $excerpt ); ?></p>
+                <span class="journal-mosaic-read-more">READ MORE</span>
+            </div>
+        </div>
+    </a>
+    <?php
+    return ob_get_clean();
+}
+
+// ── Journal Load More AJAX ────────────────────────────────────────────────────
+function dayanarc_load_more_journal() {
+    check_ajax_referer( 'dayanarc_load_more', 'nonce' );
+
+    $offset   = absint( $_POST['offset'] ?? 0 );
+    $per_page = 4;
+
+    $posts = get_posts( [
+        'post_type'      => 'post',
+        'posts_per_page' => $per_page,
+        'offset'         => $offset,
+        'post_status'    => 'publish',
+        'orderby'        => 'date',
+        'order'          => 'DESC',
+    ] );
+
+    if ( empty( $posts ) ) {
+        wp_send_json_success( [ 'html' => '', 'has_more' => false ] );
+        return;
+    }
+
+    $html = '';
+    foreach ( $posts as $i => $post ) {
+        $html .= dayanarc_render_journal_card( $post, $offset + $i );
+    }
+
+    $total    = (int) wp_count_posts( 'post' )->publish;
+    $has_more = ( $offset + $per_page ) < $total;
+
+    wp_send_json_success( [ 'html' => $html, 'has_more' => $has_more ] );
+}
+add_action( 'wp_ajax_dayanarc_load_more_journal',        'dayanarc_load_more_journal' );
+add_action( 'wp_ajax_nopriv_dayanarc_load_more_journal', 'dayanarc_load_more_journal' );

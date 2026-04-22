@@ -151,7 +151,7 @@
                 </div>
             </div>
 
-            <div class="lg:col-span-3 card-wrapper delay-200">
+            <a href="<?php echo esc_url( dayanarc_service_url( 'architecture' ) ); ?>" class="lg:col-span-3 card-wrapper delay-200" style="text-decoration:none; color:inherit; display:block;">
                 <div class="service-card group bg-white text-[#2c221a] p-5 lg:p-6 relative cursor-pointer shadow-2xl">
                     <div class="flex justify-between items-start w-full">
                         <span class="text-[11px] text-[#68635f] tracking-widest">01</span>
@@ -176,9 +176,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="lg:col-span-3 card-wrapper delay-300">
+            <a href="<?php echo esc_url( dayanarc_service_url( 'interior-design' ) ); ?>" class="lg:col-span-3 card-wrapper delay-300" style="text-decoration:none; color:inherit; display:block;">
                 <div class="service-card group bg-white text-[#2c221a] p-5 lg:p-6 relative cursor-pointer shadow-2xl">
                     <div class="flex justify-between items-start w-full">
                         <span class="text-[11px] text-[#68635f] tracking-widest">02</span>
@@ -203,11 +203,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
 
             <div class="lg:col-span-3 hidden lg:block"></div>
 
-            <div class="lg:col-span-3 card-wrapper delay-400">
+            <a href="<?php echo esc_url( dayanarc_service_url( '3d-visualization' ) ); ?>" class="lg:col-span-3 card-wrapper delay-400" style="text-decoration:none; color:inherit; display:block;">
                 <div class="service-card group bg-white text-[#2c221a] p-5 lg:p-6 relative cursor-pointer shadow-2xl">
                     <div class="flex justify-between items-start w-full">
                         <span class="text-[11px] text-[#68635f] tracking-widest">03</span>
@@ -232,9 +232,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
 
-            <div class="lg:col-span-3 card-wrapper delay-500">
+            <a href="<?php echo esc_url( dayanarc_service_url( 'project-management' ) ); ?>" class="lg:col-span-3 card-wrapper delay-500" style="text-decoration:none; color:inherit; display:block;">
                 <div class="service-card group bg-white text-[#2c221a] p-5 lg:p-6 relative cursor-pointer shadow-2xl">
                     <div class="flex justify-between items-start w-full">
                         <span class="text-[11px] text-[#68635f] tracking-widest">04</span>
@@ -259,7 +259,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
 
             <div class="lg:col-span-3 flex items-end justify-start lg:justify-end pb-8">
                 <p class="text-white text-[14px] font-light max-w-[200px] leading-relaxed text-justify lg:text-right reveal-mask">
@@ -323,32 +323,19 @@
                 </div>
 
                 <div class="flex flex-col w-full pt-4 lg:pt-16 reveal-mask">
-                    <form class="contact-form reveal-text delay-500 flex flex-col gap-10 w-full">
-                        <?php wp_nonce_field( 'dayanarc_contact', 'dayanarc_contact_nonce' ); ?>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                            <div>
-                                <input type="text" name="name" placeholder="Name" class="form-input" required>
-                            </div>
-                            <div>
-                                <input type="tel" name="phone" placeholder="Phone" class="form-input">
-                            </div>
-                        </div>
-                        <div>
-                            <input type="email" name="email" placeholder="Email" class="form-input" required>
-                        </div>
-                        <div>
-                            <textarea name="message" placeholder="Message" class="form-textarea" required></textarea>
-                        </div>
-                        <div class="mt-2">
-                            <button type="submit" class="link-wrapper-contact border-none bg-transparent cursor-pointer p-0 m-0">
-                                <span class="text-[11px] uppercase tracking-widest font-semibold text-[#2c221a]">SEND REQUEST</span>
-                                <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor" stroke-width="1.2">
-                                    <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </button>
-                        </div>
-                        <p id="contact-message" role="status"></p>
-                    </form>
+                    <div class="reveal-text delay-500 w-full fp-contact-form">
+                        <?php
+                        $cf7_id = dayanarc_get_contact_form_id();
+                        if ( $cf7_id ) :
+                            echo do_shortcode( '[contact-form-7 id="' . esc_attr( $cf7_id ) . '" html_class="flex flex-col gap-10 w-full"]' );
+                        else : ?>
+                            <p style="font-size:13px; color:#8c8783; line-height:1.8; padding:1rem 0;">
+                                Contact form not set up yet. Run the
+                                <a href="<?php echo esc_url( admin_url( 'themes.php?page=dayanarc-demo-import' ) ); ?>"
+                                   style="color:#2c221a; text-decoration:underline;">demo importer</a> to activate it.
+                            </p>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </section>

@@ -912,3 +912,467 @@ header {
 .single-post-page body {
     overflow-y: auto;
 }
+
+/* === INNER PAGES (blog posts, portfolio) === */
+body.inner-page {
+    overflow-y: auto;
+    background-color: #ffffff;
+    color: #2c221a;
+    min-height: 100vh;
+}
+
+/* Fixed nav for inner pages */
+.inner-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #e5e5e5;
+    padding: 1.25rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inner-nav-logo {
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #2c221a;
+}
+
+.inner-nav-desktop {
+    display: flex;
+    gap: 3rem;
+    align-items: center;
+}
+
+.inner-nav-link {
+    color: #2c221a;
+    font-size: 11px;
+}
+
+.inner-menu-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #2c221a;
+    padding: 0;
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .inner-nav-desktop { display: none; }
+    .inner-menu-btn { display: block; }
+}
+
+/* Mobile menu on inner pages has dark bg — ensure links are white */
+.mobile-menu {
+    color: #ffffff;
+}
+
+/* Breadcrumb */
+.inner-breadcrumb {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #a9a39f;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.inner-breadcrumb a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.inner-breadcrumb a:hover {
+    color: #2c221a;
+}
+
+.breadcrumb-sep {
+    margin: 0 0.75rem;
+    color: #d1ccc8;
+}
+
+.breadcrumb-current {
+    color: #2c221a;
+}
+
+/* Scroll-to-top for inner pages */
+.inner-scroll-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e5e5e5;
+    cursor: pointer;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.inner-scroll-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.inner-scroll-top:hover {
+    border-color: #2c221a;
+    transform: scale(1.05);
+}
+
+/* Archive pagination */
+.archive-pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 4rem;
+}
+
+.archive-pagination .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.archive-pagination .page-numbers {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid #e5e5e5;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8c8783;
+    text-decoration: none;
+    transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.archive-pagination .page-numbers:hover,
+.archive-pagination .page-numbers.current {
+    border-color: #2c221a;
+    color: #2c221a;
+}
+
+.archive-pagination .page-numbers.dots {
+    border-color: transparent;
+}
+
+/* ── Contact Form 7 overrides ───────────────────────────────────────────────── */
+
+/* Make CF7 field wrappers block so inputs take full width */
+.wpcf7-form-control-wrap {
+    display: block;
+}
+
+/* CF7 forms inside the front-page contact section and contact page */
+.fp-contact-form .wpcf7,
+.contact-page-form .wpcf7 {
+    width: 100%;
+}
+
+.fp-contact-form .wpcf7-form,
+.contact-page-form .wpcf7-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    width: 100%;
+}
+
+/* Validation error tip */
+.wpcf7-not-valid-tip {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: #c0392b;
+    margin-top: 0.35rem;
+}
+
+/* Response output (success / error banner) */
+.wpcf7-response-output {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.75rem 1rem;
+    margin-top: 0 !important;
+    border: 1px solid currentColor;
+}
+
+.wpcf7-response-output.wpcf7-mail-sent-ok {
+    color: #2e7d32;
+    border-color: #4caf50;
+    background: #f1f8e9;
+}
+
+.wpcf7-response-output.wpcf7-mail-sent-ng,
+.wpcf7-response-output.wpcf7-aborted,
+.wpcf7-response-output.wpcf7-validation-errors,
+.wpcf7-response-output.wpcf7-acceptance-missing {
+    color: #c62828;
+    border-color: #f44336;
+    background: #fff3f3;
+}
+
+.wpcf7-response-output.wpcf7-spam-blocked {
+    color: #e65100;
+    border-color: #ff9800;
+    background: #fff8f0;
+}
+
+/* Spinner shown during CF7 AJAX submission */
+.wpcf7 .wpcf7-spinner {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 0.5rem;
+}
+
+/* 404 page */
+body.error404 .inner-nav {
+    background: #fff;
+}
+
+/* Service page link cards — remove default <a> styling from card wrappers */
+a.card-wrapper {
+    text-decoration: none;
+    color: inherit;
+}
+
+a.card-wrapper:hover .service-card {
+    box-shadow: 0 25px 50px rgba(0,0,0,0.18);
+}
+
+/* ── Admin bar: push inner nav below the WP toolbar ────────────────────────── */
+html.admin-bar .inner-nav {
+    top: 32px;
+}
+@media screen and (max-width: 782px) {
+    html.admin-bar .inner-nav {
+        top: 46px;
+    }
+}
+
+/* ── Journal mosaic grid ────────────────────────────────────────────────────── */
+.journal-mosaic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.875rem;
+}
+
+@media (max-width: 1023px) {
+    .journal-mosaic-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
+
+@media (max-width: 599px) {
+    .journal-mosaic-grid {
+        grid-template-columns: 1fr;
+        gap: 0.625rem;
+    }
+    /* Override inline grid-column: span 2 on mobile */
+    .journal-mosaic-item {
+        grid-column: 1 !important;
+    }
+}
+
+.journal-mosaic-item {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    background: #1a1814;
+    /* aspect-ratio set per class below */
+}
+
+.journal-mosaic-item.mosaic-wide  { aspect-ratio: 16 / 9; }
+.journal-mosaic-item.mosaic-tall  { aspect-ratio: 3 / 4; }
+
+/* On tablet, tall portrait cards become square to avoid very tall columns */
+@media (max-width: 1023px) {
+    .journal-mosaic-item.mosaic-tall { aspect-ratio: 4 / 3; }
+}
+
+@media (max-width: 599px) {
+    .journal-mosaic-item.mosaic-wide,
+    .journal-mosaic-item.mosaic-tall { aspect-ratio: 4 / 3; }
+}
+
+.journal-mosaic-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s ease;
+}
+
+.journal-mosaic-item:hover img {
+    transform: scale(1.04);
+}
+
+.journal-mosaic-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 3rem 1.25rem 1.25rem;
+    background: linear-gradient(to top, rgba(10,8,6,0.92) 0%, rgba(10,8,6,0.35) 60%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    pointer-events: none;
+}
+
+.journal-mosaic-date {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 0.4rem;
+}
+
+.journal-mosaic-title {
+    font-size: clamp(0.875rem, 1.5vw, 1.25rem);
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 1.15;
+    letter-spacing: 0.04em;
+    font-weight: 400;
+    margin: 0;
+}
+
+.journal-mosaic-item.mosaic-wide .journal-mosaic-title {
+    font-size: clamp(1rem, 2vw, 1.5rem);
+}
+
+.journal-mosaic-excerpt {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, margin-top 0.35s ease;
+    margin-top: 0;
+}
+
+.journal-mosaic-item:hover .journal-mosaic-excerpt {
+    max-height: 120px;
+    margin-top: 0.625rem;
+}
+
+.journal-mosaic-excerpt p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.72);
+    line-height: 1.6;
+    margin: 0 0 0.625rem;
+}
+
+.journal-mosaic-read-more {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Load More button */
+.journal-load-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #2c221a;
+    background: transparent;
+    border: 1px solid #d1ccc8;
+    padding: 0.875rem 2.5rem;
+    cursor: pointer;
+    transition: border-color 0.3s ease, color 0.3s ease;
+    font-family: inherit;
+}
+
+.journal-load-more-btn:hover {
+    border-color: #2c221a;
+}
+
+.journal-load-more-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ── Blog single — hero image with overlaid title ───────────────────────────── */
+.single-hero {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 7;
+    overflow: hidden;
+    max-height: 75vh;
+}
+
+.single-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.single-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(10,8,6,0.88) 0%, rgba(10,8,6,0.3) 50%, transparent 100%);
+    display: flex;
+    align-items: flex-end;
+}
+
+.single-hero-content {
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2rem 2rem 2.5rem;
+}
+
+.single-hero-meta {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    font-weight: 500;
+    margin-bottom: 0.625rem;
+}
+
+.single-hero-title {
+    font-size: clamp(1.75rem, 4vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 0;
+    font-weight: 400;
+}
+
+.single-no-hero {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 8rem 2rem 3rem;
+}
