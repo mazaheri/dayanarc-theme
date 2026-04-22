@@ -255,7 +255,7 @@
                     if ( $svc_i === 2 ) : ?>
             <div class="lg:col-span-3 hidden lg:block"></div>
                     <?php endif; ?>
-            <a href="<?php echo esc_url( get_permalink() ); ?>" class="lg:col-span-3 card-wrapper <?php echo esc_attr( $card_d ); ?>" style="text-decoration:none; color:inherit; display:block;">
+            <a href="<?php echo esc_url( get_permalink() ); ?>" class="lg:col-span-3 card-wrapper <?php echo esc_attr( $card_d ); ?><?php echo $svc_i >= 2 ? ' card-row2' : ''; ?>" style="text-decoration:none; color:inherit; display:block;">
                 <div class="service-card group bg-white text-[#2c221a] p-5 lg:p-6 relative cursor-pointer shadow-2xl">
                     <div class="flex justify-between items-start w-full">
                         <span class="text-[11px] text-[#68635f] tracking-widest"><?php echo esc_html( $svc_num ); ?></span>
@@ -358,7 +358,8 @@
                     <p class="text-[14px] leading-relaxed text-[#68635f] font-light max-w-[420px] reveal-mask block mb-8">
                         <span class="reveal-text delay-400"><?php echo esc_html( get_theme_mod( 'fp_contact_description', "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention." ) ); ?></span>
                     </p>
-                    <a href="<?php echo esc_url( dayanarc_contact_page_url() ); ?>" class="link-wrapper" style="opacity:1; transform:none; width:auto; display:inline-flex;">
+                    <span class="reveal-mask block">
+                    <a href="<?php echo esc_url( dayanarc_contact_page_url() ); ?>" class="link-wrapper reveal-text delay-600" style="width:auto; display:inline-flex;">
                         <span class="link-text" style="font-size:11px;">VIEW OUR LOCATIONS</span>
                         <div class="arrow-graphic">
                             <svg width="14" height="9" viewBox="0 0 16 10" fill="none">
@@ -366,6 +367,7 @@
                             </svg>
                         </div>
                     </a>
+                    </span>
                 </div>
 
                 <div class="flex flex-col w-full reveal-mask">
@@ -391,7 +393,7 @@
     <div class="section fp-auto-height" id="portfolio-section">
 
         <!-- Portfolio -->
-        <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 pt-10 pb-6">
+        <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 pt-10 pb-14">
             <div class="flex items-end justify-between mb-8">
                 <div>
                     <span class="text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium block mb-2">PORTFOLIO</span>

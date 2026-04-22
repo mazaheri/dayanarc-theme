@@ -549,6 +549,11 @@ header {
     justify-content: space-between;
 }
 
+.card-row2 .service-card {
+    height: 400px;
+    overflow: hidden;
+}
+
 .img-container {
     width: 85%;
     height: 240px;
