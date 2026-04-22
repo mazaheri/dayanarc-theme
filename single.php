@@ -3,11 +3,7 @@
 <main style="max-width:860px; margin:0 auto; padding:8rem 2rem 6rem;">
     <?php if ( have_posts() ) : the_post(); ?>
 
-        <div style="margin-bottom:1.5rem;">
-            <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500;">
-                JOURNAL &mdash; <?php echo esc_html( get_the_date( 'F j, Y' ) ); ?>
-            </span>
-        </div>
+        <?php dayanarc_breadcrumb(); ?>
 
         <h1 style="font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.5rem); line-height:1.1; letter-spacing:-0.02em; margin-bottom:2.5rem; text-transform:uppercase;">
             <?php the_title(); ?>
@@ -19,9 +15,13 @@
             </div>
         <?php endif; ?>
 
-        <?php dayanarc_breadcrumb(); ?>
+        <div style="margin-bottom:1.5rem;">
+            <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500;">
+                JOURNAL &mdash; <?php echo esc_html( get_the_date( 'F j, Y' ) ); ?>
+            </span>
+        </div>
 
-        <div style="font-size:15px; line-height:1.9; color:#4a4540; font-weight:300; max-width:680px; margin-top:2.5rem;">
+        <div style="font-size:15px; line-height:1.9; color:#4a4540; font-weight:300; max-width:680px;">
             <?php the_content(); ?>
         </div>
 
