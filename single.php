@@ -1,28 +1,27 @@
 <?php get_header( 'inner' ); ?>
 
 <main style="max-width:860px; margin:0 auto; padding:8rem 2rem 6rem;">
-<?php if ( have_posts() ) : the_post(); ?>
+    <?php if ( have_posts() ) : the_post(); ?>
 
-    <!-- Title & date above image -->
-    <div style="margin-bottom:1.75rem;">
-        <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500; display:block; margin-bottom:0.75rem;">
-            JOURNAL &mdash; <?php echo esc_html( get_the_date( 'F j, Y' ) ); ?>
-        </span>
-        <h1 class="title-text" style="font-size:clamp(2rem,5vw,3.5rem); line-height:1.1; letter-spacing:-0.02em; text-transform:uppercase; color:#2c221a; margin:0;">
-            <?php echo esc_html( strtoupper( get_the_title() ) ); ?>
-        </h1>
-    </div>
+        <?php if ( has_post_thumbnail() ) : ?>
+            <div style="width:100%; aspect-ratio:16/9; overflow:hidden; margin-bottom:3rem;">
+                <?php the_post_thumbnail( 'full', [ 'style' => 'width:100%; height:100%; object-fit:cover;' ] ); ?>
+            </div>
+        <?php endif; ?>
 
-    <?php if ( has_post_thumbnail() ) : ?>
-        <div style="width:100%; aspect-ratio:16/9; overflow:hidden; margin-bottom:2rem;">
-            <?php the_post_thumbnail( 'full', [ 'style' => 'width:100%; height:100%; object-fit:cover; display:block;', 'alt' => esc_attr( get_the_title() ) ] ); ?>
+        <?php dayanarc_breadcrumb(); ?>
+
+        <div style="margin-bottom:1.5rem; margin-top:1.5rem;">
+            <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500;">
+                JOURNAL &mdash; <?php echo esc_html( get_the_date( 'F j, Y' ) ); ?>
+            </span>
         </div>
-    <?php endif; ?>
 
-    <?php dayanarc_breadcrumb(); ?>
+        <h1 style="font-family:'Playfair Display',serif; font-size:clamp(2rem,5vw,3.5rem); line-height:1.1; letter-spacing:-0.02em; margin-bottom:2.5rem; text-transform:uppercase;">
+            <?php the_title(); ?>
+        </h1>
 
-    <article style="margin-top:2.5rem;">
-        <div style="font-size:15px; line-height:1.9; color:#4a4540; font-weight:300;">
+        <div style="font-size:15px; line-height:1.9; color:#4a4540; font-weight:300; max-width:680px;">
             <?php the_content(); ?>
         </div>
 
@@ -56,9 +55,8 @@
                 </a>
             <?php endif; ?>
         </div>
-    </article>
 
-<?php endif; ?>
+    <?php endif; ?>
 </main>
 
 <?php get_footer( 'inner' ); ?>
