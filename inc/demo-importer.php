@@ -533,11 +533,12 @@ function dayanarc_import_contact_page() {
 function dayanarc_import_service_pages( $image_ids ) {
     $services = [
         [
-            'title'    => 'Architecture',
-            'slug'     => 'architecture',
-            'number'   => '01',
-            'option'   => 'dayanarc_service_architecture_id',
-            'excerpt'  => 'Complete architectural design from concept to execution, tailored to your unique vision and functional needs.',
+            'title'      => 'Architecture',
+            'slug'       => 'architecture',
+            'number'     => '01',
+            'card_label' => 'Consultation',
+            'option'     => 'dayanarc_service_architecture_id',
+            'excerpt'    => 'Complete architectural design from concept to execution, tailored to your unique vision and functional needs.',
             'content'  => 'At Dayan Arc, our architectural services span the full design journey — from initial concept through schematic design, design development, construction documentation, and project administration. We work closely with each client to understand their vision, program requirements, and site conditions, delivering spaces that are both beautiful and precisely functional.
 
 Our architects bring deep expertise in residential, commercial, and hospitality projects across the region, blending innovative design thinking with a rigorous attention to detail and technical excellence.',
@@ -545,11 +546,12 @@ Our architects bring deep expertise in residential, commercial, and hospitality 
             'image'    => 'interior1.jpg',
         ],
         [
-            'title'    => 'Interior Design',
-            'slug'     => 'interior-design',
-            'number'   => '02',
-            'option'   => 'dayanarc_service_interior_design_id',
-            'excerpt'  => 'Comprehensive interior design services from space planning to material selection and 3D visualization.',
+            'title'      => 'Interior Design',
+            'slug'       => 'interior-design',
+            'number'     => '02',
+            'card_label' => 'Full Service',
+            'option'     => 'dayanarc_service_interior_design_id',
+            'excerpt'    => 'Comprehensive interior design services from space planning to material selection and 3D visualization.',
             'content'  => 'Our interior design team transforms spaces into experiences. Working from a deep understanding of light, material, proportion, and the human scale, we craft interiors that feel both intentional and alive. Every project begins with listening — understanding how a space will be lived in, worked in, or experienced — then translating that into a coherent design language.
 
 From concept mood boards through furniture selection, lighting design, and final installation, Dayan Arc manages the complete interior design process with precision and care.',
@@ -557,11 +559,12 @@ From concept mood boards through furniture selection, lighting design, and final
             'image'    => 'interior2.jpg',
         ],
         [
-            'title'    => '3D Visualization',
-            'slug'     => '3d-visualization',
-            'number'   => '03',
-            'option'   => 'dayanarc_service_3d_viz_id',
-            'excerpt'  => 'High-quality 3D renderings and visualization to help you see your vision before construction begins.',
+            'title'      => '3D Visualization',
+            'slug'       => '3d-visualization',
+            'number'     => '03',
+            'card_label' => 'Rendering',
+            'option'     => 'dayanarc_service_3d_viz_id',
+            'excerpt'    => 'High-quality 3D renderings and visualization to help you see your vision before construction begins.',
             'content'  => 'Seeing a space before it is built changes everything. Our 3D visualization studio produces photorealistic still renders, animated walkthroughs, and interactive virtual tours that allow clients, contractors, and stakeholders to fully understand a design before a single wall is raised.
 
 Using the latest rendering technology, we capture light, texture, and atmosphere with a level of realism that blurs the line between the designed and the built — helping clients make confident decisions at every stage.',
@@ -569,11 +572,12 @@ Using the latest rendering technology, we capture light, texture, and atmosphere
             'image'    => 'project10.png',
         ],
         [
-            'title'    => 'Project Management',
-            'slug'     => 'project-management',
-            'number'   => '04',
-            'option'   => 'dayanarc_service_project_mgmt_id',
-            'excerpt'  => 'End-to-end project management ensuring every detail is executed with precision and attention.',
+            'title'      => 'Project Management',
+            'slug'       => 'project-management',
+            'number'     => '04',
+            'card_label' => 'Management',
+            'option'     => 'dayanarc_service_project_mgmt_id',
+            'excerpt'    => 'End-to-end project management ensuring every detail is executed with precision and attention.',
             'content'  => 'Great design is only realised through great execution. Dayan Arc offers comprehensive project management services that bridge the gap between the design studio and the construction site. Our project managers coordinate all parties — contractors, consultants, suppliers, and authorities — ensuring the project stays on schedule, within budget, and true to design intent.
 
 We are on-site when it matters most, resolving issues proactively and maintaining the quality standards that define every Dayan Arc project.',
@@ -598,9 +602,11 @@ We are on-site when it matters most, resolving issues proactively and maintainin
             ] );
             if ( $q->have_posts() ) {
                 $id = $q->posts[0];
-                update_post_meta( $id, '_wp_page_template',  'page-service.php' );
-                update_post_meta( $id, '_service_number',    $svc['number'] );
-                update_post_meta( $id, '_service_features',  $svc['features'] );
+                update_post_meta( $id, '_wp_page_template',        'page-service.php' );
+                update_post_meta( $id, '_service_number',          $svc['number'] );
+                update_post_meta( $id, '_service_card_description', $svc['excerpt'] );
+                update_post_meta( $id, '_service_card_tagline',    $svc['card_label'] );
+                update_post_meta( $id, '_service_features',        $svc['features'] );
                 update_option( $svc['option'], $id );
             }
             continue;
@@ -617,9 +623,11 @@ We are on-site when it matters most, resolving issues proactively and maintainin
 
         if ( is_wp_error( $page_id ) || ! $page_id ) continue;
 
-        update_post_meta( $page_id, '_wp_page_template', 'page-service.php' );
-        update_post_meta( $page_id, '_service_number',   $svc['number'] );
-        update_post_meta( $page_id, '_service_features', $svc['features'] );
+        update_post_meta( $page_id, '_wp_page_template',         'page-service.php' );
+        update_post_meta( $page_id, '_service_number',           $svc['number'] );
+        update_post_meta( $page_id, '_service_card_description', $svc['excerpt'] );
+        update_post_meta( $page_id, '_service_card_tagline',     $svc['card_label'] );
+        update_post_meta( $page_id, '_service_features',         $svc['features'] );
 
         if ( isset( $image_ids[ $svc['image'] ] ) ) {
             set_post_thumbnail( $page_id, $image_ids[ $svc['image'] ] );

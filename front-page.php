@@ -41,25 +41,32 @@
             <div id="menuOverlay" class="menu-overlay"></div>
 
             <main class="flex-grow flex flex-col justify-center pb-12 md:pb-20 relative">
+                <?php
+                $hw1 = get_theme_mod( 'hero_word_1', 'VISION.' );
+                $hw2 = get_theme_mod( 'hero_word_2', 'DESIGN.' );
+                $hw3 = get_theme_mod( 'hero_word_3', 'REALITY.' );
+                $hw2_first = esc_html( mb_substr( $hw2, 0, 1 ) );
+                $hw2_rest  = esc_html( mb_substr( $hw2, 1 ) );
+                ?>
                 <div class="flex flex-col w-full max-w-[1200px] mx-auto relative z-10">
                     <h1 class="main-heading hero-title font-light text-left md:ml-[5%]">
-                        VISION.
+                        <?php echo esc_html( $hw1 ); ?>
                     </h1>
                     <h1 class="main-heading hero-title font-light text-right md:mr-[10%] mt-8 md:mt-4 flex items-end justify-end">
-                        <span class="italic-m mr-1 md:mr-2">D</span><span style="padding-bottom: 0.05em;">ESIGN.</span>
+                        <span class="italic-m mr-1 md:mr-2"><?php echo $hw2_first; ?></span><span style="padding-bottom: 0.05em;"><?php echo $hw2_rest; ?></span>
                     </h1>
                     <h1 class="main-heading hero-title font-light text-right md:mr-[20%] mt-8 md:mt-4">
-                        REALITY.
+                        <?php echo esc_html( $hw3 ); ?>
                     </h1>
                 </div>
 
                 <div class="mt-12 md:mt-16 flex flex-col md:flex-row md:items-end md:justify-between w-full max-w-[1200px] mx-auto px-4 md:px-0">
                     <div class="md:ml-auto md:mr-[15%]">
                         <p class="sub-text mb-8 md:mb-12 text-sm md:text-base">
-                            At Dayan Arc, we blend creativity and expertise to craft exceptional architectural and interior design experiences. From concept to completion, we bring spaces to life with innovation, precision, and a passion for design excellence.
+                            <?php echo esc_html( get_theme_mod( 'hero_tagline', 'At Dayan Arc, we blend creativity and expertise to craft exceptional architectural and interior design experiences. From concept to completion, we bring spaces to life with innovation, precision, and a passion for design excellence.' ) ); ?>
                         </p>
                         <a href="#contact" class="cta-link group" onclick="event.preventDefault(); fullpage_api.moveTo(6)">
-                            Get in touch
+                            <?php echo esc_html( get_theme_mod( 'hero_cta_label', 'Get in touch' ) ); ?>
                             <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                             </svg>
@@ -78,19 +85,23 @@
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center mt-12 lg:mt-16">
             <div class="col-span-1 lg:col-span-5 flex flex-col pt-8 lg:pt-0">
+                <?php
+                $ah1 = get_theme_mod( 'about_heading_line1', 'DESIGN WITH' );
+                $ah2 = get_theme_mod( 'about_heading_line2', 'PASSION' );
+                ?>
                 <h1 class="title-text text-4xl md:text-5xl lg:text-[4rem] leading-[1.05] tracking-tight mb-8">
-                    <span class="reveal-mask block pb-1"><span class="reveal-text delay-200"><span class="fancy-d">D</span>ESIGN WITH</span></span>
-                    <span class="reveal-mask block"><span class="reveal-text delay-300">PASSION</span></span>
+                    <span class="reveal-mask block pb-1"><span class="reveal-text delay-200"><span class="fancy-d"><?php echo esc_html( mb_substr( $ah1, 0, 1 ) ); ?></span><?php echo esc_html( mb_substr( $ah1, 1 ) ); ?></span></span>
+                    <span class="reveal-mask block"><span class="reveal-text delay-300"><?php echo esc_html( $ah2 ); ?></span></span>
                 </h1>
 
                 <div class="mb-12">
                     <p class="text-[14px] md:text-[15px] leading-relaxed text-[#68635f] font-light max-w-[420px] reveal-mask block">
-                        <span class="reveal-text delay-400">At Dayan Arc, our team brings together the best talent from around the world, combining creativity, expertise, and passion. Together, we strive to deliver exceptional design solutions that exceed expectations and create spaces that inspire and delight.</span>
+                        <span class="reveal-text delay-400"><?php echo esc_html( get_theme_mod( 'about_body', 'At Dayan Arc, our team brings together the best talent from around the world, combining creativity, expertise, and passion. Together, we strive to deliver exceptional design solutions that exceed expectations and create spaces that inspire and delight.' ) ); ?></span>
                     </p>
                 </div>
 
                 <a href="#contact" class="link-wrapper mt-4" onclick="event.preventDefault(); fullpage_api.moveTo(6)">
-                    <span class="link-text">LEARN MORE</span>
+                    <span class="link-text"><?php echo esc_html( get_theme_mod( 'about_cta_label', 'LEARN MORE' ) ); ?></span>
                     <div class="arrow-graphic">
                         <svg width="16" height="10" viewBox="0 0 16 10" fill="none">
                             <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -101,10 +112,10 @@
 
             <div class="col-span-1 lg:col-span-7 flex items-start gap-4 lg:gap-8 justify-end h-[500px] md:h-[600px] lg:h-[700px] relative lg:-mt-16">
                 <div class="w-full lg:w-[62%] h-[95%] curtain-container">
-                    <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80" alt="Main interior design view" class="curtain-img" style="transition-delay: 400ms, 400ms;">
+                    <img src="<?php echo esc_url( get_theme_mod( 'about_image_main', 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80' ) ); ?>" alt="Main interior design view" class="curtain-img" style="transition-delay: 400ms, 400ms;">
                 </div>
                 <div class="hidden lg:block w-[35%] h-[55%] curtain-container mt-24">
-                    <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?q=80&w=800&auto=format&fit=crop" alt="Interior detail" class="curtain-img" style="transition-delay: 500ms, 500ms;">
+                    <img src="<?php echo esc_url( get_theme_mod( 'about_image_detail', 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?q=80&w=800&auto=format&fit=crop' ) ); ?>" alt="Interior detail" class="curtain-img" style="transition-delay: 500ms, 500ms;">
                 </div>
             </div>
         </div>
@@ -114,8 +125,9 @@
     <div class="section portfolio-section px-4 md:px-6 py-12 flex flex-col items-center justify-center">
         <div class="text-center mb-12">
             <span class="reveal-mask"><span class="reveal-text text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium mb-4 block">PORTFOLIO</span></span>
+            <?php $ph = get_theme_mod( 'portfolio_heading', 'OUR WORKS' ); ?>
             <h1 class="title-text text-3xl md:text-4xl lg:text-5xl leading-tight text-[#2c221a]">
-                <span class="reveal-mask"><span class="reveal-text delay-100">OUR WORK<span class="fancy-e">S</span></span></span>
+                <span class="reveal-mask"><span class="reveal-text delay-100"><?php echo esc_html( mb_substr( $ph, 0, -1 ) ); ?><span class="fancy-e"><?php echo esc_html( mb_substr( $ph, -1 ) ); ?></span></span></span>
             </h1>
         </div>
         <div id="portfolio-container" class="portfolio-slide w-full max-w-[1400px]"></div>
@@ -132,17 +144,21 @@
                 <span class="reveal-mask block mb-6">
                     <span class="reveal-text text-[10px] tracking-[0.2em] text-gray-400 uppercase font-medium">SERVICES</span>
                 </span>
+                <?php
+                $sh1 = get_theme_mod( 'services_heading_line1', 'COMPREHENSIVE' );
+                $sh2 = get_theme_mod( 'services_heading_line2', 'SOLUTIONS' );
+                ?>
                 <h1 class="title-text text-4xl lg:text-[4.2rem] leading-[1.05] tracking-tight mb-6 text-white max-w-[90%]">
-                    <span class="reveal-mask block pb-1"><span class="reveal-text delay-100">COMPREHENSIVE</span></span>
-                    <span class="reveal-mask block"><span class="reveal-text delay-200"><span class="fancy-r">S</span>OLUTIONS</span></span>
+                    <span class="reveal-mask block pb-1"><span class="reveal-text delay-100"><?php echo esc_html( $sh1 ); ?></span></span>
+                    <span class="reveal-mask block"><span class="reveal-text delay-200"><span class="fancy-r"><?php echo esc_html( mb_substr( $sh2, 0, 1 ) ); ?></span><?php echo esc_html( mb_substr( $sh2, 1 ) ); ?></span></span>
                 </h1>
                 <p class="text-[14px] md:text-[15px] leading-relaxed text-gray-300 font-light max-w-[340px] reveal-mask block mb-8">
-                    <span class="reveal-text delay-300">At Dayan Arc, we offer comprehensive architectural and interior design services, from concept development to project management.</span>
+                    <span class="reveal-text delay-300"><?php echo esc_html( get_theme_mod( 'services_intro', 'At Dayan Arc, we offer comprehensive architectural and interior design services, from concept development to project management.' ) ); ?></span>
                 </p>
                 <div class="reveal-mask block">
                     <div class="reveal-text delay-400">
                         <a href="#contact" class="link-wrapper-white mt-2" onclick="event.preventDefault(); fullpage_api.moveTo(6)">
-                            <span class="text-[11px] uppercase tracking-widest font-semibold">GET IN TOUCH</span>
+                            <span class="text-[11px] uppercase tracking-widest font-semibold"><?php echo esc_html( get_theme_mod( 'services_cta_label', 'GET IN TOUCH' ) ); ?></span>
                             <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor" stroke-width="1.2">
                                 <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
@@ -151,78 +167,55 @@
                 </div>
             </div>
 
-            <a href="<?php echo esc_url( dayanarc_service_url( 'architecture' ) ); ?>" class="lg:col-span-3 card-wrapper delay-200" style="text-decoration:none; color:inherit; display:block;">
-                <div class="service-card group bg-white text-[#2c221a] p-5 lg:p-6 relative cursor-pointer shadow-2xl">
-                    <div class="flex justify-between items-start w-full">
-                        <span class="text-[11px] text-[#68635f] tracking-widest">01</span>
-                        <div class="img-container curtain-container">
-                            <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=600&q=80" alt="Architecture" class="curtain-img delay-300 object-cover w-full h-full">
-                        </div>
-                    </div>
-                    <div class="mt-auto w-full pt-6 bg-white relative z-10">
-                        <h3 class="title-text text-2xl lg:text-3xl text-[#2c221a] tracking-tight">ARCHITECTURE</h3>
-                        <div class="card-content-grid">
-                            <div class="card-inner-content">
-                                <div class="pt-4 flex flex-col gap-5">
-                                    <p class="text-[13px] leading-relaxed text-[#68635f] font-light">Complete architectural design from concept to execution, tailored to your unique vision and functional needs.</p>
-                                    <div class="flex justify-between items-center text-[12px] text-[#a9a39f]">
-                                        <span>Consultation</span>
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.5" class="arrow-hover">
-                                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
+            <?php
+            $svc_ids = array_filter( [
+                (int) get_option( 'dayanarc_service_architecture_id' ),
+                (int) get_option( 'dayanarc_service_interior_design_id' ),
+                (int) get_option( 'dayanarc_service_3d_viz_id' ),
+                (int) get_option( 'dayanarc_service_project_mgmt_id' ),
+            ] );
+            $card_delays  = [ 'delay-200', 'delay-300', 'delay-400', 'delay-500' ];
+            $img_delays   = [ 'delay-300', 'delay-400', 'delay-500', 'delay-600' ];
+            $fallback_img = 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=600&q=80';
 
-            <a href="<?php echo esc_url( dayanarc_service_url( 'interior-design' ) ); ?>" class="lg:col-span-3 card-wrapper delay-300" style="text-decoration:none; color:inherit; display:block;">
-                <div class="service-card group bg-white text-[#2c221a] p-5 lg:p-6 relative cursor-pointer shadow-2xl">
-                    <div class="flex justify-between items-start w-full">
-                        <span class="text-[11px] text-[#68635f] tracking-widest">02</span>
-                        <div class="img-container curtain-container">
-                            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=600&q=80" alt="Interior Design" class="curtain-img delay-400 object-cover w-full h-full">
-                        </div>
-                    </div>
-                    <div class="mt-auto w-full pt-6 bg-white relative z-10">
-                        <h3 class="title-text text-2xl lg:text-3xl text-[#2c221a] tracking-tight">INTERIOR DESIGN</h3>
-                        <div class="card-content-grid">
-                            <div class="card-inner-content">
-                                <div class="pt-4 flex flex-col gap-5">
-                                    <p class="text-[13px] leading-relaxed text-[#68635f] font-light">Comprehensive interior design services from space planning to material selection and 3D visualization.</p>
-                                    <div class="flex justify-between items-center text-[12px] text-[#a9a39f]">
-                                        <span>Full Service</span>
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.5" class="arrow-hover">
-                                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
+            if ( $svc_ids ) :
+                $svc_q = new WP_Query( [
+                    'post_type'      => 'page',
+                    'post__in'       => array_values( $svc_ids ),
+                    'orderby'        => 'post__in',
+                    'posts_per_page' => count( $svc_ids ),
+                    'no_found_rows'  => true,
+                ] );
+                $svc_i = 0;
+                while ( $svc_q->have_posts() ) :
+                    $svc_q->the_post();
+                    $sid       = get_the_ID();
+                    $svc_num   = get_post_meta( $sid, '_service_number', true ) ?: str_pad( $svc_i + 1, 2, '0', STR_PAD_LEFT );
+                    $svc_desc  = get_post_meta( $sid, '_service_card_description', true ) ?: get_the_excerpt();
+                    $svc_label = get_post_meta( $sid, '_service_card_tagline', true );
+                    $svc_thumb = get_the_post_thumbnail_url( $sid, 'large' ) ?: $fallback_img;
+                    $card_d    = $card_delays[ $svc_i ] ?? 'delay-200';
+                    $img_d     = $img_delays[ $svc_i ] ?? 'delay-300';
 
+                    if ( $svc_i === 2 ) : ?>
             <div class="lg:col-span-3 hidden lg:block"></div>
-
-            <a href="<?php echo esc_url( dayanarc_service_url( '3d-visualization' ) ); ?>" class="lg:col-span-3 card-wrapper delay-400" style="text-decoration:none; color:inherit; display:block;">
+                    <?php endif; ?>
+            <a href="<?php echo esc_url( get_permalink() ); ?>" class="lg:col-span-3 card-wrapper <?php echo esc_attr( $card_d ); ?>" style="text-decoration:none; color:inherit; display:block;">
                 <div class="service-card group bg-white text-[#2c221a] p-5 lg:p-6 relative cursor-pointer shadow-2xl">
                     <div class="flex justify-between items-start w-full">
-                        <span class="text-[11px] text-[#68635f] tracking-widest">03</span>
+                        <span class="text-[11px] text-[#68635f] tracking-widest"><?php echo esc_html( $svc_num ); ?></span>
                         <div class="img-container curtain-container">
-                            <img src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/project10.png" alt="3D Visualization" class="curtain-img delay-500 object-cover w-full h-full">
+                            <img src="<?php echo esc_url( $svc_thumb ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>" class="curtain-img <?php echo esc_attr( $img_d ); ?> object-cover w-full h-full">
                         </div>
                     </div>
                     <div class="mt-auto w-full pt-6 bg-white relative z-10">
-                        <h3 class="title-text text-2xl lg:text-3xl text-[#2c221a] tracking-tight">3D VISUALIZATION</h3>
+                        <h3 class="title-text text-2xl lg:text-3xl text-[#2c221a] tracking-tight"><?php echo esc_html( strtoupper( get_the_title() ) ); ?></h3>
                         <div class="card-content-grid">
                             <div class="card-inner-content">
                                 <div class="pt-4 flex flex-col gap-5">
-                                    <p class="text-[13px] leading-relaxed text-[#68635f] font-light">High-quality 3D renderings and visualization to help you see your vision before construction begins.</p>
+                                    <p class="text-[13px] leading-relaxed text-[#68635f] font-light"><?php echo esc_html( $svc_desc ); ?></p>
                                     <div class="flex justify-between items-center text-[12px] text-[#a9a39f]">
-                                        <span>Rendering</span>
+                                        <?php if ( $svc_label ) : ?><span><?php echo esc_html( $svc_label ); ?></span><?php endif; ?>
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.5" class="arrow-hover">
                                             <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke-linecap="round" stroke-linejoin="round"/>
                                         </svg>
@@ -233,37 +226,16 @@
                     </div>
                 </div>
             </a>
-
-            <a href="<?php echo esc_url( dayanarc_service_url( 'project-management' ) ); ?>" class="lg:col-span-3 card-wrapper delay-500" style="text-decoration:none; color:inherit; display:block;">
-                <div class="service-card group bg-white text-[#2c221a] p-5 lg:p-6 relative cursor-pointer shadow-2xl">
-                    <div class="flex justify-between items-start w-full">
-                        <span class="text-[11px] text-[#68635f] tracking-widest">04</span>
-                        <div class="img-container curtain-container">
-                            <img src="https://images.unsplash.com/photo-1631679706909-1844bbd07221?auto=format&fit=crop&w=600&q=80" alt="Project Management" class="curtain-img delay-600 object-cover w-full h-full">
-                        </div>
-                    </div>
-                    <div class="mt-auto w-full pt-6 bg-white relative z-10">
-                        <h3 class="title-text text-2xl lg:text-3xl text-[#2c221a] tracking-tight">PROJECT MANAGEMENT</h3>
-                        <div class="card-content-grid">
-                            <div class="card-inner-content">
-                                <div class="pt-4 flex flex-col gap-5">
-                                    <p class="text-[13px] leading-relaxed text-[#68635f] font-light">End-to-end project management ensuring every detail is executed with precision and attention.</p>
-                                    <div class="flex justify-between items-center text-[12px] text-[#a9a39f]">
-                                        <span>Management</span>
-                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.5" class="arrow-hover">
-                                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke-linecap="round" stroke-linejoin="round"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
+                    <?php
+                    $svc_i++;
+                endwhile;
+                wp_reset_postdata();
+            endif;
+            ?>
 
             <div class="lg:col-span-3 flex items-end justify-start lg:justify-end pb-8">
                 <p class="text-white text-[14px] font-light max-w-[200px] leading-relaxed text-justify lg:text-right reveal-mask">
-                    <span class="reveal-text delay-600">Transforming ideas into inspiring, functional spaces.</span>
+                    <span class="reveal-text delay-600"><?php echo esc_html( get_theme_mod( 'services_tagline', 'Transforming ideas into inspiring, functional spaces.' ) ); ?></span>
                 </p>
             </div>
         </div>
@@ -276,8 +248,9 @@
                 <span class="reveal-mask block mb-4">
                     <span class="reveal-text text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium">JOURNAL</span>
                 </span>
+                <?php $jh = get_theme_mod( 'journal_heading', 'DESIGN INSIGHTS' ); ?>
                 <h1 class="title-text text-3xl md:text-4xl lg:text-5xl leading-tight text-[#2c221a]">
-                    <span class="reveal-mask"><span class="reveal-text delay-100 uppercase tracking-tight">DESIGN IN<span class="fancy-s">S</span>IGHTS</span></span>
+                    <span class="reveal-mask"><span class="reveal-text delay-100 uppercase tracking-tight"><?php echo esc_html( $jh ); ?></span></span>
                 </h1>
             </div>
 
@@ -313,12 +286,16 @@
                     <span class="reveal-mask block mb-6">
                         <span class="reveal-text delay-100 text-[10px] tracking-[0.15em] text-[#8c8783] uppercase font-medium">CONTACT US</span>
                     </span>
+                    <?php
+                    $fch1 = get_theme_mod( 'fp_contact_heading_line1', "LET'S BEGIN A" );
+                    $fch2 = get_theme_mod( 'fp_contact_heading_line2', 'CONVERSATION' );
+                    ?>
                     <h1 class="title-text text-4xl md:text-5xl lg:text-[4rem] leading-[1.1] tracking-tight mb-8 text-[#2c221a] break-words">
-                        <span class="reveal-mask block pb-1"><span class="reveal-text delay-200">LET'S BEGIN A</span></span>
-                        <span class="reveal-mask block w-full"><span class="reveal-text delay-300"><span class="fancy-c">C</span>ONVERSATION</span></span>
+                        <span class="reveal-mask block pb-1"><span class="reveal-text delay-200"><?php echo esc_html( $fch1 ); ?></span></span>
+                        <span class="reveal-mask block w-full"><span class="reveal-text delay-300"><span class="fancy-c"><?php echo esc_html( mb_substr( $fch2, 0, 1 ) ); ?></span><?php echo esc_html( mb_substr( $fch2, 1 ) ); ?></span></span>
                     </h1>
                     <p class="text-[14px] md:text-[15px] leading-relaxed text-[#68635f] font-light max-w-[420px] reveal-mask block text-justify">
-                        <span class="reveal-text delay-400">Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention.</span>
+                        <span class="reveal-text delay-400"><?php echo esc_html( get_theme_mod( 'fp_contact_description', "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention." ) ); ?></span>
                     </p>
                 </div>
 
@@ -345,7 +322,7 @@
             <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-12">
                 <div class="flex flex-col">
                     <div class="title-text text-2xl tracking-widest text-[#2c221a] mb-6 font-medium">DAYAN ARC</div>
-                    <p class="text-[12px] leading-relaxed text-[#68635f] font-light max-w-[220px]">Bringing together creativity, expertise, and passion to deliver exceptional design solutions.</p>
+                    <p class="text-[12px] leading-relaxed text-[#68635f] font-light max-w-[220px]"><?php echo esc_html( get_theme_mod( 'footer_tagline', 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.' ) ); ?></p>
                 </div>
 
                 <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
@@ -361,19 +338,25 @@
                 <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
                     <div><span class="text-[10px] uppercase tracking-[0.15em] text-[#8c8783] font-medium">FOLLOW US</span></div>
                     <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase text-[#2c221a]">
-                        <a href="#" class="footer-link">INSTAGRAM</a>
-                        <a href="#" class="footer-link">PINTEREST</a>
-                        <a href="#" class="footer-link">BEHANCE</a>
-                        <a href="#" class="footer-link">LINKEDIN</a>
+                        <a href="<?php echo esc_url( get_theme_mod( 'social_instagram', '#' ) ); ?>" class="footer-link">INSTAGRAM</a>
+                        <a href="<?php echo esc_url( get_theme_mod( 'social_pinterest', '#' ) ); ?>" class="footer-link">PINTEREST</a>
+                        <a href="<?php echo esc_url( get_theme_mod( 'social_behance',   '#' ) ); ?>" class="footer-link">BEHANCE</a>
+                        <a href="<?php echo esc_url( get_theme_mod( 'social_linkedin',  '#' ) ); ?>" class="footer-link">LINKEDIN</a>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
                     <div><span class="text-[10px] uppercase tracking-[0.15em] text-[#8c8783] font-medium">CONTACT</span></div>
                     <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase text-[#2c221a] leading-relaxed">
-                        <p>RIYADH, SAUDI ARABIA</p>
-                        <a href="mailto:<?php echo antispambot( 'dayanarc.co@gmail.com' ); ?>" class="footer-link lowercase"><?php echo antispambot( 'dayanarc.co@gmail.com' ); ?></a>
-                        <a href="<?php echo esc_url( 'https://www.dayanarc.com' ); ?>" class="footer-link lowercase">www.dayanarc.com</a>
+                        <?php
+                        $location        = get_theme_mod( 'contact_location', 'Riyadh, Saudi Arabia' );
+                        $email           = get_theme_mod( 'contact_email',    'dayanarc.co@gmail.com' );
+                        $website         = get_theme_mod( 'contact_website',  'https://www.dayanarc.com' );
+                        $website_display = preg_replace( '#^https?://#i', '', $website );
+                        ?>
+                        <p><?php echo esc_html( strtoupper( $location ) ); ?></p>
+                        <a href="mailto:<?php echo antispambot( $email ); ?>" class="footer-link lowercase"><?php echo antispambot( $email ); ?></a>
+                        <a href="<?php echo esc_url( $website ); ?>" class="footer-link lowercase"><?php echo esc_html( $website_display ); ?></a>
                     </div>
                 </div>
             </div>

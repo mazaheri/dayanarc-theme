@@ -8,7 +8,7 @@ exit;
     <!-- Section header -->
     <div style="text-align:center; margin-bottom:1.5rem;">
         <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500; display:block; margin-bottom:1rem;">PORTFOLIO</span>
-        <h1 class="title-text" style="font-size:clamp(2rem,5vw,4rem); line-height:1.05; letter-spacing:-0.02em; color:#2c221a; text-transform:uppercase;">OUR WORKS</h1>
+        <h1 class="title-text" style="font-size:clamp(2rem,5vw,4rem); line-height:1.05; letter-spacing:-0.02em; color:#2c221a; text-transform:uppercase;"><?php echo esc_html( get_theme_mod( 'portfolio_heading', 'OUR WORKS' ) ); ?></h1>
     </div>
 
     <?php dayanarc_breadcrumb(); ?>

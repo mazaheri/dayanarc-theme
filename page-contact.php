@@ -100,30 +100,36 @@ $form_id = dayanarc_get_contact_form_id();
             <div>
                 <span style="font-size:10px; letter-spacing:0.15em; color:#8c8783; text-transform:uppercase; font-weight:500; display:block; margin-bottom:1.5rem;">CONTACT US</span>
                 <h1 class="title-text" style="font-size:clamp(2.5rem,5vw,4rem); line-height:1.1; color:#2c221a; margin-bottom:2rem;">
-                    LET'S BEGIN A<br><span class="fancy-c">C</span>ONVERSATION
+                    <?php echo esc_html( get_theme_mod( 'contact_page_heading', "LET'S BEGIN A CONVERSATION" ) ); ?>
                 </h1>
                 <p style="font-size:14px; line-height:1.8; color:#68635f; font-weight:300; max-width:400px; margin-bottom:2.5rem;">
-                    Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention.
+                    <?php echo esc_html( get_theme_mod( 'contact_page_description', "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention." ) ); ?>
                 </p>
 
                 <div style="display:flex; flex-direction:column; gap:1.5rem;">
                     <div>
                         <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#8c8783; font-weight:500; display:block; margin-bottom:0.4rem;">Location</span>
-                        <p style="font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#2c221a; font-weight:600;">Riyadh, Saudi Arabia</p>
+                        <?php $location = get_theme_mod( 'contact_location', 'Riyadh, Saudi Arabia' ); ?>
+                        <p style="font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#2c221a; font-weight:600;"><?php echo esc_html( strtoupper( $location ) ); ?></p>
                     </div>
                     <div>
+                        <?php $email = get_theme_mod( 'contact_email', 'dayanarc.co@gmail.com' ); ?>
                         <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#8c8783; font-weight:500; display:block; margin-bottom:0.4rem;">Email</span>
-                        <a href="mailto:<?php echo antispambot( 'dayanarc.co@gmail.com' ); ?>"
+                        <a href="mailto:<?php echo antispambot( $email ); ?>"
                            style="font-size:11px; letter-spacing:0.08em; color:#2c221a; font-weight:600; text-decoration:none;">
-                            <?php echo antispambot( 'dayanarc.co@gmail.com' ); ?>
+                            <?php echo antispambot( $email ); ?>
                         </a>
                     </div>
                     <div>
+                        <?php
+                        $website         = get_theme_mod( 'contact_website', 'https://www.dayanarc.com' );
+                        $website_display = preg_replace( '#^https?://#i', '', $website );
+                        ?>
                         <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#8c8783; font-weight:500; display:block; margin-bottom:0.4rem;">Website</span>
-                        <a href="<?php echo esc_url( 'https://www.dayanarc.com' ); ?>"
+                        <a href="<?php echo esc_url( $website ); ?>"
                            style="font-size:11px; letter-spacing:0.08em; color:#2c221a; font-weight:600; text-decoration:none;"
                            target="_blank" rel="noopener noreferrer">
-                            www.dayanarc.com
+                            <?php echo esc_html( $website_display ); ?>
                         </a>
                     </div>
                 </div>

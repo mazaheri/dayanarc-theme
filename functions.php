@@ -395,8 +395,14 @@ function dayanarc_render_service_meta( $post ) {
         return;
     }
     wp_nonce_field( 'dayanarc_service_nonce', 'service_nonce' );
-    $number   = get_post_meta( $post->ID, '_service_number', true );
-    $features = get_post_meta( $post->ID, '_service_features', true );
+    $number         = get_post_meta( $post->ID, '_service_number', true );
+    $card_desc      = get_post_meta( $post->ID, '_service_card_description', true );
+    $card_label     = get_post_meta( $post->ID, '_service_card_tagline', true );
+    $features       = get_post_meta( $post->ID, '_service_features', true );
+    $offer_heading  = get_post_meta( $post->ID, '_service_what_we_offer', true );
+    $cta_heading    = get_post_meta( $post->ID, '_service_cta_heading', true );
+    $cta_desc       = get_post_meta( $post->ID, '_service_cta_description', true );
+    $cta_label      = get_post_meta( $post->ID, '_service_cta_label', true );
     ?>
     <table class="form-table">
         <tr>
@@ -408,11 +414,59 @@ function dayanarc_render_service_meta( $post ) {
             </td>
         </tr>
         <tr>
+            <th><label for="service_card_description"><?php _e( 'Card Description', 'dayanarc' ); ?></label></th>
+            <td>
+                <textarea id="service_card_description" name="service_card_description"
+                          rows="3" class="large-text"><?php echo esc_textarea( $card_desc ); ?></textarea>
+                <p class="description"><?php _e( 'Short description shown on the homepage service card.', 'dayanarc' ); ?></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="service_card_tagline"><?php _e( 'Card Label', 'dayanarc' ); ?></label></th>
+            <td>
+                <input type="text" id="service_card_tagline" name="service_card_tagline"
+                       value="<?php echo esc_attr( $card_label ); ?>"
+                       class="regular-text" placeholder="e.g. Consultation">
+                <p class="description"><?php _e( 'Short label shown at the bottom of the homepage card.', 'dayanarc' ); ?></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="service_what_we_offer"><?php _e( '"What We Offer" Heading', 'dayanarc' ); ?></label></th>
+            <td>
+                <input type="text" id="service_what_we_offer" name="service_what_we_offer"
+                       value="<?php echo esc_attr( $offer_heading ); ?>"
+                       class="regular-text" placeholder="WHAT WE OFFER">
+            </td>
+        </tr>
+        <tr>
             <th><label for="service_features"><?php _e( 'Features (one per line)', 'dayanarc' ); ?></label></th>
             <td>
                 <textarea id="service_features" name="service_features"
                           rows="8" class="large-text"><?php echo esc_textarea( $features ); ?></textarea>
                 <p class="description"><?php _e( 'Each line becomes one bullet point in the "What We Offer" list.', 'dayanarc' ); ?></p>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="service_cta_heading"><?php _e( 'CTA Strip Heading', 'dayanarc' ); ?></label></th>
+            <td>
+                <input type="text" id="service_cta_heading" name="service_cta_heading"
+                       value="<?php echo esc_attr( $cta_heading ); ?>"
+                       class="regular-text" placeholder="READY TO START YOUR PROJECT?">
+            </td>
+        </tr>
+        <tr>
+            <th><label for="service_cta_description"><?php _e( 'CTA Strip Description', 'dayanarc' ); ?></label></th>
+            <td>
+                <textarea id="service_cta_description" name="service_cta_description"
+                          rows="3" class="large-text"><?php echo esc_textarea( $cta_desc ); ?></textarea>
+            </td>
+        </tr>
+        <tr>
+            <th><label for="service_cta_label"><?php _e( 'CTA Button Label', 'dayanarc' ); ?></label></th>
+            <td>
+                <input type="text" id="service_cta_label" name="service_cta_label"
+                       value="<?php echo esc_attr( $cta_label ); ?>"
+                       class="regular-text" placeholder="CONTACT US">
             </td>
         </tr>
     </table>
@@ -427,8 +481,26 @@ function dayanarc_save_service_meta( $post_id ) {
     if ( isset( $_POST['service_number'] ) ) {
         update_post_meta( $post_id, '_service_number', sanitize_text_field( $_POST['service_number'] ) );
     }
+    if ( isset( $_POST['service_card_description'] ) ) {
+        update_post_meta( $post_id, '_service_card_description', sanitize_textarea_field( $_POST['service_card_description'] ) );
+    }
+    if ( isset( $_POST['service_card_tagline'] ) ) {
+        update_post_meta( $post_id, '_service_card_tagline', sanitize_text_field( $_POST['service_card_tagline'] ) );
+    }
+    if ( isset( $_POST['service_what_we_offer'] ) ) {
+        update_post_meta( $post_id, '_service_what_we_offer', sanitize_text_field( $_POST['service_what_we_offer'] ) );
+    }
     if ( isset( $_POST['service_features'] ) ) {
         update_post_meta( $post_id, '_service_features', sanitize_textarea_field( $_POST['service_features'] ) );
+    }
+    if ( isset( $_POST['service_cta_heading'] ) ) {
+        update_post_meta( $post_id, '_service_cta_heading', sanitize_text_field( $_POST['service_cta_heading'] ) );
+    }
+    if ( isset( $_POST['service_cta_description'] ) ) {
+        update_post_meta( $post_id, '_service_cta_description', sanitize_textarea_field( $_POST['service_cta_description'] ) );
+    }
+    if ( isset( $_POST['service_cta_label'] ) ) {
+        update_post_meta( $post_id, '_service_cta_label', sanitize_text_field( $_POST['service_cta_label'] ) );
     }
 }
 add_action( 'save_post_page', 'dayanarc_save_service_meta' );
@@ -510,3 +582,342 @@ function dayanarc_load_more_journal() {
 }
 add_action( 'wp_ajax_dayanarc_load_more_journal',        'dayanarc_load_more_journal' );
 add_action( 'wp_ajax_nopriv_dayanarc_load_more_journal', 'dayanarc_load_more_journal' );
+
+// ── Customizer: auto-navigate preview when a section is opened ────────────────
+add_action( 'customize_controls_enqueue_scripts', function () {
+    $ver = wp_get_theme()->get( 'Version' );
+    wp_enqueue_script(
+        'dayanarc-customizer-nav',
+        get_template_directory_uri() . '/assets/js/customizer-nav.js',
+        [ 'customize-controls' ],
+        $ver,
+        true
+    );
+    wp_localize_script( 'dayanarc-customizer-nav', 'dayanarcCustomizerUrls', [
+        'home'      => home_url( '/' ),
+        'contact'   => dayanarc_contact_page_url(),
+        'journal'   => dayanarc_journal_url(),
+        'portfolio' => dayanarc_portfolio_url(),
+    ] );
+} );
+
+// ── Customizer: Dayan Arc editable fields ─────────────────────────────────────
+add_action( 'customize_register', function ( $wp_customize ) {
+
+    // ══ PANELS ════════════════════════════════════════════════════════════════
+
+    $wp_customize->add_panel( 'dayanarc_homepage', [
+        'title'       => 'Homepage',
+        'description' => 'Settings for front page sections.',
+        'priority'    => 30,
+    ] );
+
+    $wp_customize->add_panel( 'dayanarc_pages', [
+        'title'       => 'Other Pages',
+        'description' => 'Settings for individual inner pages.',
+        'priority'    => 31,
+    ] );
+
+    $wp_customize->add_panel( 'dayanarc_general', [
+        'title'       => 'General Settings',
+        'description' => 'Sitewide settings that appear on every page.',
+        'priority'    => 32,
+    ] );
+
+    // ══ HOMEPAGE PANEL ════════════════════════════════════════════════════════
+
+    // ── Hero ──────────────────────────────────────────────────────────────
+    $wp_customize->add_section( 'dayanarc_hero', [
+        'title'    => 'Hero Section',
+        'panel'    => 'dayanarc_homepage',
+        'priority' => 10,
+    ] );
+    foreach ( [
+        'hero_word_1' => [ 'label' => 'Hero Word 1', 'default' => 'VISION.' ],
+        'hero_word_2' => [ 'label' => 'Hero Word 2', 'default' => 'DESIGN.' ],
+        'hero_word_3' => [ 'label' => 'Hero Word 3', 'default' => 'REALITY.' ],
+        'hero_cta_label' => [ 'label' => 'CTA Button Label', 'default' => 'Get in touch' ],
+    ] as $key => $field ) {
+        $wp_customize->add_setting( $key, [
+            'default'           => $field['default'],
+            'sanitize_callback' => 'sanitize_text_field',
+            'transport'         => 'refresh',
+        ] );
+        $wp_customize->add_control( $key, [
+            'label'   => $field['label'],
+            'section' => 'dayanarc_hero',
+            'type'    => 'text',
+        ] );
+    }
+    $wp_customize->add_setting( 'hero_tagline', [
+        'default'           => 'At Dayan Arc, we blend creativity and expertise to craft exceptional architectural and interior design experiences. From concept to completion, we bring spaces to life with innovation, precision, and a passion for design excellence.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( 'hero_tagline', [
+        'label'       => 'Hero Tagline',
+        'description' => 'Paragraph below the main headline.',
+        'section'     => 'dayanarc_hero',
+        'type'        => 'textarea',
+    ] );
+
+    // ── About ─────────────────────────────────────────────────────────────
+    $wp_customize->add_section( 'dayanarc_about', [
+        'title'    => 'About Section',
+        'panel'    => 'dayanarc_homepage',
+        'priority' => 20,
+    ] );
+    foreach ( [
+        'about_heading_line1' => [ 'label' => 'Heading Line 1', 'default' => 'DESIGN WITH' ],
+        'about_heading_line2' => [ 'label' => 'Heading Line 2', 'default' => 'PASSION' ],
+        'about_cta_label'     => [ 'label' => 'CTA Link Label', 'default' => 'LEARN MORE' ],
+    ] as $key => $field ) {
+        $wp_customize->add_setting( $key, [
+            'default'           => $field['default'],
+            'sanitize_callback' => 'sanitize_text_field',
+            'transport'         => 'refresh',
+        ] );
+        $wp_customize->add_control( $key, [
+            'label'   => $field['label'],
+            'section' => 'dayanarc_about',
+            'type'    => 'text',
+        ] );
+    }
+    $wp_customize->add_setting( 'about_body', [
+        'default'           => 'At Dayan Arc, our team brings together the best talent from around the world, combining creativity, expertise, and passion. Together, we strive to deliver exceptional design solutions that exceed expectations and create spaces that inspire and delight.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( 'about_body', [
+        'label'   => 'About Description',
+        'section' => 'dayanarc_about',
+        'type'    => 'textarea',
+    ] );
+    $wp_customize->add_setting( 'about_image_main', [
+        'default'           => 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80',
+        'sanitize_callback' => 'esc_url_raw',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'about_image_main', [
+        'label'   => 'About Main Image',
+        'section' => 'dayanarc_about',
+    ] ) );
+    $wp_customize->add_setting( 'about_image_detail', [
+        'default'           => 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?q=80&w=800&auto=format&fit=crop',
+        'sanitize_callback' => 'esc_url_raw',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, 'about_image_detail', [
+        'label'   => 'About Detail Image (desktop only)',
+        'section' => 'dayanarc_about',
+    ] ) );
+
+    // ── Portfolio ─────────────────────────────────────────────────────────
+    $wp_customize->add_section( 'dayanarc_portfolio', [
+        'title'    => 'Portfolio Section',
+        'panel'    => 'dayanarc_homepage',
+        'priority' => 25,
+    ] );
+    $wp_customize->add_setting( 'portfolio_heading', [
+        'default'           => 'OUR WORKS',
+        'sanitize_callback' => 'sanitize_text_field',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( 'portfolio_heading', [
+        'label'       => 'Portfolio Heading',
+        'description' => 'Used on the homepage section and the portfolio archive page.',
+        'section'     => 'dayanarc_portfolio',
+        'type'        => 'text',
+    ] );
+
+    // ── Services ──────────────────────────────────────────────────────────
+    $wp_customize->add_section( 'dayanarc_services', [
+        'title'    => 'Services Section',
+        'panel'    => 'dayanarc_homepage',
+        'priority' => 30,
+    ] );
+    foreach ( [
+        'services_heading_line1' => [ 'label' => 'Heading Line 1', 'default' => 'COMPREHENSIVE' ],
+        'services_heading_line2' => [ 'label' => 'Heading Line 2', 'default' => 'SOLUTIONS' ],
+        'services_cta_label'     => [ 'label' => 'CTA Button Label', 'default' => 'GET IN TOUCH' ],
+    ] as $key => $field ) {
+        $wp_customize->add_setting( $key, [
+            'default'           => $field['default'],
+            'sanitize_callback' => 'sanitize_text_field',
+            'transport'         => 'refresh',
+        ] );
+        $wp_customize->add_control( $key, [
+            'label'   => $field['label'],
+            'section' => 'dayanarc_services',
+            'type'    => 'text',
+        ] );
+    }
+    $wp_customize->add_setting( 'services_intro', [
+        'default'           => 'At Dayan Arc, we offer comprehensive architectural and interior design services, from concept development to project management.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( 'services_intro', [
+        'label'   => 'Services Intro',
+        'section' => 'dayanarc_services',
+        'type'    => 'textarea',
+    ] );
+    $wp_customize->add_setting( 'services_tagline', [
+        'default'           => 'Transforming ideas into inspiring, functional spaces.',
+        'sanitize_callback' => 'sanitize_text_field',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( 'services_tagline', [
+        'label'   => 'Services Tagline',
+        'section' => 'dayanarc_services',
+        'type'    => 'text',
+    ] );
+
+    // ── Journal ───────────────────────────────────────────────────────────
+    $wp_customize->add_section( 'dayanarc_journal', [
+        'title'       => 'Journal Section',
+        'panel'       => 'dayanarc_homepage',
+        'description' => 'Used on the homepage section and the journal archive page.',
+        'priority'    => 35,
+    ] );
+    $wp_customize->add_setting( 'journal_heading', [
+        'default'           => 'DESIGN INSIGHTS',
+        'sanitize_callback' => 'sanitize_text_field',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( 'journal_heading', [
+        'label'   => 'Journal Heading',
+        'section' => 'dayanarc_journal',
+        'type'    => 'text',
+    ] );
+
+    // ── Contact Section (front page) ──────────────────────────────────────
+    $wp_customize->add_section( 'dayanarc_fp_contact', [
+        'title'    => 'Contact Section',
+        'panel'    => 'dayanarc_homepage',
+        'priority' => 40,
+    ] );
+    foreach ( [
+        'fp_contact_heading_line1' => [ 'label' => 'Heading Line 1', 'default' => "LET'S BEGIN A" ],
+        'fp_contact_heading_line2' => [ 'label' => 'Heading Line 2', 'default' => 'CONVERSATION' ],
+    ] as $key => $field ) {
+        $wp_customize->add_setting( $key, [
+            'default'           => $field['default'],
+            'sanitize_callback' => 'sanitize_text_field',
+            'transport'         => 'refresh',
+        ] );
+        $wp_customize->add_control( $key, [
+            'label'   => $field['label'],
+            'section' => 'dayanarc_fp_contact',
+            'type'    => 'text',
+        ] );
+    }
+    $wp_customize->add_setting( 'fp_contact_description', [
+        'default'           => "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention.",
+        'sanitize_callback' => 'sanitize_textarea_field',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( 'fp_contact_description', [
+        'label'       => 'Description',
+        'description' => 'Paragraph under the contact heading on the home page.',
+        'section'     => 'dayanarc_fp_contact',
+        'type'        => 'textarea',
+    ] );
+
+    // ══ OTHER PAGES PANEL ════════════════════════════════════════════════════
+
+    // ── Contact Page ──────────────────────────────────────────────────────
+    $wp_customize->add_section( 'dayanarc_contact_page', [
+        'title'    => 'Contact Page',
+        'panel'    => 'dayanarc_pages',
+        'priority' => 10,
+    ] );
+    $wp_customize->add_setting( 'contact_page_heading', [
+        'default'           => "LET'S BEGIN A CONVERSATION",
+        'sanitize_callback' => 'sanitize_text_field',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( 'contact_page_heading', [
+        'label'   => 'Heading',
+        'section' => 'dayanarc_contact_page',
+        'type'    => 'text',
+    ] );
+    $wp_customize->add_setting( 'contact_page_description', [
+        'default'           => "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention.",
+        'sanitize_callback' => 'sanitize_textarea_field',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( 'contact_page_description', [
+        'label'   => 'Description',
+        'section' => 'dayanarc_contact_page',
+        'type'    => 'textarea',
+    ] );
+
+    // ══ GENERAL SETTINGS PANEL ════════════════════════════════════════════════
+
+    // ── Brand ─────────────────────────────────────────────────────────────
+    $wp_customize->add_section( 'dayanarc_brand', [
+        'title'    => 'Brand',
+        'panel'    => 'dayanarc_general',
+        'priority' => 5,
+    ] );
+    $wp_customize->add_setting( 'footer_tagline', [
+        'default'           => 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.',
+        'sanitize_callback' => 'sanitize_textarea_field',
+        'transport'         => 'refresh',
+    ] );
+    $wp_customize->add_control( 'footer_tagline', [
+        'label'       => 'Brand Tagline',
+        'description' => 'Short line under the logo in every footer.',
+        'section'     => 'dayanarc_brand',
+        'type'        => 'textarea',
+    ] );
+
+    // ── Contact Info ──────────────────────────────────────────────────────
+    $wp_customize->add_section( 'dayanarc_contact_info', [
+        'title'    => 'Contact Info',
+        'panel'    => 'dayanarc_general',
+        'priority' => 10,
+    ] );
+    foreach ( [
+        'contact_location' => [ 'label' => 'Location',   'default' => 'Riyadh, Saudi Arabia',     'type' => 'text' ],
+        'contact_email'    => [ 'label' => 'Email',       'default' => 'dayanarc.co@gmail.com',    'type' => 'text' ],
+        'contact_website'  => [ 'label' => 'Website URL', 'default' => 'https://www.dayanarc.com', 'type' => 'url'  ],
+    ] as $key => $field ) {
+        $wp_customize->add_setting( $key, [
+            'default'           => $field['default'],
+            'sanitize_callback' => $field['type'] === 'url' ? 'esc_url_raw' : 'sanitize_text_field',
+            'transport'         => 'refresh',
+        ] );
+        $wp_customize->add_control( $key, [
+            'label'   => $field['label'],
+            'section' => 'dayanarc_contact_info',
+            'type'    => $field['type'],
+        ] );
+    }
+
+    // ── Social Links ──────────────────────────────────────────────────────
+    $wp_customize->add_section( 'dayanarc_social', [
+        'title'    => 'Social Links',
+        'panel'    => 'dayanarc_general',
+        'priority' => 20,
+    ] );
+    foreach ( [
+        'social_instagram' => 'Instagram URL',
+        'social_pinterest' => 'Pinterest URL',
+        'social_behance'   => 'Behance URL',
+        'social_linkedin'  => 'LinkedIn URL',
+    ] as $key => $label ) {
+        $wp_customize->add_setting( $key, [
+            'default'           => '#',
+            'sanitize_callback' => 'esc_url_raw',
+            'transport'         => 'refresh',
+        ] );
+        $wp_customize->add_control( $key, [
+            'label'   => $label,
+            'section' => 'dayanarc_social',
+            'type'    => 'url',
+        ] );
+    }
+
+} );

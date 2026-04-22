@@ -13,7 +13,7 @@
             <!-- Brand -->
             <div style="display:flex; flex-direction:column;">
                 <div class="title-text" style="font-size:1.5rem; letter-spacing:0.15em; color:#2c221a; margin-bottom:1.5rem; font-weight:500;">DAYAN ARC</div>
-                <p style="font-size:12px; line-height:1.8; color:#68635f; font-weight:300; max-width:220px;">Bringing together creativity, expertise, and passion to deliver exceptional design solutions.</p>
+                <p style="font-size:12px; line-height:1.8; color:#68635f; font-weight:300; max-width:220px;"><?php echo esc_html( get_theme_mod( 'footer_tagline', 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.' ) ); ?></p>
             </div>
 
             <!-- Menu -->
@@ -31,10 +31,10 @@
             <div style="display:grid; grid-template-columns:auto 1fr; gap:1rem 2rem; align-items:start;">
                 <span style="font-size:10px; text-transform:uppercase; letter-spacing:0.15em; color:#8c8783; font-weight:500;">FOLLOW US</span>
                 <nav style="display:flex; flex-direction:column; gap:1rem; font-size:11px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:#2c221a;">
-                    <a href="#" class="footer-link">INSTAGRAM</a>
-                    <a href="#" class="footer-link">PINTEREST</a>
-                    <a href="#" class="footer-link">BEHANCE</a>
-                    <a href="#" class="footer-link">LINKEDIN</a>
+                    <a href="<?php echo esc_url( get_theme_mod( 'social_instagram', '#' ) ); ?>" class="footer-link">INSTAGRAM</a>
+                    <a href="<?php echo esc_url( get_theme_mod( 'social_pinterest', '#' ) ); ?>" class="footer-link">PINTEREST</a>
+                    <a href="<?php echo esc_url( get_theme_mod( 'social_behance',   '#' ) ); ?>" class="footer-link">BEHANCE</a>
+                    <a href="<?php echo esc_url( get_theme_mod( 'social_linkedin',  '#' ) ); ?>" class="footer-link">LINKEDIN</a>
                 </nav>
             </div>
 
@@ -42,9 +42,15 @@
             <div style="display:grid; grid-template-columns:auto 1fr; gap:1rem 2rem; align-items:start;">
                 <span style="font-size:10px; text-transform:uppercase; letter-spacing:0.15em; color:#8c8783; font-weight:500;">CONTACT</span>
                 <div style="display:flex; flex-direction:column; gap:1rem; font-size:11px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:#2c221a; line-height:1.6;">
-                    <p>RIYADH, SAUDI ARABIA</p>
-                    <a href="mailto:<?php echo antispambot( 'dayanarc.co@gmail.com' ); ?>" class="footer-link" style="text-transform:lowercase;"><?php echo antispambot( 'dayanarc.co@gmail.com' ); ?></a>
-                    <a href="<?php echo esc_url( 'https://www.dayanarc.com' ); ?>" class="footer-link" style="text-transform:lowercase;">www.dayanarc.com</a>
+                    <?php
+                    $location = get_theme_mod( 'contact_location', 'Riyadh, Saudi Arabia' );
+                    $email    = get_theme_mod( 'contact_email',    'dayanarc.co@gmail.com' );
+                    $website  = get_theme_mod( 'contact_website',  'https://www.dayanarc.com' );
+                    $website_display = preg_replace( '#^https?://#i', '', $website );
+                    ?>
+                    <p><?php echo esc_html( strtoupper( $location ) ); ?></p>
+                    <a href="mailto:<?php echo antispambot( $email ); ?>" class="footer-link" style="text-transform:lowercase;"><?php echo antispambot( $email ); ?></a>
+                    <a href="<?php echo esc_url( $website ); ?>" class="footer-link" style="text-transform:lowercase;"><?php echo esc_html( $website_display ); ?></a>
                 </div>
             </div>
 

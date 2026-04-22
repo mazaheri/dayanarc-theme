@@ -24,7 +24,7 @@ $total_posts = $journal_query->found_posts;
     <!-- Header -->
     <div style="margin-bottom:2rem;">
         <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500; display:block; margin-bottom:0.75rem;">JOURNAL</span>
-        <h1 class="title-text" style="font-size:clamp(2rem,5vw,4rem); line-height:1.05; letter-spacing:-0.02em; color:#2c221a; text-transform:uppercase; margin-bottom:1.25rem;">DESIGN INSIGHTS</h1>
+        <h1 class="title-text" style="font-size:clamp(2rem,5vw,4rem); line-height:1.05; letter-spacing:-0.02em; color:#2c221a; text-transform:uppercase; margin-bottom:1.25rem;"><?php echo esc_html( get_theme_mod( 'journal_heading', 'DESIGN INSIGHTS' ) ); ?></h1>
         <?php dayanarc_breadcrumb(); ?>
     </div>
 
