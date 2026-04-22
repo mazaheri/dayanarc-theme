@@ -3,14 +3,6 @@
 <main style="max-width:860px; margin:0 auto; padding:8rem 2rem 6rem;">
     <?php if ( have_posts() ) : the_post(); ?>
 
-        <?php if ( has_post_thumbnail() ) : ?>
-            <div style="width:100%; aspect-ratio:16/9; overflow:hidden; margin-bottom:3rem;">
-                <?php the_post_thumbnail( 'full', [ 'style' => 'width:100%; height:100%; object-fit:cover;' ] ); ?>
-            </div>
-        <?php endif; ?>
-
-        <?php dayanarc_breadcrumb(); ?>
-
         <div style="margin-bottom:1.5rem;">
             <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500;">
                 JOURNAL &mdash; <?php echo esc_html( get_the_date( 'F j, Y' ) ); ?>
@@ -21,7 +13,15 @@
             <?php the_title(); ?>
         </h1>
 
-        <div style="font-size:15px; line-height:1.9; color:#4a4540; font-weight:300; max-width:680px;">
+        <?php if ( has_post_thumbnail() ) : ?>
+            <div style="width:100%; aspect-ratio:16/9; overflow:hidden; margin-bottom:3rem;">
+                <?php the_post_thumbnail( 'full', [ 'style' => 'width:100%; height:100%; object-fit:cover;' ] ); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php dayanarc_breadcrumb(); ?>
+
+        <div style="font-size:15px; line-height:1.9; color:#4a4540; font-weight:300; max-width:680px; margin-top:2.5rem;">
             <?php the_content(); ?>
         </div>
 
