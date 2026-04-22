@@ -307,6 +307,14 @@
                 <h1 class="title-text text-3xl md:text-4xl lg:text-5xl leading-tight text-[#2c221a]">
                     <span class="reveal-mask"><span class="reveal-text delay-100 uppercase tracking-tight"><?php echo esc_html( $jh ); ?></span></span>
                 </h1>
+                <div class="reveal-mask mt-5">
+                    <a href="<?php echo esc_url( dayanarc_journal_url() ); ?>" class="reveal-text delay-200 inline-flex items-center gap-2 text-[11px] tracking-widest uppercase font-medium text-[#a9a39f] hover:text-[#2c221a] transition-colors">
+                        View all articles
+                        <svg width="14" height="9" viewBox="0 0 16 10" fill="none">
+                            <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </a>
+                </div>
             </div>
 
             <div class="relative min-h-[600px] pt-4">
