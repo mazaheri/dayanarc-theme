@@ -147,38 +147,38 @@
         const data = portfolios[index];
 
         container.innerHTML =
-            '<div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-8 items-start">' +
+            '<div class="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-6 items-start">' +
                 '<div class="order-2 lg:order-1">' +
-                    '<div class="curtain-container aspect-square w-full">' +
+                    '<div class="curtain-container portfolio-img-large">' +
                         '<img src="' + escHtml(data.imgLarge) + '" class="curtain-img-portfolio active" alt="' + escHtml(data.title) + '">' +
                     '</div>' +
                 '</div>' +
-                '<div class="order-1 lg:order-2 flex flex-col h-full lg:min-h-[550px]">' +
-                    '<div class="flex justify-between items-center mb-12 lg:mb-16">' +
-                        '<span class="text-[12px] text-[#68635f] font-light">' + escHtml(data.location) + '</span>' +
-                        '<span class="text-[12px] text-[#68635f] font-light tracking-widest">' + escHtml(data.id) + '</span>' +
+                '<div class="order-1 lg:order-2 flex flex-col">' +
+                    '<div class="flex justify-between items-center mb-6">' +
+                        '<span class="text-[11px] text-[#68635f] font-light">' + escHtml(data.location) + '</span>' +
+                        '<span class="text-[11px] text-[#68635f] font-light tracking-widest">' + escHtml(data.id) + '</span>' +
                     '</div>' +
-                    '<div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-auto">' +
+                    '<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-auto">' +
                         '<div class="flex flex-col">' +
-                            '<h2 class="title-text text-3xl lg:text-4xl mb-6 text-[#2c221a] font-medium tracking-wide uppercase">' + escHtml(data.title) + '</h2>' +
-                            '<p class="text-[14px] leading-relaxed text-[#68635f] font-light">' + escHtml(data.description) + '</p>' +
+                            '<h2 class="title-text text-2xl lg:text-3xl mb-4 text-[#2c221a] font-medium tracking-wide uppercase">' + escHtml(data.title) + '</h2>' +
+                            '<p class="text-[13px] leading-relaxed text-[#68635f] font-light">' + escHtml(data.description) + '</p>' +
                         '</div>' +
                         '<div class="flex flex-col">' +
-                            '<div class="curtain-container aspect-square w-full max-w-[280px] ml-auto">' +
+                            '<div class="curtain-container portfolio-img-small">' +
                                 '<img src="' + escHtml(data.imgSmall) + '" class="curtain-img-portfolio active" alt="Detail">' +
                             '</div>' +
-                            '<p class="text-[11px] leading-relaxed text-[#68635f] font-light mt-4 text-right max-w-[280px] ml-auto">' + escHtml(data.palette) + '</p>' +
-                            (data.permalink ? '<a href="' + escHtml(data.permalink) + '" class="link-wrapper" style="opacity:1;transform:none;width:auto;gap:0.75rem;min-width:100px;margin-top:1rem;margin-left:auto;"><span class="link-text" style="font-size:11px;">LEARN MORE</span><div class="arrow-graphic"><svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></a>' : '') +
+                            '<p class="text-[11px] leading-relaxed text-[#68635f] font-light mt-3 text-right max-w-[180px] ml-auto">' + escHtml(data.palette) + '</p>' +
+                            (data.permalink ? '<a href="' + escHtml(data.permalink) + '" class="link-wrapper" style="opacity:1;transform:none;width:auto;gap:0.75rem;min-width:100px;margin-top:0.75rem;margin-left:auto;"><span class="link-text" style="font-size:11px;">LEARN MORE</span><div class="arrow-graphic"><svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></a>' : '') +
                         '</div>' +
                     '</div>' +
-                    '<div class="mt-12 lg:mt-auto pt-8 flex flex-col md:flex-row justify-between items-end gap-8">' +
-                        '<div class="text-[12px] text-[#68635f] font-light leading-relaxed"><p>' + escHtml(data.concept) + '</p></div>' +
-                        '<div class="flex gap-4">' +
+                    '<div class="mt-6 pt-6 flex flex-col md:flex-row justify-between items-end gap-4 border-t border-[#e5e5e5]">' +
+                        '<div class="text-[11px] text-[#68635f] font-light leading-relaxed"><p>' + escHtml(data.concept) + '</p></div>' +
+                        '<div class="flex gap-3">' +
                             '<button onclick="prevPortfolioSlide()" class="nav-btn">' +
-                                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>' +
+                                '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>' +
                             '</button>' +
                             '<button onclick="nextPortfolioSlide()" class="nav-btn">' +
-                                '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg>' +
+                                '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg>' +
                             '</button>' +
                         '</div>' +
                     '</div>' +

@@ -177,9 +177,9 @@
                 ];
                 foreach ( $svc_imgs as $si ) : ?>
                 <div class="flex flex-col items-center flex-1">
-                    <div class="our-service-img curtain-container w-full">
+                    <a href="<?php echo esc_url( $si['img'] ); ?>" class="our-service-img curtain-container w-full glightbox" data-type="image" data-gallery="our-service-gallery">
                         <img src="<?php echo esc_url( $si['img'] ); ?>" alt="" class="curtain-img" style="transition-delay:300ms,300ms;">
-                    </div>
+                    </a>
                     <p class="mt-4 text-[12px] leading-relaxed text-[#68635f] font-light text-center max-w-[240px]"><?php echo esc_html( $si['desc'] ); ?></p>
                 </div>
                 <?php endforeach; ?>
@@ -331,12 +331,10 @@
         </div>
     </div>
 
-    <!-- ===== SECTION 6: CONTACT + FOOTER ===== -->
-    <div class="section fp-auto-height">
-
-        <!-- Contact -->
-        <section class="contact-section relative w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 pt-24 pb-12 lg:pt-32 lg:pb-16 flex flex-col justify-center min-h-[70vh]">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+    <!-- ===== SECTION 6: CONTACT ===== -->
+    <div class="section" id="contact">
+        <div class="relative w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 h-full flex flex-col justify-center py-16">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
                 <div class="flex flex-col">
                     <span class="reveal-mask block mb-6">
                         <span class="reveal-text delay-100 text-[10px] tracking-[0.15em] text-[#8c8783] uppercase font-medium">CONTACT US</span>
@@ -345,21 +343,29 @@
                     $fch1 = get_theme_mod( 'fp_contact_heading_line1', "LET'S BEGIN A" );
                     $fch2 = get_theme_mod( 'fp_contact_heading_line2', 'CONVERSATION' );
                     ?>
-                    <h1 class="title-text text-4xl md:text-5xl lg:text-[4rem] leading-[1.1] tracking-tight mb-8 text-[#2c221a] break-words">
+                    <h1 class="title-text text-4xl md:text-5xl lg:text-[4rem] leading-[1.1] tracking-tight mb-6 text-[#2c221a] break-words">
                         <span class="reveal-mask block pb-1"><span class="reveal-text delay-200"><?php echo esc_html( $fch1 ); ?></span></span>
                         <span class="reveal-mask block w-full"><span class="reveal-text delay-300"><span class="fancy-c"><?php echo esc_html( mb_substr( $fch2, 0, 1 ) ); ?></span><?php echo esc_html( mb_substr( $fch2, 1 ) ); ?></span></span>
                     </h1>
-                    <p class="text-[14px] md:text-[15px] leading-relaxed text-[#68635f] font-light max-w-[420px] reveal-mask block text-justify">
+                    <p class="text-[14px] leading-relaxed text-[#68635f] font-light max-w-[420px] reveal-mask block mb-8">
                         <span class="reveal-text delay-400"><?php echo esc_html( get_theme_mod( 'fp_contact_description', "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention." ) ); ?></span>
                     </p>
+                    <a href="<?php echo esc_url( dayanarc_contact_page_url() ); ?>" class="link-wrapper" style="opacity:1; transform:none; width:auto; display:inline-flex;">
+                        <span class="link-text" style="font-size:11px;">VIEW OUR LOCATIONS</span>
+                        <div class="arrow-graphic">
+                            <svg width="14" height="9" viewBox="0 0 16 10" fill="none">
+                                <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </a>
                 </div>
 
-                <div class="flex flex-col w-full pt-4 lg:pt-16 reveal-mask">
+                <div class="flex flex-col w-full reveal-mask">
                     <div class="reveal-text delay-500 w-full fp-contact-form">
                         <?php
                         $cf7_id = dayanarc_get_contact_form_id();
                         if ( $cf7_id ) :
-                            echo do_shortcode( '[contact-form-7 id="' . esc_attr( $cf7_id ) . '" html_class="flex flex-col gap-10 w-full"]' );
+                            echo do_shortcode( '[contact-form-7 id="' . esc_attr( $cf7_id ) . '" html_class="flex flex-col gap-8 w-full"]' );
                         else : ?>
                             <p style="font-size:13px; color:#8c8783; line-height:1.8; padding:1rem 0;">
                                 Contact form not set up yet. Run the
@@ -370,19 +376,46 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div><!-- end section 6 -->
+
+    <!-- ===== SECTION 7: PORTFOLIO + FOOTER ===== -->
+    <div class="section fp-auto-height" id="portfolio-section">
+
+        <!-- Portfolio -->
+        <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 pt-10 pb-6">
+            <div class="flex items-end justify-between mb-8">
+                <div>
+                    <span class="text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium block mb-2">PORTFOLIO</span>
+                    <?php $ph = get_theme_mod( 'portfolio_heading', 'OUR WORKS' ); ?>
+                    <h2 class="title-text text-3xl md:text-4xl text-[#2c221a] leading-tight uppercase tracking-tight">
+                        <?php echo esc_html( $ph ); ?>
+                    </h2>
+                </div>
+                <a href="<?php echo esc_url( dayanarc_portfolio_url() ); ?>" class="link-wrapper" style="opacity:1; transform:none; width:auto; display:inline-flex; gap:0.75rem; flex-shrink:0;">
+                    <span class="link-text" style="font-size:11px;">SEE ALL</span>
+                    <div class="arrow-graphic">
+                        <svg width="14" height="9" viewBox="0 0 16 10" fill="none">
+                            <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </a>
+            </div>
+
+            <div id="portfolio-container"></div>
+        </div>
 
         <!-- Footer -->
-        <footer class="fp-footer pt-16 pb-6 w-full flex flex-col relative">
-            <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-12">
+        <footer class="fp-footer pt-8 pb-5 w-full flex flex-col relative">
+            <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                 <div class="flex flex-col">
-                    <div class="title-text text-2xl tracking-widest mb-6 font-medium">DAYAN ARC</div>
-                    <p class="text-[12px] leading-relaxed font-light max-w-[220px]"><?php echo esc_html( get_theme_mod( 'footer_tagline', 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.' ) ); ?></p>
+                    <div class="title-text text-xl tracking-widest mb-4 font-medium">DAYAN ARC</div>
+                    <p class="text-[11px] leading-relaxed font-light max-w-[200px]"><?php echo esc_html( get_theme_mod( 'footer_tagline', 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.' ) ); ?></p>
                 </div>
 
-                <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
-                    <div><span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted">MENU</span></div>
-                    <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase">
+                <div class="grid grid-cols-[auto_1fr] gap-3 lg:gap-6">
+                    <div><span class="text-[9px] uppercase tracking-[0.15em] font-medium footer-muted">MENU</span></div>
+                    <div class="flex flex-col gap-3 text-[10px] font-semibold tracking-widest uppercase">
                         <a href="#" onclick="fullpage_api.moveTo(2); return false;" class="footer-link">ABOUT US</a>
                         <a href="#" onclick="fullpage_api.moveTo(3); return false;" class="footer-link">OUR SERVICE</a>
                         <a href="#" onclick="fullpage_api.moveTo(4); return false;" class="footer-link">SERVICES</a>
@@ -390,9 +423,9 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
-                    <div><span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted">FOLLOW US</span></div>
-                    <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase">
+                <div class="grid grid-cols-[auto_1fr] gap-3 lg:gap-6">
+                    <div><span class="text-[9px] uppercase tracking-[0.15em] font-medium footer-muted">FOLLOW US</span></div>
+                    <div class="flex flex-col gap-3 text-[10px] font-semibold tracking-widest uppercase">
                         <a href="<?php echo esc_url( get_theme_mod( 'social_instagram', '#' ) ); ?>" class="footer-link">INSTAGRAM</a>
                         <a href="<?php echo esc_url( get_theme_mod( 'social_pinterest', '#' ) ); ?>" class="footer-link">PINTEREST</a>
                         <a href="<?php echo esc_url( get_theme_mod( 'social_behance',   '#' ) ); ?>" class="footer-link">BEHANCE</a>
@@ -400,9 +433,9 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
-                    <div><span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted">CONTACT</span></div>
-                    <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase leading-relaxed">
+                <div class="grid grid-cols-[auto_1fr] gap-3 lg:gap-6">
+                    <div><span class="text-[9px] uppercase tracking-[0.15em] font-medium footer-muted">CONTACT</span></div>
+                    <div class="flex flex-col gap-3 text-[10px] font-semibold tracking-widest uppercase leading-relaxed">
                         <?php
                         $location        = get_theme_mod( 'contact_location', 'Business Bay, Dubai, UAE' );
                         $email           = get_theme_mod( 'contact_email',    'support@dayanarc.com' );
@@ -416,59 +449,14 @@
                 </div>
             </div>
 
-            <div class="marquee-container mb-6">
-                <div class="marquee-content title-text">
-                    <span class="marquee-text">
-                        GET IN TOUCH <div class="diamond"></div>
-                        <span class="fancy-marquee">GET IN TOUCH</span> <div class="diamond"></div>
-                        GET IN TOUCH <div class="diamond"></div>
-                        <span class="fancy-marquee">GET IN TOUCH</span> <div class="diamond"></div>
-                    </span>
-                    <span class="marquee-text">
-                        GET IN TOUCH <div class="diamond"></div>
-                        <span class="fancy-marquee">GET IN TOUCH</span> <div class="diamond"></div>
-                        GET IN TOUCH <div class="diamond"></div>
-                        <span class="fancy-marquee">GET IN TOUCH</span> <div class="diamond"></div>
-                    </span>
-                </div>
-            </div>
-
             <div class="flex flex-col items-center">
-                <div class="w-1/5 h-[1px] mb-4" style="background:rgba(246,240,218,0.2);"></div>
-                <div class="text-center text-[10px] tracking-widest uppercase font-medium footer-muted">
+                <div class="w-1/5 h-[1px] mb-3" style="background:rgba(246,240,218,0.2);"></div>
+                <div class="text-center text-[9px] tracking-widest uppercase font-medium footer-muted">
                     COPYRIGHT <?php echo esc_html( date( 'Y' ) ); ?> &copy; DESIGNED BY <a href="https://valasolution.com/" target="_blank" rel="noopener noreferrer" class="footer-link">VALASOLUTION</a>
                 </div>
             </div>
         </footer>
 
-    </div><!-- end section 6 -->
-
-    <!-- ===== SECTION 7: PORTFOLIO ===== -->
-    <div class="section portfolio-section relative w-full px-6 md:px-12 lg:px-20 py-16 lg:py-24 flex flex-col justify-center" id="portfolio-section">
-        <div class="w-full max-w-[1440px] mx-auto">
-            <div class="text-center mb-12 lg:mb-16">
-                <span class="reveal-mask block mb-4">
-                    <span class="reveal-text text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium">PORTFOLIO</span>
-                </span>
-                <?php $ph = get_theme_mod( 'portfolio_heading', 'OUR WORKS' ); ?>
-                <h1 class="title-text text-3xl md:text-4xl lg:text-5xl leading-tight text-[#2c221a]">
-                    <span class="reveal-mask"><span class="reveal-text delay-100 uppercase tracking-tight"><?php echo esc_html( mb_substr( $ph, 0, -1 ) ); ?><span class="fancy-s"><?php echo esc_html( mb_substr( $ph, -1 ) ); ?></span></span></span>
-                </h1>
-            </div>
-
-            <div id="portfolio-container"></div>
-
-            <div class="mt-12 text-center">
-                <a href="<?php echo esc_url( dayanarc_portfolio_url() ); ?>" class="link-wrapper" style="display:inline-flex; opacity:1; transform:none; gap:1rem;">
-                    <span class="link-text">SEE MORE</span>
-                    <div class="arrow-graphic">
-                        <svg width="16" height="10" viewBox="0 0 16 10" fill="none">
-                            <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                </a>
-            </div>
-        </div>
     </div><!-- end section 7 -->
 
 </div><!-- end #fullpage -->
