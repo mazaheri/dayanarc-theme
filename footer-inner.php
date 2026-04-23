@@ -32,7 +32,7 @@
             <nav class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase">
                 <a href="<?php echo esc_url( get_theme_mod( 'social_instagram', '#' ) ); ?>" class="footer-link">INSTAGRAM</a>
                 <a href="<?php echo esc_url( get_theme_mod( 'social_pinterest', '#' ) ); ?>" class="footer-link">PINTEREST</a>
-                <a href="<?php echo esc_url( get_theme_mod( 'social_behance',   '#' ) ); ?>" class="footer-link">BEHANCE</a>
+                <a href="<?php echo esc_url( get_theme_mod( 'social_youtube',   '#' ) ); ?>" class="footer-link">YOUTUBE</a>
                 <a href="<?php echo esc_url( get_theme_mod( 'social_linkedin',  '#' ) ); ?>" class="footer-link">LINKEDIN</a>
             </nav>
         </div>

@@ -9,29 +9,34 @@
             <?php the_title(); ?>
         </h1>
 
-        <?php if ( has_post_thumbnail() ) : ?>
-            <div style="width:100%; aspect-ratio:16/9; overflow:hidden; margin-bottom:3rem;">
-                <?php the_post_thumbnail( 'full', [ 'style' => 'width:100%; height:100%; object-fit:cover;' ] ); ?>
-            </div>
+        <?php
+        $gallery_ids  = json_decode( get_post_meta( get_the_ID(), '_portfolio_gallery', true ), true );
+        $gallery_ids  = is_array( $gallery_ids ) ? $gallery_ids : [];
+        $thumb_full   = get_the_post_thumbnail_url( get_the_ID(), 'full' );
+        ?>
+
+        <?php if ( $thumb_full ) : ?>
+            <a href="<?php echo esc_url( $thumb_full ); ?>" class="glightbox" data-gallery="portfolio-gallery" style="display:block; width:100%; aspect-ratio:16/9; overflow:hidden; margin-bottom:3rem;">
+                <?php the_post_thumbnail( 'full', [ 'style' => 'width:100%; height:100%; object-fit:cover; display:block;' ] ); ?>
+            </a>
         <?php endif; ?>
 
-        <?php
-        $gallery_ids = json_decode( get_post_meta( get_the_ID(), '_portfolio_gallery', true ), true );
-        if ( ! empty( $gallery_ids ) ) :
-        ?>
+        <?php if ( ! empty( $gallery_ids ) ) : ?>
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr)); gap:1rem; margin-bottom:3rem;">
             <?php foreach ( $gallery_ids as $gid ) :
-                $img_url = wp_get_attachment_image_url( $gid, 'large' );
+                $img_url  = wp_get_attachment_image_url( $gid, 'large' );
+                $img_full = wp_get_attachment_image_url( $gid, 'full' );
                 if ( ! $img_url ) continue;
             ?>
-                <div style="aspect-ratio:4/3; overflow:hidden;">
+                <a href="<?php echo esc_url( $img_full ?: $img_url ); ?>" class="glightbox" data-gallery="portfolio-gallery"
+                   style="display:block; aspect-ratio:4/3; overflow:hidden;">
                     <img src="<?php echo esc_url( $img_url ); ?>"
                          alt=""
                          loading="lazy"
                          style="width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s ease;"
                          onmouseover="this.style.transform='scale(1.04)'"
                          onmouseout="this.style.transform='scale(1)'">
-                </div>
+                </a>
             <?php endforeach; ?>
         </div>
         <?php endif; ?>

@@ -235,7 +235,7 @@
             const conf  = slotConfigs[i];
             const hSize = i === 0 ? 'text-2xl lg:text-3xl' : 'text-xl';
             return (
-                '<div class="' + conf.colSpan + ' flex flex-col ' + conf.align + (i > 0 ? ' h-[700px]' : '') + '">' +
+                '<a href="' + escHtml(post.url) + '" class="' + conf.colSpan + ' flex flex-col ' + conf.align + (i > 0 ? ' h-[700px]' : '') + '" style="text-decoration:none;color:inherit;">' +
                     '<div class="journal-card group relative ' + conf.height + ' w-full cursor-pointer">' +
                         '<div class="curtain-container h-full">' +
                             '<div class="curtain-mask active ' + conf.delay + ' h-full">' +
@@ -245,16 +245,16 @@
                         '<div class="hover-overlay shadow-sm">' +
                             '<h3 class="title-text ' + hSize + ' text-[#2c221a] uppercase mb-3 leading-tight">' + escHtml(post.title) + '</h3>' +
                             '<p class="text-[12px] md:text-[13px] leading-relaxed text-[#68635f] font-light px-2 mb-4">' + escHtml(post.desc) + '</p>' +
-                            '<a href="' + escHtml(post.url) + '" class="read-more-btn text-[10px] tracking-widest font-semibold flex items-center gap-2 text-[#2c221a]">' +
+                            '<span class="read-more-btn text-[10px] tracking-widest font-semibold flex items-center gap-2 text-[#2c221a]">' +
                                 'VIEW PROJECT ' +
                                 '<svg width="14" height="8" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-                            '</a>' +
+                            '</span>' +
                         '</div>' +
                     '</div>' +
                     '<div class="w-full mt-3">' +
                         '<span class="title-text ' + conf.titleSize + ' uppercase tracking-wider text-[#2c221a] block">' + escHtml(post.title) + '</span>' +
                     '</div>' +
-                '</div>'
+                '</a>'
             );
         }).join('');
     }

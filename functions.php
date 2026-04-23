@@ -36,6 +36,11 @@ function dayanarc_enqueue() {
         wp_localize_script( 'dayanarc-main', 'dayanarcData', dayanarc_get_localized_data() );
     } else {
         wp_enqueue_style( 'dayanarc', get_stylesheet_uri(), [], $ver );
+        if ( is_singular( 'portfolio' ) ) {
+            wp_enqueue_style( 'glightbox', 'https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css', [], '3.2.0' );
+            wp_enqueue_script( 'glightbox', 'https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js', [], '3.2.0', true );
+            wp_add_inline_script( 'glightbox', 'document.addEventListener("DOMContentLoaded",function(){GLightbox({selector:".glightbox",touchNavigation:true,loop:true});});' );
+        }
         wp_enqueue_script( 'dayanarc-main', $uri . '/assets/js/main.js', [], $ver, true );
         wp_localize_script( 'dayanarc-main', 'dayanarcData', [
             'themeUrl'      => $uri,
@@ -1066,7 +1071,7 @@ add_action( 'customize_register', function ( $wp_customize ) {
     foreach ( [
         'social_instagram' => 'Instagram URL',
         'social_pinterest' => 'Pinterest URL',
-        'social_behance'   => 'Behance URL',
+        'social_youtube'   => 'YouTube URL',
         'social_linkedin'  => 'LinkedIn URL',
     ] as $key => $label ) {
         $wp_customize->add_setting( $key, [

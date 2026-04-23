@@ -815,7 +815,7 @@ function dayanarc_apply_content_theme_mods() {
         // Social
         'social_instagram'          => '#',
         'social_pinterest'          => '#',
-        'social_behance'            => '#',
+        'social_youtube'            => '#',
         'social_linkedin'           => '#',
     ];
 
