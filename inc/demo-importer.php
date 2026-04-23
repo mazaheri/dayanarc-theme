@@ -55,7 +55,7 @@ function dayanarc_demo_page() {
                 <li><strong>Primary navigation menu</strong> with all links</li>
             </ul>
             <p style="color:#856404; background:#fff3cd; padding:.75rem 1rem; border-left:4px solid #ffc107; margin-top:1rem;">
-                Existing posts/pages with the same title will be skipped — safe to run more than once.
+                <strong>Note:</strong> All existing portfolio projects will be removed and replaced with the 4 sample projects. Blog posts and pages are preserved (new posts are only added if they don't already exist).
             </p>
             <form method="post" style="margin-top:1.5rem;">
                 <?php wp_nonce_field( 'dayanarc_import_nonce' ); ?>
@@ -74,6 +74,9 @@ function dayanarc_run_import() {
 
     // 1. Upload images
     $image_ids = dayanarc_import_images();
+
+    // 1b. Remove old portfolio CPT posts so fresh ones (with images) replace them
+    dayanarc_cleanup_portfolio_posts();
 
     // 2. Portfolio items
     dayanarc_import_portfolio( $image_ids );
@@ -178,6 +181,19 @@ function dayanarc_import_images() {
     }
 
     return $ids;
+}
+
+// ── 1b. Cleanup: remove all portfolio CPT posts before fresh import ───────────
+function dayanarc_cleanup_portfolio_posts() {
+    $ids = get_posts( [
+        'post_type'      => 'portfolio',
+        'post_status'    => 'any',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+    ] );
+    foreach ( $ids as $id ) {
+        wp_delete_post( $id, true );
+    }
 }
 
 // ── 2. Portfolio items (4 projects from sample images) ───────────────────────
@@ -398,26 +414,40 @@ function dayanarc_import_journal_page() {
 
 // ── 5b. Portfolio page ────────────────────────────────────────────────────────
 function dayanarc_import_portfolio_page() {
-    $existing_id = (int) get_option( 'dayanarc_portfolio_page_id', 0 );
-    if ( $existing_id && get_post( $existing_id ) ) return $existing_id;
-
-    if ( dayanarc_post_exists( 'Portfolio', 'page' ) ) {
-        $q = new WP_Query( [
-            'post_type'      => 'page',
-            'title'          => 'Portfolio',
-            'post_status'    => 'any',
-            'posts_per_page' => 1,
-            'fields'         => 'ids',
-            'no_found_rows'  => true,
-        ] );
-        if ( $q->have_posts() ) {
-            $id = $q->posts[0];
-            update_post_meta( $id, '_wp_page_template', 'page-portfolio.php' );
-            update_option( 'dayanarc_portfolio_page_id', $id );
-            return $id;
+    // Try stored ID first — restore if trashed, return if live
+    $stored_id = (int) get_option( 'dayanarc_portfolio_page_id', 0 );
+    if ( $stored_id ) {
+        $p = get_post( $stored_id );
+        if ( $p ) {
+            if ( $p->post_status === 'trash' ) {
+                wp_untrash_post( $stored_id );
+            }
+            update_post_meta( $stored_id, '_wp_page_template', 'page-portfolio.php' );
+            return $stored_id;
         }
     }
 
+    // Search for any page titled Portfolio (including trashed)
+    $q = new WP_Query( [
+        'post_type'      => 'page',
+        'title'          => 'Portfolio',
+        'post_status'    => 'any',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'no_found_rows'  => true,
+    ] );
+    if ( $q->have_posts() ) {
+        $id = $q->posts[0];
+        $p  = get_post( $id );
+        if ( $p && $p->post_status === 'trash' ) {
+            wp_untrash_post( $id );
+        }
+        update_post_meta( $id, '_wp_page_template', 'page-portfolio.php' );
+        update_option( 'dayanarc_portfolio_page_id', $id );
+        return $id;
+    }
+
+    // Create fresh
     $page_id = wp_insert_post( [
         'post_title'   => 'Portfolio',
         'post_content' => '',
