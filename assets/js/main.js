@@ -150,7 +150,7 @@
         container.innerHTML =
             '<div class="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-6 items-start">' +
                 '<div class="order-2 lg:order-1">' +
-                    '<div class="curtain-container" style="aspect-ratio:1/1;overflow:hidden;">' +
+                    '<div class="curtain-container" style="aspect-ratio:4/3;overflow:hidden;">' +
                         '<img src="' + escHtml(data.img) + '" class="curtain-img-portfolio active" alt="' + escHtml(data.title) + '" style="width:100%;height:100%;object-fit:cover;">' +
                     '</div>' +
                 '</div>' +
@@ -160,16 +160,18 @@
                         '<span class="text-[11px] text-[#68635f] font-light tracking-widest">' + escHtml(data.id) + '</span>' +
                     '</div>' +
                     '<h2 class="title-text text-2xl lg:text-3xl xl:text-4xl mb-5 text-[#2c221a] font-medium tracking-wide uppercase leading-tight">' + escHtml(data.title) + '</h2>' +
-                    '<p class="text-[13px] leading-relaxed text-[#68635f] font-light mb-8">' + escHtml(data.description) + '</p>' +
-                    (data.permalink ? '<a href="' + escHtml(data.permalink) + '" class="link-wrapper mb-6" style="opacity:1;transform:none;width:auto;gap:0.75rem;min-width:100px;"><span class="link-text" style="font-size:11px;">READ MORE</span><div class="arrow-graphic"><svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></a>' : '') +
-                    '<div class="mt-auto pt-6 border-t border-[#e5e5e5] flex justify-end">' +
-                        '<div class="flex gap-3">' +
-                            '<button onclick="prevJournalSlide()" class="nav-btn">' +
-                                '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>' +
-                            '</button>' +
-                            '<button onclick="nextJournalSlide()" class="nav-btn">' +
-                                '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg>' +
-                            '</button>' +
+                    '<p class="text-[13px] leading-relaxed text-[#68635f] font-light">' + escHtml(data.description) + '</p>' +
+                    '<div class="mt-auto">' +
+                        (data.permalink ? '<a href="' + escHtml(data.permalink) + '" class="link-wrapper mb-6" style="opacity:1;transform:none;width:auto;gap:0.75rem;min-width:100px;border-bottom:none;"><span class="link-text" style="font-size:11px;">READ MORE</span><div class="arrow-graphic"><svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></a>' : '') +
+                        '<div class="pt-6 border-t border-[#e5e5e5] flex justify-end">' +
+                            '<div class="flex gap-3">' +
+                                '<button onclick="prevJournalSlide()" class="nav-btn">' +
+                                    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>' +
+                                '</button>' +
+                                '<button onclick="nextJournalSlide()" class="nav-btn">' +
+                                    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg>' +
+                                '</button>' +
+                            '</div>' +
                         '</div>' +
                     '</div>' +
                 '</div>' +
