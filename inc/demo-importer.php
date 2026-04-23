@@ -54,8 +54,8 @@ function dayanarc_demo_page() {
                 <li><strong>4 Service pages</strong>: Architecture, Interior Design, 3D Visualization, Project Management</li>
                 <li><strong>Primary navigation menu</strong> with all links</li>
             </ul>
-            <p style="color:#856404; background:#fff3cd; padding:.75rem 1rem; border-left:4px solid #ffc107; margin-top:1rem;">
-                <strong>Note:</strong> All existing portfolio projects will be removed and replaced with the 4 sample projects. Blog posts and pages are preserved (new posts are only added if they don't already exist).
+            <p style="color:#1a5c2e; background:#d4edda; padding:.75rem 1rem; border-left:4px solid #28a745; margin-top:1rem;">
+                Safe to run on a live site — existing posts, pages, and media are never deleted. Only missing items are created.
             </p>
             <form method="post" style="margin-top:1.5rem;">
                 <?php wp_nonce_field( 'dayanarc_import_nonce' ); ?>
@@ -74,9 +74,6 @@ function dayanarc_run_import() {
 
     // 1. Upload images
     $image_ids = dayanarc_import_images();
-
-    // 1b. Remove old portfolio CPT posts so fresh ones (with images) replace them
-    dayanarc_cleanup_portfolio_posts();
 
     // 2. Portfolio items
     dayanarc_import_portfolio( $image_ids );
