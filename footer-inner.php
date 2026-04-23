@@ -7,7 +7,7 @@
 
 <footer class="fp-footer pt-16 pb-6 w-full flex flex-col relative">
 
-    <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-12">
+    <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 lg:gap-6 mb-12">
 
         <!-- Brand -->
         <div class="flex flex-col">
@@ -38,7 +38,7 @@
         </div>
 
         <!-- Contact -->
-        <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
+        <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-6">
             <div><span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted">CONTACT</span></div>
             <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase leading-relaxed">
                 <?php
@@ -51,6 +51,27 @@
                 <a href="mailto:<?php echo antispambot( $email ); ?>" class="footer-link lowercase"><?php echo antispambot( $email ); ?></a>
                 <a href="<?php echo esc_url( $website ); ?>" class="footer-link lowercase"><?php echo esc_html( $website_display ); ?></a>
             </div>
+        </div>
+
+        <!-- Our Offices -->
+        <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-6">
+            <div><span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted">OUR OFFICES</span></div>
+            <nav class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase">
+                <?php
+                $contact_url = dayanarc_contact_page_url();
+                foreach ( [
+                    get_theme_mod( 'office_germany', 'Berlin, Germany' ),
+                    get_theme_mod( 'office_georgia', 'Tbilisi, Georgia' ),
+                    get_theme_mod( 'office_dubai',   'Business Bay, Dubai, UAE' ),
+                ] as $office ) :
+                    if ( ! $office ) continue;
+                ?>
+                <a href="<?php echo esc_url( $contact_url ); ?>" class="footer-link flex items-center gap-2">
+                    <svg width="8" height="11" viewBox="0 0 16 22" fill="currentColor" style="flex-shrink:0;opacity:0.7;"><path d="M8 0C3.589 0 0 3.589 0 8c0 5.25 8 14 8 14S16 13.25 16 8c0-4.411-3.589-8-8-8zm0 11a3 3 0 110-6 3 3 0 010 6z"/></svg>
+                    <?php echo esc_html( strtoupper( $office ) ); ?>
+                </a>
+                <?php endforeach; ?>
+            </nav>
         </div>
 
     </div>

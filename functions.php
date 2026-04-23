@@ -965,6 +965,35 @@ add_action( 'customize_register', function ( $wp_customize ) {
         ] );
     }
 
+    // ── Our Offices ──────────────────────────────────────────────────────
+    $wp_customize->add_section( 'dayanarc_offices', [
+        'title'    => 'Our Offices',
+        'panel'    => 'dayanarc_general',
+        'priority' => 15,
+    ] );
+    foreach ( [
+        'office_germany' => 'Germany Office Location',
+        'office_georgia' => 'Georgia Office Location',
+        'office_dubai'   => 'Dubai Office Location',
+    ] as $key => $label ) {
+        $defaults = [
+            'office_germany' => 'Berlin, Germany',
+            'office_georgia' => 'Tbilisi, Georgia',
+            'office_dubai'   => 'Business Bay, Dubai, UAE',
+        ];
+        $wp_customize->add_setting( $key, [
+            'default'           => $defaults[ $key ],
+            'sanitize_callback' => 'sanitize_text_field',
+            'transport'         => 'refresh',
+        ] );
+        $wp_customize->add_control( $key, [
+            'label'       => $label,
+            'description' => 'Shown in the footer and links to the Contact page.',
+            'section'     => 'dayanarc_offices',
+            'type'        => 'text',
+        ] );
+    }
+
     // ── Social Links ──────────────────────────────────────────────────────
     $wp_customize->add_section( 'dayanarc_social', [
         'title'    => 'Social Links',

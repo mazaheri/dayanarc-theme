@@ -1175,6 +1175,28 @@ html.admin-bar .inner-nav {
     }
 }
 
+/* ── Homepage mobile header — fixed at top, mirrors inner-nav behaviour ──── */
+@media (max-width: 767px) {
+    .hero-section .content-layer > header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 200;
+        padding: 0.9rem 1.5rem;
+        background: rgba(20, 20, 20, 0.92);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .hero-section > .content-layer {
+        padding-top: 56px;
+    }
+    html.admin-bar .hero-section .content-layer > header {
+        top: 46px;
+    }
+}
+
 /* ── Journal mosaic grid ────────────────────────────────────────────────────── */
 .journal-mosaic-grid {
     display: grid;
