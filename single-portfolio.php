@@ -1,6 +1,6 @@
 <?php get_header( 'inner' ); ?>
 
-<main style="max-width:860px; margin:0 auto; padding:8rem 2rem 6rem;">
+<main class="inner-page-main" style="max-width:860px; margin:0 auto;">
     <?php if ( have_posts() ) : the_post(); ?>
 
         <?php dayanarc_breadcrumb(); ?>
@@ -19,7 +19,7 @@
         $gallery_ids = json_decode( get_post_meta( get_the_ID(), '_portfolio_gallery', true ), true );
         if ( ! empty( $gallery_ids ) ) :
         ?>
-        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1rem; margin-bottom:3rem;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr)); gap:1rem; margin-bottom:3rem;">
             <?php foreach ( $gallery_ids as $gid ) :
                 $img_url = wp_get_attachment_image_url( $gid, 'large' );
                 if ( ! $img_url ) continue;

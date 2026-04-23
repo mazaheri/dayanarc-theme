@@ -357,6 +357,92 @@ function dayanarc_save_portfolio_meta( $post_id ) {
 }
 add_action( 'save_post_portfolio', 'dayanarc_save_portfolio_meta' );
 
+// ── Portfolio gallery meta box ────────────────────────────────────────────────
+add_action( 'add_meta_boxes', function () {
+    add_meta_box( 'portfolio_gallery', __( 'Gallery Images', 'dayanarc' ), 'dayanarc_render_portfolio_gallery_meta', 'portfolio', 'normal', 'high' );
+} );
+
+function dayanarc_render_portfolio_gallery_meta( $post ) {
+    wp_nonce_field( 'dayanarc_gallery_nonce', 'portfolio_gallery_nonce' );
+    $ids = json_decode( get_post_meta( $post->ID, '_portfolio_gallery', true ), true );
+    if ( ! is_array( $ids ) ) $ids = [];
+    ?>
+    <div id="portfolio-gallery-wrap" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;min-height:32px;">
+        <?php foreach ( $ids as $id ) :
+            $url = wp_get_attachment_image_url( $id, 'thumbnail' );
+            if ( ! $url ) continue;
+        ?>
+        <div class="gallery-item" style="position:relative;width:80px;height:80px;">
+            <img src="<?php echo esc_url( $url ); ?>" style="width:80px;height:80px;object-fit:cover;display:block;">
+            <button type="button" class="remove-gallery-img" data-id="<?php echo (int) $id; ?>"
+                style="position:absolute;top:2px;right:2px;background:#cc0000;color:#fff;border:none;border-radius:2px;padding:0 5px;cursor:pointer;font-size:12px;line-height:1.6;">×</button>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    <input type="hidden" id="portfolio_gallery_ids" name="portfolio_gallery_ids" value="<?php echo esc_attr( wp_json_encode( array_values( $ids ) ) ); ?>">
+    <button type="button" id="add-gallery-images" class="button"><?php _e( 'Add / Edit Gallery Images', 'dayanarc' ); ?></button>
+    <p class="description" style="margin-top:6px;"><?php _e( 'These images appear in the grid on the single portfolio page.', 'dayanarc' ); ?></p>
+    <script>
+    jQuery(function($){
+        var frame;
+        $('#add-gallery-images').on('click', function(e){
+            e.preventDefault();
+            if ( frame ) { frame.open(); return; }
+            frame = wp.media({
+                title: '<?php echo esc_js( __( 'Select Gallery Images', 'dayanarc' ) ); ?>',
+                button: { text: '<?php echo esc_js( __( 'Add to Gallery', 'dayanarc' ) ); ?>' },
+                multiple: true
+            });
+            frame.on('select', function(){
+                var ids = JSON.parse( $('#portfolio_gallery_ids').val() || '[]' );
+                frame.state().get('selection').each(function(att){
+                    var id = att.get('id');
+                    if ( ids.indexOf(id) !== -1 ) return;
+                    ids.push(id);
+                    var sizes = att.get('sizes');
+                    var url   = (sizes && sizes.thumbnail) ? sizes.thumbnail.url : att.get('url');
+                    $('#portfolio-gallery-wrap').append(
+                        '<div class="gallery-item" style="position:relative;width:80px;height:80px;">' +
+                        '<img src="' + url + '" style="width:80px;height:80px;object-fit:cover;display:block;">' +
+                        '<button type="button" class="remove-gallery-img" data-id="' + id + '" ' +
+                        'style="position:absolute;top:2px;right:2px;background:#cc0000;color:#fff;border:none;border-radius:2px;padding:0 5px;cursor:pointer;font-size:12px;line-height:1.6;">×</button>' +
+                        '</div>'
+                    );
+                    $('#portfolio_gallery_ids').val(JSON.stringify(ids));
+                });
+            });
+            frame.open();
+        });
+
+        $(document).on('click', '.remove-gallery-img', function(){
+            var id  = parseInt( $(this).data('id'), 10 );
+            var ids = JSON.parse( $('#portfolio_gallery_ids').val() || '[]' );
+            ids = ids.filter(function(i){ return i !== id; });
+            $('#portfolio_gallery_ids').val(JSON.stringify(ids));
+            $(this).closest('.gallery-item').remove();
+        });
+    });
+    </script>
+    <?php
+}
+
+function dayanarc_save_portfolio_gallery( $post_id ) {
+    if ( ! isset( $_POST['portfolio_gallery_nonce'] ) || ! wp_verify_nonce( $_POST['portfolio_gallery_nonce'], 'dayanarc_gallery_nonce' ) ) return;
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+    if ( ! current_user_can( 'edit_post', $post_id ) ) return;
+
+    $ids = isset( $_POST['portfolio_gallery_ids'] ) ? json_decode( wp_unslash( $_POST['portfolio_gallery_ids'] ), true ) : [];
+    if ( ! is_array( $ids ) ) $ids = [];
+    $ids = array_values( array_filter( array_map( 'absint', $ids ) ) );
+
+    if ( empty( $ids ) ) {
+        delete_post_meta( $post_id, '_portfolio_gallery' );
+    } else {
+        update_post_meta( $post_id, '_portfolio_gallery', wp_json_encode( $ids ) );
+    }
+}
+add_action( 'save_post_portfolio', 'dayanarc_save_portfolio_gallery' );
+
 // ── Service page meta box ─────────────────────────────────────────────────────
 function dayanarc_add_service_meta_box() {
     add_meta_box(

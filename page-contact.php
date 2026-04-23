@@ -13,7 +13,7 @@ $form_id = dayanarc_get_contact_form_id();
 .loc-map-outer {
     position: relative;
     width: 100%;
-    height: 420px;
+    height: 300px;
     overflow: hidden;
     margin-top: 1.5rem;
 }

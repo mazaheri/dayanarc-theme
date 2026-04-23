@@ -110,7 +110,7 @@
             $detail_img  = get_theme_mod( 'about_image_detail', 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?q=80&w=800&auto=format&fit=crop' );
             $thumb_src   = $video_thumb ?: $main_img;
             ?>
-            <div class="col-span-1 lg:col-span-7 about-images-wrapper items-start justify-end h-[500px] md:h-[600px] lg:h-[700px] relative lg:-mt-16">
+            <div class="col-span-1 lg:col-span-7 about-images-wrapper items-start justify-end h-[300px] md:h-[600px] lg:h-[700px] relative lg:-mt-16">
 
                 <!-- Big image / video thumbnail — play button always visible -->
                 <div class="about-img-big curtain-container">
@@ -310,10 +310,10 @@
                 </div>
             </div>
 
-            <div class="relative min-h-[600px] pt-4">
+            <div class="relative pt-4">
                 <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-5 gap-6 lg:gap-8 items-stretch transition-opacity duration-500 opacity-100"></div>
 
-                <div class="absolute bottom-8 lg:bottom-12 right-0 flex flex-col items-end gap-3 z-20">
+                <div class="relative md:absolute md:bottom-12 md:right-0 flex flex-col items-end gap-3 z-20 mt-6 md:mt-0">
                     <div class="flex gap-3">
                         <button onclick="changePage(-1)" class="w-10 h-10 border border-[#e5e5e5] rounded-full flex items-center justify-center hover:border-[#2c221a] transition-all bg-white shadow-sm">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -387,7 +387,7 @@
 
         <!-- Journal/Blog carousel -->
         <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 pt-10 pb-14">
-            <div class="flex items-end justify-between mb-8">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-0 mb-8">
                 <div>
                     <span class="text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium block mb-2">JOURNAL</span>
                     <?php $jh7 = get_theme_mod( 'journal_heading', 'DESIGN INSIGHTS' ); ?>
@@ -419,10 +419,10 @@
                 <div class="grid grid-cols-[auto_1fr] gap-4 lg:gap-8">
                     <div><span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted">MENU</span></div>
                     <div class="flex flex-col gap-4 text-[11px] font-semibold tracking-widest uppercase">
-                        <a href="#" onclick="fullpage_api.moveTo(2); return false;" class="footer-link">ABOUT US</a>
-                        <a href="#" onclick="fullpage_api.moveTo(3); return false;" class="footer-link">OUR SERVICE</a>
-                        <a href="#" onclick="fullpage_api.moveTo(4); return false;" class="footer-link">SERVICES</a>
-                        <a href="#" onclick="fullpage_api.moveTo(5); return false;" class="footer-link">JOURNAL</a>
+                        <a href="#about"       onclick="if(typeof fullpage_api!=='undefined'){event.preventDefault();fullpage_api.moveTo(2);}" class="footer-link">ABOUT US</a>
+                        <a href="#ourservice"  onclick="if(typeof fullpage_api!=='undefined'){event.preventDefault();fullpage_api.moveTo(3);}" class="footer-link">OUR SERVICE</a>
+                        <a href="#services-section" onclick="if(typeof fullpage_api!=='undefined'){event.preventDefault();fullpage_api.moveTo(4);}" class="footer-link">SERVICES</a>
+                        <a href="#journal-section"  onclick="if(typeof fullpage_api!=='undefined'){event.preventDefault();fullpage_api.moveTo(5);}" class="footer-link">JOURNAL</a>
                     </div>
                 </div>
 

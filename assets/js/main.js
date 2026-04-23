@@ -148,7 +148,7 @@
         const data = journalPosts[index];
 
         container.innerHTML =
-            '<div class="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-6 items-start">' +
+            '<div class="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-6">' +
                 '<div class="order-2 lg:order-1">' +
                     '<div class="curtain-container" style="aspect-ratio:4/3;overflow:hidden;">' +
                         '<img src="' + escHtml(data.img) + '" class="curtain-img-portfolio active" alt="' + escHtml(data.title) + '" style="width:100%;height:100%;object-fit:cover;">' +
@@ -160,9 +160,9 @@
                         '<span class="text-[11px] text-[#68635f] font-light tracking-widest">' + escHtml(data.id) + '</span>' +
                     '</div>' +
                     '<h2 class="title-text text-2xl lg:text-3xl xl:text-4xl mb-5 text-[#2c221a] font-medium tracking-wide uppercase leading-tight">' + escHtml(data.title) + '</h2>' +
-                    '<p class="text-[13px] leading-relaxed text-[#68635f] font-light">' + escHtml(data.description) + '</p>' +
-                    '<div class="mt-auto">' +
-                        (data.permalink ? '<a href="' + escHtml(data.permalink) + '" class="link-wrapper mb-6" style="opacity:1;transform:none;width:auto;gap:0.75rem;min-width:100px;border-bottom:none;"><span class="link-text" style="font-size:11px;">READ MORE</span><div class="arrow-graphic"><svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></a>' : '') +
+                    '<p class="text-[13px] leading-relaxed text-[#68635f] font-light mb-0">' + escHtml(data.description) + '</p>' +
+                    '<div class="mt-auto pt-6">' +
+                        (data.permalink ? '<a href="' + escHtml(data.permalink) + '" class="link-wrapper" style="opacity:1;transform:none;width:auto;gap:0.75rem;min-width:100px;border-bottom:none;margin-bottom:1.5rem;"><span class="link-text" style="font-size:11px;">READ MORE</span><div class="arrow-graphic"><svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></a>' : '') +
                         '<div class="pt-6 border-t border-[#e5e5e5] flex justify-end">' +
                             '<div class="flex gap-3">' +
                                 '<button onclick="prevJournalSlide()" class="nav-btn">' +
@@ -178,28 +178,33 @@
             '</div>';
     }
 
-    window.nextJournalSlide = function () {
-        const container = document.getElementById('journal-container');
+    function journalTransition(renderFn) {
+        var container = document.getElementById('journal-container');
         container.classList.add('slide-exit');
         setTimeout(function () {
-            currentJournalIndex = (currentJournalIndex + 1) % journalPosts.length;
-            renderJournalSlide(currentJournalIndex);
+            renderFn();
             container.classList.remove('slide-exit');
             container.classList.add('slide-enter');
-            setTimeout(function () { container.classList.remove('slide-enter'); }, 50);
-        }, 600);
+            requestAnimationFrame(function () {
+                requestAnimationFrame(function () {
+                    container.classList.remove('slide-enter');
+                });
+            });
+        }, 550);
+    }
+
+    window.nextJournalSlide = function () {
+        journalTransition(function () {
+            currentJournalIndex = (currentJournalIndex + 1) % journalPosts.length;
+            renderJournalSlide(currentJournalIndex);
+        });
     };
 
     window.prevJournalSlide = function () {
-        const container = document.getElementById('journal-container');
-        container.classList.add('slide-exit');
-        setTimeout(function () {
+        journalTransition(function () {
             currentJournalIndex = (currentJournalIndex - 1 + journalPosts.length) % journalPosts.length;
             renderJournalSlide(currentJournalIndex);
-            container.classList.remove('slide-exit');
-            container.classList.add('slide-enter');
-            setTimeout(function () { container.classList.remove('slide-enter'); }, 50);
-        }, 600);
+        });
     };
 
     // ── Portfolio grid (section 5 — shows portfolio CPT items) ──────────────────

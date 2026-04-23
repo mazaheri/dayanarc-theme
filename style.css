@@ -435,14 +435,18 @@ header {
     transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+#journal-container {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
 .slide-exit {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
 }
 
 .slide-enter {
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(-12px);
 }
 
 /* === SERVICES SECTION === */
@@ -1501,5 +1505,64 @@ html.admin-bar .inner-nav {
 /* ── Portfolio bottom section ────────────────────────────────────────────── */
 .fp-portfolio-bottom {
     border-top: 1px solid #e5e5e5;
+}
+
+/* ── Inner-page responsive padding ──────────────────────────────────────── */
+.inner-page-main {
+    padding: 8rem 2rem 6rem;
+}
+@media (max-width: 767px) {
+    .inner-page-main {
+        padding: 5rem 1.25rem 4rem;
+    }
+}
+
+/* ── Portfolio archive: responsive grid ─────────────────────────────────── */
+.portfolio-archive-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+}
+@media (max-width: 599px) {
+    .portfolio-archive-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+/* ── Mobile overrides (≤ 767px) ─────────────────────────────────────────── */
+@media (max-width: 767px) {
+    /* Marquee: 5rem is too large on phones */
+    .marquee-text {
+        font-size: 2.5rem;
+    }
+
+    /* Service cards: reduce fixed heights so they don't dominate viewport */
+    .service-card {
+        min-height: 220px;
+    }
+    .card-row2 .service-card {
+        height: auto;
+        min-height: 220px;
+    }
+    .img-container {
+        height: 160px;
+        width: 70%;
+    }
+
+    /* link-wrapper: 280px is wider than many phone screens minus padding */
+    .link-wrapper {
+        width: auto;
+        min-width: 180px;
+    }
+    .link-wrapper-white {
+        width: auto;
+        min-width: 160px;
+    }
+    .link-wrapper-contact {
+        width: auto;
+        min-width: 160px;
+    }
+
 }
 

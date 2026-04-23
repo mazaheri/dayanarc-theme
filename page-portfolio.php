@@ -13,7 +13,7 @@ $portfolio_query = new WP_Query( [
 ] );
 ?>
 
-<main style="max-width:1400px; margin:0 auto; padding:8rem 1.5rem 6rem;">
+<main class="inner-page-main" style="max-width:1400px; margin:0 auto;">
 
     <div style="margin-bottom:2.5rem;">
         <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500; display:block; margin-bottom:1rem;">PORTFOLIO</span>
@@ -23,7 +23,7 @@ $portfolio_query = new WP_Query( [
 
     <?php if ( $portfolio_query->have_posts() ) : ?>
 
-        <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:2rem;">
+        <div class="portfolio-archive-grid">
             <?php
             $item_count = 0;
             $total = $portfolio_query->found_posts;
