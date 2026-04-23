@@ -15,6 +15,27 @@
             </div>
         <?php endif; ?>
 
+        <?php
+        $gallery_ids = json_decode( get_post_meta( get_the_ID(), '_portfolio_gallery', true ), true );
+        if ( ! empty( $gallery_ids ) ) :
+        ?>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1rem; margin-bottom:3rem;">
+            <?php foreach ( $gallery_ids as $gid ) :
+                $img_url = wp_get_attachment_image_url( $gid, 'large' );
+                if ( ! $img_url ) continue;
+            ?>
+                <div style="aspect-ratio:4/3; overflow:hidden;">
+                    <img src="<?php echo esc_url( $img_url ); ?>"
+                         alt=""
+                         loading="lazy"
+                         style="width:100%; height:100%; object-fit:cover; display:block; transition:transform 0.5s ease;"
+                         onmouseover="this.style.transform='scale(1.04)'"
+                         onmouseout="this.style.transform='scale(1)'">
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+
         <?php $location = get_post_meta( get_the_ID(), '_portfolio_location', true ); ?>
 
         <div style="margin-bottom:1.5rem;">

@@ -44,9 +44,8 @@ function dayanarc_demo_page() {
         <div style="max-width:600px; margin-top:1.5rem;">
             <p>This will create the following demo content in the database:</p>
             <ul style="list-style:disc; margin-left:2rem; line-height:2;">
-                <li><strong>13 images</strong> uploaded to the Media Library</li>
-                <li><strong>3 Portfolio items</strong> with featured images and meta data</li>
-                <li><strong>12 Journal posts</strong> with featured images and excerpts</li>
+                <li><strong>4 Portfolio projects</strong> with gallery images (Georgia, GCC, Germany, Studio)</li>
+                <li><strong>3 Blog/Journal posts</strong> with featured images</li>
                 <li><strong>Home page</strong> set as the static front page</li>
                 <li><strong>Journal page</strong> set as the blog posts page</li>
                 <li><strong>Portfolio page</strong> at /portfolio/ with portfolio listing template</li>
@@ -117,11 +116,54 @@ function dayanarc_run_import() {
     return true;
 }
 
-// ── 1. Upload images to Media Library ────────────────────────────────────────
-function dayanarc_import_images() {
-    $theme_dir  = get_template_directory();
+// ── Helper: import one image from any absolute path ──────────────────────────
+function dayanarc_import_image_file( $src_path, $key ) {
+    if ( ! file_exists( $src_path ) ) return 0;
+
+    $existing = new WP_Query( [
+        'post_type'      => 'attachment',
+        'post_status'    => 'inherit',
+        'meta_key'       => '_dayanarc_source_file',
+        'meta_value'     => $key,
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+    ] );
+    if ( $existing->have_posts() ) return $existing->posts[0];
+
     $upload_dir = wp_upload_dir();
-    $ids        = [];
+    $filename   = sanitize_file_name( basename( $src_path ) );
+    $dest       = $upload_dir['path'] . '/' . $filename;
+
+    // Avoid filename collisions
+    $n = 1;
+    while ( file_exists( $dest ) ) {
+        $info = pathinfo( $filename );
+        $dest = $upload_dir['path'] . '/' . $info['filename'] . '-' . $n . '.' . $info['extension'];
+        $n++;
+    }
+
+    if ( ! @copy( $src_path, $dest ) ) return 0;
+
+    $mime      = wp_check_filetype( basename( $dest ) );
+    $attach_id = wp_insert_attachment( [
+        'post_mime_type' => $mime['type'],
+        'post_title'     => pathinfo( $key, PATHINFO_FILENAME ),
+        'post_status'    => 'inherit',
+    ], $dest );
+
+    if ( is_wp_error( $attach_id ) ) return 0;
+
+    $metadata = wp_generate_attachment_metadata( $attach_id, $dest );
+    wp_update_attachment_metadata( $attach_id, $metadata );
+    update_post_meta( $attach_id, '_dayanarc_source_file', $key );
+
+    return (int) $attach_id;
+}
+
+// ── 1. Upload theme asset images to Media Library ─────────────────────────────
+function dayanarc_import_images() {
+    $theme_dir = get_template_directory();
+    $ids       = [];
 
     $files = [
         'project1.png', 'project2.png', 'project3.png', 'project4.png',
@@ -131,71 +173,81 @@ function dayanarc_import_images() {
     ];
 
     foreach ( $files as $filename ) {
-        $src = $theme_dir . '/assets/' . $filename;
-        if ( ! file_exists( $src ) ) continue;
-
-        // Skip if already imported (match by original filename stored in meta)
-        $existing = new WP_Query( [
-            'post_type'      => 'attachment',
-            'post_status'    => 'inherit',
-            'meta_key'       => '_dayanarc_source_file',
-            'meta_value'     => $filename,
-            'posts_per_page' => 1,
-            'fields'         => 'ids',
-        ] );
-        if ( $existing->have_posts() ) {
-            $ids[ $filename ] = $existing->posts[0];
-            continue;
-        }
-
-        $dest = $upload_dir['path'] . '/' . $filename;
-        if ( ! @copy( $src, $dest ) ) continue;
-
-        $mime      = wp_check_filetype( $filename );
-        $attach_id = wp_insert_attachment( [
-            'post_mime_type' => $mime['type'],
-            'post_title'     => pathinfo( $filename, PATHINFO_FILENAME ),
-            'post_status'    => 'inherit',
-        ], $dest );
-
-        if ( is_wp_error( $attach_id ) ) continue;
-
-        $metadata = wp_generate_attachment_metadata( $attach_id, $dest );
-        wp_update_attachment_metadata( $attach_id, $metadata );
-        update_post_meta( $attach_id, '_dayanarc_source_file', $filename );
-
-        $ids[ $filename ] = $attach_id;
+        $id = dayanarc_import_image_file( $theme_dir . '/assets/' . $filename, $filename );
+        if ( $id ) $ids[ $filename ] = $id;
     }
 
     return $ids;
 }
 
-// ── 2. Portfolio items ────────────────────────────────────────────────────────
+// ── 2. Portfolio items (4 projects from sample images) ───────────────────────
 function dayanarc_import_portfolio( $image_ids ) {
+    $sample = ABSPATH . 'Dayan Arc website/sample/';
+
     $items = [
         [
-            'title'    => 'Point Hotel Ballroom',
-            'content'  => 'This project features the ballroom of a 5-star Point Hotel. Dayan Arc was responsible for the complete scope of work, delivering the design from concept development to execution, ensuring a refined and cohesive interior experience.',
-            'location' => 'Riyadh, KSA',
+            'title'    => 'Georgia Residence',
+            'content'  => 'A refined residential project in Tbilisi blending contemporary design with local architectural traditions. Dayan Arc delivered the full scope from concept through execution, creating warm and livable spaces that honour both the setting and the client\'s lifestyle.',
+            'excerpt'  => 'A refined residential project blending contemporary design with local architectural traditions.',
+            'location' => 'Tbilisi, Georgia',
+            'concept'  => 'Full residential design and fit-out',
+            'palette'  => 'Warm neutrals, natural stone, textured plaster',
+            'thumb'    => $sample . 'Georgia/Georgia 01.jpg',
+            'thumb_key'=> 'georgia-01',
+            'gallery'  => [
+                [ $sample . 'Georgia/Georgia 02.jpg', 'georgia-02' ],
+                [ $sample . 'Georgia/Georgia 03.jpg', 'georgia-03' ],
+                [ $sample . 'Georgia/Georgia 04.jpg', 'georgia-04' ],
+                [ $sample . 'Georgia/Georgia 05.jpg', 'georgia-05' ],
+                [ $sample . 'Georgia/Georgia 06.jpg', 'georgia-06' ],
+                [ $sample . 'Georgia/Georgia 07.jpg', 'georgia-07' ],
+                [ $sample . 'Georgia/Georgia 08.jpg', 'georgia-08' ],
+            ],
+        ],
+        [
+            'title'    => 'GCC Pavilion',
+            'content'  => 'A landmark hospitality and commercial pavilion designed from concept to execution with precision and care. Every detail — from the structural skin to the interior finishes — was orchestrated to create an immersive and memorable guest experience.',
+            'excerpt'  => 'A landmark hospitality space designed from concept to execution with precision and care.',
+            'location' => 'GCC Region',
             'concept'  => 'Complete hospitality design and fit-out',
-            'palette'  => 'Balancing structural architecture with high-end styling',
-            'image'    => 'interior1.jpg',
+            'palette'  => 'Monochromatic accents, reflective surfaces, deep tones',
+            'thumb'    => $sample . 'gcc final/gcc 1.jpg',
+            'thumb_key'=> 'gcc-01',
+            'gallery'  => [
+                [ $sample . 'gcc final/gcc 2.jpg', 'gcc-02' ],
+                [ $sample . 'gcc final/gcc 4.jpg', 'gcc-04' ],
+                [ $sample . 'gcc final/gcc 5.jpg', 'gcc-05' ],
+                [ $sample . 'gcc final/gcc 6.jpg', 'gcc-06' ],
+                [ $sample . 'gcc final/gcc 7.jpg', 'gcc-07' ],
+                [ $sample . 'gcc final/gcc 8.jpg', 'gcc-08' ],
+            ],
         ],
         [
-            'title'    => 'Modern Elegance',
-            'content'  => 'Where modern elegance meets contemporary comfort. Our latest project showcases sleek lines, thoughtful details, and a harmonious design that inspires.',
-            'location' => 'Riyadh, KSA',
-            'concept'  => 'Luxury living with architectural precision',
-            'palette'  => 'Accent palette: neutral tones, sophisticated finishes',
-            'image'    => 'interior2.jpg',
+            'title'    => 'Germany Office HQ',
+            'content'  => 'A modern office headquarters in Berlin that balances open collaboration with focused workspaces. The design draws on Bauhaus proportions while integrating contemporary materials and biophilic elements for a productive and inspiring environment.',
+            'excerpt'  => 'A modern office design that balances open collaboration with focused work environments.',
+            'location' => 'Berlin, Germany',
+            'concept'  => 'Office and workplace design',
+            'palette'  => 'Concrete grey, warm oak, matte black accents',
+            'thumb'    => $sample . 'germany/Germany 01.jpg',
+            'thumb_key'=> 'germany-01',
+            'gallery'  => [
+                [ $sample . 'germany/Germany 02.jpg', 'germany-02' ],
+                [ $sample . 'germany/Germany 03.jpg', 'germany-03' ],
+                [ $sample . 'germany/Germany 04.jpg', 'germany-04' ],
+            ],
         ],
         [
-            'title'    => 'Modern Kitchen',
-            'content'  => 'Transform your culinary space with Dayan Arc. Where modern elegance meets functional design. Every detail crafted to inspire cooking and living.',
-            'location' => 'Riyadh, KSA',
-            'concept'  => 'Full range of services from architecture to fit-out',
-            'palette'  => 'Accent palette: contemporary materials, clean lines',
-            'image'    => 'project11.png',
+            'title'    => 'Modern Interior Studio',
+            'content'  => 'Transforming a raw open-plan space into a warm, functional creative studio. The brief called for a space that would inspire without distracting — achieved through a restrained material palette, considered lighting, and custom joinery.',
+            'excerpt'  => 'Transforming a raw space into a warm, functional studio that reflects the client\'s creative identity.',
+            'location' => 'Dubai, UAE',
+            'concept'  => 'Studio and creative workspace design',
+            'palette'  => 'Linen white, brushed brass, warm timber',
+            'thumb'    => null,
+            'thumb_key'=> null,
+            'thumb_id' => isset( $image_ids['interior1.jpg'] ) ? $image_ids['interior1.jpg'] : 0,
+            'gallery'  => [],
         ],
     ];
 
@@ -205,38 +257,54 @@ function dayanarc_import_portfolio( $image_ids ) {
         $post_id = wp_insert_post( [
             'post_title'   => $item['title'],
             'post_content' => $item['content'],
-            'post_excerpt' => $item['content'],
+            'post_excerpt' => $item['excerpt'],
             'post_status'  => 'publish',
             'post_type'    => 'portfolio',
         ] );
-
         if ( is_wp_error( $post_id ) ) continue;
 
         update_post_meta( $post_id, '_portfolio_location', $item['location'] );
         update_post_meta( $post_id, '_portfolio_concept',  $item['concept'] );
         update_post_meta( $post_id, '_portfolio_palette',  $item['palette'] );
 
-        if ( isset( $image_ids[ $item['image'] ] ) ) {
-            set_post_thumbnail( $post_id, $image_ids[ $item['image'] ] );
+        // Featured image
+        if ( ! empty( $item['thumb_id'] ) ) {
+            set_post_thumbnail( $post_id, $item['thumb_id'] );
+        } elseif ( $item['thumb'] ) {
+            $thumb_id = dayanarc_import_image_file( $item['thumb'], $item['thumb_key'] );
+            if ( $thumb_id ) set_post_thumbnail( $post_id, $thumb_id );
+        }
+
+        // Gallery images
+        $gallery_ids = [];
+        foreach ( $item['gallery'] as $g ) {
+            $gid = dayanarc_import_image_file( $g[0], $g[1] );
+            if ( $gid ) $gallery_ids[] = $gid;
+        }
+        if ( ! empty( $gallery_ids ) ) {
+            update_post_meta( $post_id, '_portfolio_gallery', wp_json_encode( $gallery_ids ) );
         }
     }
 }
 
-// ── 3. Journal posts ──────────────────────────────────────────────────────────
+// ── 3. Blog posts (journal — 3 posts) ────────────────────────────────────────
 function dayanarc_import_journal_posts( $image_ids ) {
     $posts = [
-        [ 'title' => 'Design Excellence',     'content' => 'Design is the art of creating solutions that blend form with function, bringing innovation and beauty to everyday spaces.',                                                          'image' => 'project1.png'  ],
-        [ 'title' => 'Modern Living',          'content' => 'Creating spaces that elevate everyday living through thoughtful design, where every element serves a purpose and adds to the overall harmony.',                                   'image' => 'project2.png'  ],
-        [ 'title' => 'Functional Luxury',      'content' => 'Balancing high-end aesthetics with practical functionality — where beauty and purpose coexist seamlessly.',                                                                       'image' => 'project3.png'  ],
-        [ 'title' => 'Creative Vision',        'content' => 'Innovation starts with a spark of creativity, igniting the world of design and transforming ordinary spaces into extraordinary experiences.',                                      'image' => 'project4.png'  ],
-        [ 'title' => 'Architectural Harmony',  'content' => 'The firm designed a cohesive hospitality space that balances structural architecture with high-end interior styling, creating a unified and memorable environment.',               'image' => 'project5.png'  ],
-        [ 'title' => 'Material Selection',     'content' => 'Expert guidance in choosing materials that guarantee durability and comfort, ensuring every surface tells a story of quality and craftsmanship.',                                  'image' => 'project6.png'  ],
-        [ 'title' => 'Space Planning',         'content' => 'Thoughtful space planning that maximizes functionality and flow, creating environments that feel both expansive and intimate.',                                                    'image' => 'project7.png'  ],
-        [ 'title' => 'Design Process',         'content' => 'From concept to execution, we design spaces tailored to your vision — a collaborative journey that transforms ideas into living, breathing environments.',                        'image' => 'project8.png'  ],
-        [ 'title' => 'Transformative Design',  'content' => 'Dayan Arc brings a new approach and fresh opportunities to transform your spaces. From vision to reality, we design environments that elevate everyday living.',                  'image' => 'project9.png'  ],
-        [ 'title' => 'Detail Focused',         'content' => 'Design is in the details. We believe in precision and attention to every element, from the curve of a handle to the texture of a wall.',                                         'image' => 'project10.png' ],
-        [ 'title' => 'Finishing Touches',      'content' => 'Accessories have the power to elevate any design, adding the perfect finishing touch that brings a space to life and makes it uniquely yours.',                                   'image' => 'project11.png' ],
-        [ 'title' => 'Inspired Spaces',        'content' => 'Your space deserves to become something greater and we make it happen — through vision, craft, and an unwavering commitment to design excellence.',                               'image' => 'interior1.jpg' ],
+        [
+            'title'   => 'Design Excellence',
+            'content' => 'Design is the art of creating solutions that blend form with function, bringing innovation and beauty to everyday spaces. At Dayan Arc, excellence is not an aspiration — it is our baseline. Every project begins with a deep dive into the client\'s world, their habits, their values, and the way they move through space. Only then do we begin to design.',
+            'image'   => 'project1.png',
+        ],
+        [
+            'title'   => 'Modern Living',
+            'content' => 'Creating spaces that elevate everyday living through thoughtful design, where every element serves a purpose and adds to the overall harmony. The modern home is not defined by a style — it is defined by how well it serves the people who live in it. We design for the morning rush, the quiet evening, the weekend gathering, and everything in between.',
+            'image'   => 'project2.png',
+        ],
+        [
+            'title'   => 'Functional Luxury',
+            'content' => 'Balancing high-end aesthetics with practical functionality — where beauty and purpose coexist seamlessly. True luxury is not about price. It is about the feeling of a space that anticipates your needs, materials that age beautifully, and details so considered that they become invisible. This is the standard we hold ourselves to on every project.',
+            'image'   => 'project3.png',
+        ],
     ];
 
     foreach ( $posts as $post ) {
@@ -245,11 +313,10 @@ function dayanarc_import_journal_posts( $image_ids ) {
         $post_id = wp_insert_post( [
             'post_title'   => $post['title'],
             'post_content' => $post['content'],
-            'post_excerpt' => $post['content'],
+            'post_excerpt' => wp_trim_words( $post['content'], 25, '...' ),
             'post_status'  => 'publish',
             'post_type'    => 'post',
         ] );
-
         if ( is_wp_error( $post_id ) ) continue;
 
         if ( isset( $image_ids[ $post['image'] ] ) ) {

@@ -137,47 +137,37 @@
         });
     }
 
-    // ── Portfolio carousel ──────────────────────────────────────────────────────
-    const portfolios          = dayanarcData.portfolioData;
-    let currentPortfolioIndex = 0;
+    // ── Journal/Blog carousel (section 7 — shows blog posts) ────────────────────
+    // dayanarcData.portfolioData now contains blog posts (swapped from CPT)
+    const journalPosts      = dayanarcData.portfolioData;
+    let currentJournalIndex = 0;
 
-    function renderPortfolioSlide(index) {
-        const container = document.getElementById('portfolio-container');
+    function renderJournalSlide(index) {
+        const container = document.getElementById('journal-container');
         if (!container) return;
-        const data = portfolios[index];
+        const data = journalPosts[index];
 
         container.innerHTML =
             '<div class="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-6 items-start">' +
                 '<div class="order-2 lg:order-1">' +
-                    '<div class="curtain-container portfolio-img-large">' +
-                        '<img src="' + escHtml(data.imgLarge) + '" class="curtain-img-portfolio active" alt="' + escHtml(data.title) + '">' +
+                    '<div class="curtain-container" style="aspect-ratio:1/1;overflow:hidden;">' +
+                        '<img src="' + escHtml(data.img) + '" class="curtain-img-portfolio active" alt="' + escHtml(data.title) + '" style="width:100%;height:100%;object-fit:cover;">' +
                     '</div>' +
                 '</div>' +
                 '<div class="order-1 lg:order-2 flex flex-col">' +
-                    '<div class="flex justify-between items-center mb-6">' +
-                        '<span class="text-[11px] text-[#68635f] font-light">' + escHtml(data.location) + '</span>' +
+                    '<div class="flex justify-between items-center mb-8">' +
+                        '<span class="text-[11px] text-[#68635f] font-light">' + escHtml(data.date) + '</span>' +
                         '<span class="text-[11px] text-[#68635f] font-light tracking-widest">' + escHtml(data.id) + '</span>' +
                     '</div>' +
-                    '<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-auto">' +
-                        '<div class="flex flex-col">' +
-                            '<h2 class="title-text text-2xl lg:text-3xl mb-4 text-[#2c221a] font-medium tracking-wide uppercase">' + escHtml(data.title) + '</h2>' +
-                            '<p class="text-[13px] leading-relaxed text-[#68635f] font-light">' + escHtml(data.description) + '</p>' +
-                        '</div>' +
-                        '<div class="flex flex-col">' +
-                            '<div class="curtain-container portfolio-img-small">' +
-                                '<img src="' + escHtml(data.imgSmall) + '" class="curtain-img-portfolio active" alt="Detail">' +
-                            '</div>' +
-                            '<p class="text-[11px] leading-relaxed text-[#68635f] font-light mt-3 text-right max-w-[180px] ml-auto">' + escHtml(data.palette) + '</p>' +
-                            (data.permalink ? '<a href="' + escHtml(data.permalink) + '" class="link-wrapper" style="opacity:1;transform:none;width:auto;gap:0.75rem;min-width:100px;margin-top:0.75rem;margin-left:auto;"><span class="link-text" style="font-size:11px;">LEARN MORE</span><div class="arrow-graphic"><svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></a>' : '') +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="mt-6 pt-6 flex flex-col md:flex-row justify-between items-end gap-4 border-t border-[#e5e5e5]">' +
-                        '<div class="text-[11px] text-[#68635f] font-light leading-relaxed"><p>' + escHtml(data.concept) + '</p></div>' +
+                    '<h2 class="title-text text-2xl lg:text-3xl xl:text-4xl mb-5 text-[#2c221a] font-medium tracking-wide uppercase leading-tight">' + escHtml(data.title) + '</h2>' +
+                    '<p class="text-[13px] leading-relaxed text-[#68635f] font-light mb-8">' + escHtml(data.description) + '</p>' +
+                    (data.permalink ? '<a href="' + escHtml(data.permalink) + '" class="link-wrapper mb-6" style="opacity:1;transform:none;width:auto;gap:0.75rem;min-width:100px;"><span class="link-text" style="font-size:11px;">READ MORE</span><div class="arrow-graphic"><svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></a>' : '') +
+                    '<div class="mt-auto pt-6 border-t border-[#e5e5e5] flex justify-end">' +
                         '<div class="flex gap-3">' +
-                            '<button onclick="prevPortfolioSlide()" class="nav-btn">' +
+                            '<button onclick="prevJournalSlide()" class="nav-btn">' +
                                 '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>' +
                             '</button>' +
-                            '<button onclick="nextPortfolioSlide()" class="nav-btn">' +
+                            '<button onclick="nextJournalSlide()" class="nav-btn">' +
                                 '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg>' +
                             '</button>' +
                         '</div>' +
@@ -186,33 +176,34 @@
             '</div>';
     }
 
-    window.nextPortfolioSlide = function () {
-        const container = document.getElementById('portfolio-container');
+    window.nextJournalSlide = function () {
+        const container = document.getElementById('journal-container');
         container.classList.add('slide-exit');
         setTimeout(function () {
-            currentPortfolioIndex = (currentPortfolioIndex + 1) % portfolios.length;
-            renderPortfolioSlide(currentPortfolioIndex);
+            currentJournalIndex = (currentJournalIndex + 1) % journalPosts.length;
+            renderJournalSlide(currentJournalIndex);
             container.classList.remove('slide-exit');
             container.classList.add('slide-enter');
             setTimeout(function () { container.classList.remove('slide-enter'); }, 50);
         }, 600);
     };
 
-    window.prevPortfolioSlide = function () {
-        const container = document.getElementById('portfolio-container');
+    window.prevJournalSlide = function () {
+        const container = document.getElementById('journal-container');
         container.classList.add('slide-exit');
         setTimeout(function () {
-            currentPortfolioIndex = (currentPortfolioIndex - 1 + portfolios.length) % portfolios.length;
-            renderPortfolioSlide(currentPortfolioIndex);
+            currentJournalIndex = (currentJournalIndex - 1 + journalPosts.length) % journalPosts.length;
+            renderJournalSlide(currentJournalIndex);
             container.classList.remove('slide-exit');
             container.classList.add('slide-enter');
             setTimeout(function () { container.classList.remove('slide-enter'); }, 50);
         }, 600);
     };
 
-    // ── Journal / Blog grid ─────────────────────────────────────────────────────
-    const journalData       = dayanarcData.journalPages;
-    let currentJournalPage  = 0;
+    // ── Portfolio grid (section 5 — shows portfolio CPT items) ──────────────────
+    // dayanarcData.journalPages now contains portfolio CPT items (swapped)
+    const portfolioPages      = dayanarcData.journalPages;
+    let currentPortfolioPage  = 0;
 
     const slotConfigs = [
         { colSpan: 'md:col-span-2', align: 'justify-start', height: 'h-[700px]', titleSize: 'text-lg',  delay: 'delay-200' },
@@ -221,19 +212,19 @@
         { colSpan: 'md:col-span-1', align: 'justify-start', height: 'h-[380px]', titleSize: 'text-sm',  delay: 'delay-500' }
     ];
 
-    function renderJournalPage(pageIndex) {
-        const grid = document.getElementById('journal-grid');
+    function renderPortfolioPage(pageIndex) {
+        const grid = document.getElementById('portfolio-grid');
         const nums = document.getElementById('pagination-numbers');
         if (!grid || !nums) return;
 
-        nums.innerHTML = journalData.map(function (_, i) {
+        nums.innerHTML = portfolioPages.map(function (_, i) {
             const active = i === pageIndex
                 ? 'text-[#2c221a] border-b border-[#2c221a] pb-1'
                 : 'text-[#a9a39f] hover:text-[#2c221a]';
-            return '<span class="cursor-pointer transition-colors ' + active + '" onclick="goToJournalPage(' + i + ')">0' + (i + 1) + '</span>';
+            return '<span class="cursor-pointer transition-colors ' + active + '" onclick="goToPortfolioPage(' + i + ')">0' + (i + 1) + '</span>';
         }).join('');
 
-        grid.innerHTML = journalData[pageIndex].map(function (post, i) {
+        grid.innerHTML = portfolioPages[pageIndex].map(function (post, i) {
             const conf  = slotConfigs[i];
             const hSize = i === 0 ? 'text-2xl lg:text-3xl' : 'text-xl';
             return (
@@ -248,7 +239,7 @@
                             '<h3 class="title-text ' + hSize + ' text-[#2c221a] uppercase mb-3 leading-tight">' + escHtml(post.title) + '</h3>' +
                             '<p class="text-[12px] md:text-[13px] leading-relaxed text-[#68635f] font-light px-2 mb-4">' + escHtml(post.desc) + '</p>' +
                             '<a href="' + escHtml(post.url) + '" class="read-more-btn text-[10px] tracking-widest font-semibold flex items-center gap-2 text-[#2c221a]">' +
-                                'READ MORE ' +
+                                'VIEW PROJECT ' +
                                 '<svg width="14" height="8" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
                             '</a>' +
                         '</div>' +
@@ -262,21 +253,19 @@
     }
 
     window.changePage = function (dir) {
-        goToJournalPage((currentJournalPage + dir + journalData.length) % journalData.length);
+        goToPortfolioPage((currentPortfolioPage + dir + portfolioPages.length) % portfolioPages.length);
     };
 
-    window.goToJournalPage = function (index) {
-        if (index === currentJournalPage) return;
-        const grid = document.getElementById('journal-grid');
+    window.goToPortfolioPage = function (index) {
+        if (index === currentPortfolioPage) return;
+        const grid = document.getElementById('portfolio-grid');
         grid.style.opacity = '0';
         setTimeout(function () {
-            currentJournalPage = index;
-            renderJournalPage(currentJournalPage);
+            currentPortfolioPage = index;
+            renderPortfolioPage(currentPortfolioPage);
             grid.style.opacity = '1';
         }, 500);
     };
-
-    // Contact form is now handled by Contact Form 7.
 
     // ── Utility ─────────────────────────────────────────────────────────────────
     function escHtml(str) {
@@ -289,7 +278,7 @@
     }
 
     // ── Initialise ───────────────────────────────────────────────────────────────
-    renderPortfolioSlide(0);
-    renderJournalPage(0);
+    renderJournalSlide(0);
+    renderPortfolioPage(0);
 
 }());

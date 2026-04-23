@@ -169,30 +169,29 @@ function dayanarc_get_contact_form_id() {
 function dayanarc_get_localized_data() {
     $uri = get_template_directory_uri();
 
-    // Portfolio data from CPT, with fallback to defaults
-    $portfolio_posts = get_posts( [ 'post_type' => 'portfolio', 'numberposts' => 10, 'post_status' => 'publish' ] );
-    $portfolio_data  = [];
+    // ── portfolioData → now blog posts (feeds Section 7 journal carousel) ──────
+    $blog_posts     = get_posts( [ 'post_type' => 'post', 'numberposts' => 10, 'post_status' => 'publish', 'orderby' => 'date', 'order' => 'DESC' ] );
+    $portfolio_data = [];
 
-    if ( ! empty( $portfolio_posts ) ) {
-        $total = count( $portfolio_posts );
-        foreach ( $portfolio_posts as $i => $post ) {
-            $num          = str_pad( $i + 1, 2, '0', STR_PAD_LEFT ) . '/' . str_pad( $total, 2, '0', STR_PAD_LEFT );
-            $location     = get_post_meta( $post->ID, '_portfolio_location', true ) ?: 'Riyadh, KSA';
-            $concept      = get_post_meta( $post->ID, '_portfolio_concept', true ) ?: '';
-            $palette      = get_post_meta( $post->ID, '_portfolio_palette', true ) ?: '';
-            $img_large    = get_the_post_thumbnail_url( $post->ID, 'large' ) ?: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80';
-            $detail_id    = get_post_meta( $post->ID, '_portfolio_detail_image', true );
-            $img_small    = $detail_id ? wp_get_attachment_image_url( $detail_id, 'medium' ) : 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=600&q=80';
+    if ( ! empty( $blog_posts ) ) {
+        $total = count( $blog_posts );
+        foreach ( $blog_posts as $i => $post ) {
+            $num     = str_pad( $i + 1, 2, '0', STR_PAD_LEFT ) . '/' . str_pad( $total, 2, '0', STR_PAD_LEFT );
+            $img     = get_the_post_thumbnail_url( $post->ID, 'large' );
+            if ( ! $img ) {
+                $fb = [ 'project1.png', 'project2.png', 'project3.png', 'interior1.jpg' ];
+                $img = $uri . '/assets/' . $fb[ $i % count( $fb ) ];
+            }
+            $excerpt = has_excerpt( $post->ID )
+                ? get_the_excerpt( $post )
+                : wp_trim_words( $post->post_content, 30, '...' );
 
             $portfolio_data[] = [
                 'id'          => $num,
                 'title'       => strtoupper( $post->post_title ),
-                'location'    => $location,
-                'description' => wp_strip_all_tags( $post->post_content ),
-                'concept'     => $concept,
-                'palette'     => $palette,
-                'imgLarge'    => $img_large,
-                'imgSmall'    => $img_small,
+                'date'        => date_i18n( 'F Y', strtotime( $post->post_date ) ),
+                'description' => wp_strip_all_tags( $excerpt ),
+                'img'         => $img,
                 'permalink'   => get_permalink( $post->ID ),
             ];
         }
@@ -200,57 +199,47 @@ function dayanarc_get_localized_data() {
         $portfolio_data = [
             [
                 'id'          => '01/03',
-                'title'       => 'POINT HOTEL BALLROOM',
-                'location'    => 'Riyadh, KSA',
-                'description' => 'This project features the ballroom of a 5-star Point Hotel. Dayan Arc was responsible for the complete scope of work, delivering the design from concept development to execution, ensuring a refined and cohesive interior experience.',
-                'concept'     => 'Complete hospitality design and fit-out',
-                'palette'     => 'Balancing structural architecture with high-end styling',
-                'imgLarge'    => 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=80',
-                'imgSmall'    => 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=600&q=80',
+                'title'       => 'DESIGN EXCELLENCE',
+                'date'        => 'April 2026',
+                'description' => 'Design is the art of creating solutions that blend form with function, bringing innovation and beauty to everyday spaces.',
+                'img'         => $uri . '/assets/project1.png',
+                'permalink'   => '#',
             ],
             [
                 'id'          => '02/03',
-                'title'       => 'MODERN ELEGANCE',
-                'location'    => 'Riyadh, KSA',
-                'description' => 'Where modern elegance meets contemporary comfort. Our latest project showcases sleek lines, thoughtful details, and a harmonious design that inspires.',
-                'concept'     => 'Luxury living with architectural precision',
-                'palette'     => 'Accent palette: neutral tones, sophisticated finishes',
-                'imgLarge'    => 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=80',
-                'imgSmall'    => $uri . '/assets/interior2.jpg',
+                'title'       => 'MODERN LIVING',
+                'date'        => 'March 2026',
+                'description' => 'Creating spaces that elevate everyday living through thoughtful design, where every element serves a purpose and adds to the overall harmony.',
+                'img'         => $uri . '/assets/project2.png',
+                'permalink'   => '#',
             ],
             [
                 'id'          => '03/03',
-                'title'       => 'MODERN KITCHEN',
-                'location'    => 'Riyadh, KSA',
-                'description' => 'Transform your culinary space with Dayan Arc. Where modern elegance meets functional design. Every detail crafted to inspire cooking and living.',
-                'concept'     => 'Full range of services from architecture to fit-out',
-                'palette'     => 'Accent palette: contemporary materials, clean lines',
-                'imgLarge'    => 'https://images.unsplash.com/photo-1617103996702-96ff29b1c467?auto=format&fit=crop&w=1200&q=80',
-                'imgSmall'    => $uri . '/assets/project11.png',
+                'title'       => 'FUNCTIONAL LUXURY',
+                'date'        => 'February 2026',
+                'description' => 'Balancing high-end aesthetics with practical functionality — where beauty and purpose coexist seamlessly.',
+                'img'         => $uri . '/assets/project3.png',
+                'permalink'   => '#',
             ],
         ];
     }
 
-    // Journal data from posts, with fallback to defaults
-    $posts         = get_posts( [ 'numberposts' => 12, 'post_status' => 'publish', 'orderby' => 'date', 'order' => 'DESC' ] );
+    // ── journalPages → now portfolio CPT (feeds Section 5 portfolio grid) ───────
+    $portfolio_cpt = get_posts( [ 'post_type' => 'portfolio', 'numberposts' => 12, 'post_status' => 'publish', 'orderby' => 'date', 'order' => 'DESC' ] );
     $journal_pages = [];
 
-    if ( ! empty( $posts ) ) {
+    if ( ! empty( $portfolio_cpt ) ) {
         $fallback_imgs = [ 'project1', 'project2', 'project3', 'project4', 'project5', 'project6', 'project7', 'project8', 'project9', 'project10', 'project11', 'interior1' ];
         $page          = [];
 
-        foreach ( $posts as $i => $post ) {
-            $thumb   = get_the_post_thumbnail_url( $post->ID, 'large' );
-            $fb_name = $fallback_imgs[ $i % count( $fallback_imgs ) ];
-            $ext     = str_contains( $fb_name, 'interior' ) ? '.jpg' : '.png';
-
+        foreach ( $portfolio_cpt as $i => $post ) {
+            $thumb = get_the_post_thumbnail_url( $post->ID, 'large' );
             if ( ! $thumb ) {
-                $thumb = $uri . '/assets/' . $fb_name . $ext;
+                $fb_name = $fallback_imgs[ $i % count( $fallback_imgs ) ];
+                $ext     = str_contains( $fb_name, 'interior' ) ? '.jpg' : '.png';
+                $thumb   = $uri . '/assets/' . $fb_name . $ext;
             }
-
-            $excerpt = has_excerpt( $post->ID )
-                ? get_the_excerpt( $post )
-                : wp_trim_words( $post->post_content, 20, '...' );
+            $excerpt = wp_trim_words( $post->post_content, 20, '...' );
 
             $page[] = [
                 'title' => strtoupper( $post->post_title ),
@@ -271,22 +260,10 @@ function dayanarc_get_localized_data() {
     } else {
         $journal_pages = [
             [
-                [ 'title' => 'DESIGN EXCELLENCE',    'desc' => 'Design is the art of creating solutions that blend form with function, bringing innovation and beauty to everyday spaces.',                                                         'img' => $uri . '/assets/project1.png',  'url' => '#' ],
-                [ 'title' => 'MODERN LIVING',         'desc' => 'Creating spaces that elevate everyday living through thoughtful design.',                                                                                                              'img' => $uri . '/assets/project2.png',  'url' => '#' ],
-                [ 'title' => 'FUNCTIONAL LUXURY',     'desc' => 'Balancing high-end aesthetics with practical functionality.',                                                                                                                          'img' => $uri . '/assets/project3.png',  'url' => '#' ],
-                [ 'title' => 'CREATIVE VISION',       'desc' => 'Innovation starts with a spark of creativity, igniting the world of design.',                                                                                                         'img' => $uri . '/assets/project4.png',  'url' => '#' ],
-            ],
-            [
-                [ 'title' => 'ARCHITECTURAL HARMONY', 'desc' => 'The firm designed a cohesive hospitality space that balances structural architecture with high-end interior styling.',                                                                 'img' => $uri . '/assets/project5.png',  'url' => '#' ],
-                [ 'title' => 'MATERIAL SELECTION',    'desc' => 'Expert guidance in choosing materials that guarantee durability and comfort.',                                                                                                         'img' => $uri . '/assets/project6.png',  'url' => '#' ],
-                [ 'title' => 'SPACE PLANNING',        'desc' => 'Thoughtful space planning that maximizes functionality and flow.',                                                                                                                     'img' => $uri . '/assets/project7.png',  'url' => '#' ],
-                [ 'title' => 'DESIGN PROCESS',        'desc' => 'From concept to execution, we design spaces tailored to your vision.',                                                                                                                'img' => $uri . '/assets/project8.png',  'url' => '#' ],
-            ],
-            [
-                [ 'title' => 'TRANSFORMATIVE DESIGN', 'desc' => 'Dayan Arc brings a new approach and fresh opportunities to transform your spaces. From vision to reality, we design environments that elevate everyday living.',                       'img' => $uri . '/assets/project9.png',  'url' => '#' ],
-                [ 'title' => 'DETAIL FOCUSED',        'desc' => 'Design is in the details. We believe in precision and attention to every element.',                                                                                                   'img' => $uri . '/assets/project10.png', 'url' => '#' ],
-                [ 'title' => 'FINISHING TOUCHES',     'desc' => 'Accessories have the power to elevate any design, adding the perfect finishing touch.',                                                                                               'img' => $uri . '/assets/project11.png', 'url' => '#' ],
-                [ 'title' => 'INSPIRED SPACES',       'desc' => 'Your space deserves to become something greater and we make it happen.',                                                                                                              'img' => $uri . '/assets/interior1.jpg', 'url' => '#' ],
+                [ 'title' => 'GEORGIA RESIDENCE',     'desc' => 'A refined residential project blending contemporary design with local architectural traditions.',                          'img' => $uri . '/assets/project1.png',  'url' => '#' ],
+                [ 'title' => 'GCC PAVILION',           'desc' => 'A landmark hospitality space designed from concept to execution with precision and care.',                                'img' => $uri . '/assets/project2.png',  'url' => '#' ],
+                [ 'title' => 'GERMANY OFFICE HQ',      'desc' => 'Modern office design that balances open collaboration with focused work environments.',                                   'img' => $uri . '/assets/project3.png',  'url' => '#' ],
+                [ 'title' => 'MODERN INTERIOR STUDIO', 'desc' => 'Transforming a raw space into a warm, functional studio that reflects the client\'s creative identity.',                  'img' => $uri . '/assets/interior1.jpg', 'url' => '#' ],
             ],
         ];
     }

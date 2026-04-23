@@ -289,20 +289,20 @@
         </div>
     </div>
 
-    <!-- ===== SECTION 5: JOURNAL ===== -->
+    <!-- ===== SECTION 5: PORTFOLIO ===== -->
     <div class="section blog-section">
         <div class="relative w-full max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16 py-16 lg:py-20 flex flex-col justify-center">
             <div class="text-center mb-12 lg:mb-16">
                 <span class="reveal-mask block mb-4">
-                    <span class="reveal-text text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium">JOURNAL</span>
+                    <span class="reveal-text text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium">PORTFOLIO</span>
                 </span>
-                <?php $jh = get_theme_mod( 'journal_heading', 'OUR GLOBAL FOOTPRINT' ); ?>
+                <?php $ph5 = get_theme_mod( 'portfolio_heading', 'OUR WORKS' ); ?>
                 <h1 class="title-text text-3xl md:text-4xl lg:text-5xl leading-tight text-[#2c221a]">
-                    <span class="reveal-mask"><span class="reveal-text delay-100 uppercase tracking-tight"><?php echo esc_html( $jh ); ?></span></span>
+                    <span class="reveal-mask"><span class="reveal-text delay-100 uppercase tracking-tight"><?php echo esc_html( $ph5 ); ?></span></span>
                 </h1>
                 <div class="reveal-mask mt-5">
-                    <a href="<?php echo esc_url( dayanarc_journal_url() ); ?>" class="reveal-text delay-200 inline-flex items-center gap-2 text-[11px] tracking-widest uppercase font-medium text-[#a9a39f] hover:text-[#2c221a] transition-colors">
-                        View all articles
+                    <a href="<?php echo esc_url( dayanarc_portfolio_url() ); ?>" class="reveal-text delay-200 inline-flex items-center gap-2 text-[11px] tracking-widest uppercase font-medium text-[#a9a39f] hover:text-[#2c221a] transition-colors">
+                        View all projects
                         <svg width="14" height="9" viewBox="0 0 16 10" fill="none">
                             <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
@@ -311,7 +311,7 @@
             </div>
 
             <div class="relative min-h-[600px] pt-4">
-                <div id="journal-grid" class="grid grid-cols-1 md:grid-cols-5 gap-6 lg:gap-8 items-stretch transition-opacity duration-500 opacity-100"></div>
+                <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-5 gap-6 lg:gap-8 items-stretch transition-opacity duration-500 opacity-100"></div>
 
                 <div class="absolute bottom-8 lg:bottom-12 right-0 flex flex-col items-end gap-3 z-20">
                     <div class="flex gap-3">
@@ -382,20 +382,20 @@
         </div>
     </div><!-- end section 6 -->
 
-    <!-- ===== SECTION 7: PORTFOLIO + FOOTER ===== -->
-    <div class="section fp-auto-height" id="portfolio-section">
+    <!-- ===== SECTION 7: JOURNAL + FOOTER ===== -->
+    <div class="section fp-auto-height" id="journal-section">
 
-        <!-- Portfolio -->
+        <!-- Journal/Blog carousel -->
         <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 pt-10 pb-14">
             <div class="flex items-end justify-between mb-8">
                 <div>
-                    <span class="text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium block mb-2">PORTFOLIO</span>
-                    <?php $ph = get_theme_mod( 'portfolio_heading', 'OUR WORKS' ); ?>
+                    <span class="text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium block mb-2">JOURNAL</span>
+                    <?php $jh7 = get_theme_mod( 'journal_heading', 'DESIGN INSIGHTS' ); ?>
                     <h2 class="title-text text-3xl md:text-4xl text-[#2c221a] leading-tight uppercase tracking-tight">
-                        <?php echo esc_html( $ph ); ?>
+                        <?php echo esc_html( $jh7 ); ?>
                     </h2>
                 </div>
-                <a href="<?php echo esc_url( dayanarc_portfolio_url() ); ?>" class="link-wrapper" style="opacity:1; transform:none; width:auto; display:inline-flex; gap:0.75rem; flex-shrink:0;">
+                <a href="<?php echo esc_url( dayanarc_journal_url() ); ?>" class="link-wrapper" style="opacity:1; transform:none; width:auto; display:inline-flex; gap:0.75rem; flex-shrink:0;">
                     <span class="link-text" style="font-size:11px;">SEE ALL</span>
                     <div class="arrow-graphic">
                         <svg width="14" height="9" viewBox="0 0 16 10" fill="none">
@@ -405,7 +405,7 @@
                 </a>
             </div>
 
-            <div id="portfolio-container"></div>
+            <div id="journal-container"></div>
         </div>
 
         <!-- Footer -->
