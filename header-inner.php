@@ -15,7 +15,9 @@
 <?php wp_body_open(); ?>
 
 <nav class="inner-nav" id="inner-nav">
-    <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="inner-nav-logo hero-title">DAYAN ARC</a>
+    <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="inner-nav-logo" style="display:inline-block;">
+        <img src="<?php echo esc_url( wp_get_attachment_image_url( get_theme_mod( 'header_logo_id', 86 ), 'full' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>" style="height:40px; width:auto;">
+    </a>
 
     <div class="inner-nav-desktop">
         <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="nav-link inner-nav-link">HOME</a>

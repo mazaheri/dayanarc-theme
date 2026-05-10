@@ -240,7 +240,7 @@ body::-webkit-scrollbar {
     height: 100%;
     z-index: 3;
     pointer-events: none;
-    background: radial-gradient(circle 300px at var(--x) var(--y), transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+    background: radial-gradient(circle 550px at var(--x) var(--y), rgba(255, 235, 200, 0.12) 0%, transparent 45%, rgba(0, 0, 0, 0.65) 100%);
     mix-blend-mode: normal;
 }
 
@@ -354,7 +354,7 @@ header {
 /* === ABOUT SECTION === */
 .about-section {
     background-color: #ffffff;
-    color: #2c221a;
+    color: #231f20;
 }
 
 .link-wrapper {
@@ -365,7 +365,7 @@ header {
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #e5e5e5;
     text-decoration: none;
-    color: #2c221a;
+    color: #231f20;
     position: relative;
     opacity: 0;
     transform: translateY(10px);
@@ -391,7 +391,7 @@ header {
     height: 1px;
     bottom: -1px;
     left: 0;
-    background-color: #2c221a;
+    background-color: #c3ac8f;
     transform-origin: right center;
     transition: transform 0.5s cubic-bezier(0.86, 0, 0.07, 1);
 }
@@ -404,13 +404,13 @@ header {
 .arrow-graphic {
     display: flex;
     align-items: center;
-    color: #2c221a;
+    color: #231f20;
 }
 
 /* === PORTFOLIO SECTION === */
 .portfolio-section {
     background-color: #ffffff;
-    color: #2c221a;
+    color: #231f20;
 }
 
 .nav-btn {
@@ -427,7 +427,7 @@ header {
 }
 
 .nav-btn:hover {
-    border-color: #2c221a;
+    border-color: #231f20;
     transform: scale(1.05);
 }
 
@@ -602,7 +602,7 @@ header {
 /* === BLOG SECTION === */
 .blog-section {
     background-color: #ffffff;
-    color: #2c221a;
+    color: #231f20;
 }
 
 .curtain-mask {
@@ -662,7 +662,7 @@ header {
 /* === CONTACT SECTION === */
 .contact-section {
     background-color: #ffffff;
-    color: #2c221a;
+    color: #231f20;
 }
 
 .form-input {
@@ -672,17 +672,17 @@ header {
     background: transparent;
     padding-bottom: 0.75rem;
     font-size: 13px;
-    color: #2c221a;
+    color: #231f20;
     transition: border-color 0.3s ease;
 }
 
 .form-input:focus {
     outline: none;
-    border-bottom-color: #2c221a;
+    border-bottom-color: #231f20;
 }
 
 .form-input::placeholder {
-    color: #8c8783;
+    color: #585058;
     font-weight: 300;
 }
 
@@ -692,7 +692,7 @@ header {
     background: transparent;
     padding: 1rem;
     font-size: 13px;
-    color: #2c221a;
+    color: #231f20;
     transition: border-color 0.3s ease;
     resize: none;
     height: 120px;
@@ -700,11 +700,11 @@ header {
 
 .form-textarea:focus {
     outline: none;
-    border-color: #2c221a;
+    border-color: #231f20;
 }
 
 .form-textarea::placeholder {
-    color: #8c8783;
+    color: #585058;
     font-weight: 300;
 }
 
@@ -715,7 +715,7 @@ header {
     width: 240px;
     padding-bottom: 0.5rem;
     text-decoration: none;
-    color: #2c221a;
+    color: #231f20;
     position: relative;
 }
 
@@ -736,7 +736,7 @@ header {
     left: 0;
     width: 100%;
     height: 1px;
-    background: #2c221a;
+    background: #c3ac8f;
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -773,7 +773,7 @@ header {
 }
 
 .footer-link:hover {
-    color: #a9a39f;
+    color: #585058;
 }
 
 .marquee-container {
@@ -825,7 +825,7 @@ header {
 
 .vala-link:hover {
     transform: scale(0.95);
-    color: #2c221a;
+    color: #231f20;
     text-shadow: 0 0 8px rgba(44, 34, 26, 0.2);
 }
 
@@ -836,7 +836,7 @@ header {
 
 #fp-nav ul li a span,
 .fp-slidesNav ul li a span {
-    background: #2c221a !important;
+    background: #c3ac8f !important;
 }
 
 .section {
@@ -897,7 +897,7 @@ header {
 
 .progress-ring-circle {
     transition: stroke-dashoffset 0.3s ease;
-    stroke: #2c221a;
+    stroke: #c3ac8f;
     stroke-width: 2;
     fill: transparent;
     stroke-linecap: round;
@@ -913,7 +913,7 @@ header {
 .single-post-page {
     font-family: 'Inter', sans-serif;
     background-color: #ffffff;
-    color: #2c221a;
+    color: #231f20;
     min-height: 100vh;
     overflow-y: auto;
 }
@@ -926,7 +926,7 @@ header {
 body.inner-page {
     overflow-y: auto;
     background-color: #ffffff;
-    color: #2c221a;
+    color: #231f20;
     min-height: 100vh;
 }
 
@@ -951,7 +951,7 @@ body.inner-page {
     letter-spacing: 0.15em;
     text-transform: uppercase;
     text-decoration: none;
-    color: #2c221a;
+    color: #231f20;
 }
 
 .inner-nav-desktop {
@@ -961,7 +961,7 @@ body.inner-page {
 }
 
 .inner-nav-link {
-    color: #2c221a;
+    color: #231f20;
     font-size: 11px;
 }
 
@@ -969,7 +969,7 @@ body.inner-page {
     background: none;
     border: none;
     cursor: pointer;
-    color: #2c221a;
+    color: #231f20;
     padding: 0;
     display: none;
 }
@@ -989,7 +989,7 @@ body.inner-page {
     font-size: 10px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #a9a39f;
+    color: #585058;
     margin-bottom: 3rem;
     display: flex;
     align-items: center;
@@ -1003,7 +1003,7 @@ body.inner-page {
 }
 
 .inner-breadcrumb a:hover {
-    color: #2c221a;
+    color: #231f20;
 }
 
 .breadcrumb-sep {
@@ -1012,7 +1012,7 @@ body.inner-page {
 }
 
 .breadcrumb-current {
-    color: #2c221a;
+    color: #231f20;
 }
 
 /* Scroll-to-top for inner pages */
@@ -1042,7 +1042,7 @@ body.inner-page {
 }
 
 .inner-scroll-top:hover {
-    border-color: #2c221a;
+    border-color: #231f20;
     transform: scale(1.05);
 }
 
@@ -1071,15 +1071,15 @@ body.inner-page {
     font-size: 11px;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: #8c8783;
+    color: #585058;
     text-decoration: none;
     transition: border-color 0.3s ease, color 0.3s ease;
 }
 
 .archive-pagination .page-numbers:hover,
 .archive-pagination .page-numbers.current {
-    border-color: #2c221a;
-    color: #2c221a;
+    border-color: #231f20;
+    color: #231f20;
 }
 
 .archive-pagination .page-numbers.dots {
@@ -1333,7 +1333,7 @@ html.admin-bar .inner-nav {
     letter-spacing: 0.15em;
     text-transform: uppercase;
     font-weight: 600;
-    color: #2c221a;
+    color: #231f20;
     background: transparent;
     border: 1px solid #d1ccc8;
     padding: 0.875rem 2.5rem;
@@ -1343,7 +1343,7 @@ html.admin-bar .inner-nav {
 }
 
 .journal-load-more-btn:hover {
-    border-color: #2c221a;
+    border-color: #231f20;
 }
 
 .journal-load-more-btn:disabled {
@@ -1353,7 +1353,7 @@ html.admin-bar .inner-nav {
 
 /* ── Footer (dark green) ─────────────────────────────────────────────────── */
 .fp-footer {
-    background-color: #465548;
+    background-color: #46554b;
     color: #f6f0da;
 }
 .fp-footer .title-text,
@@ -1382,6 +1382,25 @@ html.admin-bar .inner-nav {
 }
 .fp-footer .diamond {
     background-color: rgba(246, 240, 218, 0.4);
+}
+
+/* ── Footer social icons ─────────────────────────────────────────────────── */
+.footer-social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(246, 240, 218, 0.25);
+    border-radius: 50%;
+    color: #c3ac8f;
+    text-decoration: none;
+    transition: border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+}
+.footer-social-icon:hover {
+    border-color: #c3ac8f;
+    color: #f6f0da;
+    background: rgba(195, 172, 143, 0.15);
 }
 
 /* ── About section: image hover swap ────────────────────────────────────── */

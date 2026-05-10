@@ -57,20 +57,20 @@ $customizer['about_body']          =
 
 // ══ HOMEPAGE — OUR SERVICE SECTION ═══════════════════════════════════════════
 
-$customizer['our_service_heading']     = 'OUR SERVICE';
+$customizer['our_service_heading']     = 'WHAT WE DO';
 $customizer['our_service_description'] =
     'From architectural vision to flawless execution — our integrated services '
     . 'cover every discipline, every scale, and every geography.';
 $customizer['our_service_image_1_desc'] =
-    'Concept development and schematic design services tailored to your architectural vision.';
+    'We turn your vision into reality through innovative design and precise planning—creating residential and commercial spaces that balance beauty and functionality.';
 $customizer['our_service_image_2_desc'] =
-    'Comprehensive construction documentation and technical drawings executed with precision.';
+    'We deliver advanced engineering solutions, from complex structures to large-scale facilities, ensuring efficiency, durability, and precision.';
 
 // our_service_image_1 and our_service_image_2 are set by import-images.php
 
 // ══ HOMEPAGE — PORTFOLIO SECTION ═════════════════════════════════════════════
 
-$customizer['portfolio_heading'] = 'OUR WORKS';
+$customizer['portfolio_heading'] = 'OUR PROJECTS';
 
 // ══ HOMEPAGE — SERVICES SECTION ══════════════════════════════════════════════
 
@@ -85,7 +85,7 @@ $customizer['services_tagline']       = 'Transforming ideas into inspiring, func
 
 // ══ HOMEPAGE — JOURNAL SECTION ═══════════════════════════════════════════════
 
-$customizer['journal_heading'] = 'OUR GLOBAL FOOTPRINT';
+$customizer['journal_heading'] = 'LATEST PROJECTS';
 
 // ══ HOMEPAGE — CONTACT SECTION ═══════════════════════════════════════════════
 
@@ -115,10 +115,11 @@ $customizer['contact_website']  = 'http://dayanarc.com';
 
 // ══ GENERAL — SOCIAL LINKS ═══════════════════════════════════════════════════
 
-$customizer['social_instagram'] = '#';
-$customizer['social_pinterest'] = '#';
-$customizer['social_behance']   = '#';
-$customizer['social_linkedin']  = '#';
+$customizer['social_instagram'] = 'https://www.instagram.com/dayan.arc.co';
+$customizer['social_linkedin']  = 'https://www.linkedin.com/company/dayanarc-de/?viewAsMember=true';
+$customizer['social_facebook']  = 'https://www.facebook.com/share/1B5ciXyKgT/?mibextid=wwXIfr';
+$customizer['social_phone']     = '+971564160061';
+$customizer['social_whatsapp']  = '+971564160061';
 
 // ══ SERVICE PAGES ════════════════════════════════════════════════════════════
 
@@ -126,9 +127,9 @@ $services = [
 
     'architecture' => [
         'option_key'       => 'dayanarc_service_architecture_id',
-        'new_title'        => 'Residential Excellence',
-        'card_description' => 'Crafting bespoke luxury villas and high-end residential complexes that redefine modern living through elegance and comfort.',
-        'card_label'       => 'Residential',
+        'new_title'        => 'Architectural & Interior Design',
+        'card_description' => 'From concept to detail, we design modern spaces that reflect lifestyle and precision—covering everything from form to interiors and custom elements.',
+        'card_label'       => '',
         'what_we_offer'    => 'WHAT WE OFFER',
         'cta_heading'      => 'READY TO START YOUR PROJECT?',
         'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
@@ -137,66 +138,104 @@ $services = [
             'Concept Development',
             'Schematic Design',
             'Design Development',
-            'Construction Documentation',
-            'Project Administration',
-            'Site Supervision',
+            'Interior Styling & Layouts',
+            'Custom Furniture Design',
+            'Material Selection and FF&E',
         ] ),
     ],
 
-    'interior_design' => [
+    'industrial_warehouse' => [
         'option_key'       => 'dayanarc_service_interior_design_id',
-        'new_title'        => 'Commercial & Hospitality',
-        'card_description' => 'Designing dynamic corporate offices, retail spaces, and world-class restaurants that enhance brand identity and user experience.',
-        'card_label'       => 'Commercial',
+        'new_title'        => 'Industrial Sheds & Warehouses',
+        'card_description' => 'End-to-end design and execution of wide-span industrial structures, optimized for cost, efficiency, and smart space integration.',
+        'card_label'       => '',
         'what_we_offer'    => 'WHAT WE OFFER',
         'cta_heading'      => 'READY TO START YOUR PROJECT?',
         'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
         'cta_label'        => 'CONTACT US',
         'features'         => implode( "\n", [
-            'Space Planning',
-            'Concept & Mood Boards',
-            'Material & Finish Selection',
-            'Furniture & FF&E Procurement',
-            'Lighting Design',
-            '3D Visualization',
+            'Wide-Span Structural Engineering',
+            'Steel Structure Execution',
+            'Mezzanine & Office Integration',
+            'Material Optimization',
+            'Design & Planning',
+            'Turnkey Industrial Solutions',
         ] ),
     ],
 
-    '3d_visualization' => [
+    'structural_engineering' => [
         'option_key'       => 'dayanarc_service_3d_viz_id',
-        'new_title'        => 'Public & Institutional',
-        'card_description' => 'Creating functional and inspiring public environments, including cultural centers and educational facilities, tailored for community engagement.',
-        'card_label'       => 'Public',
+        'new_title'        => 'Structural Engineering',
+        'card_description' => 'Robust steel and concrete structures designed for safety, efficiency, and full alignment with architectural vision.',
+        'card_label'       => '',
         'what_we_offer'    => 'WHAT WE OFFER',
         'cta_heading'      => 'READY TO START YOUR PROJECT?',
         'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
         'cta_label'        => 'CONTACT US',
         'features'         => implode( "\n", [
-            'Photorealistic Still Renders',
-            'Architectural Walkthroughs',
-            'Virtual Reality Tours',
-            'Exterior & Interior Renders',
-            'Material Studies',
-            'Presentation Boards',
+            'Concrete Structure Analysis & Design',
+            'Steel Frame Engineering & Design',
+            'Seismic & Lateral Load Analysis',
+            'Structural Retrofitting',
+            'Specialized Foundation Design',
+            'Technical Calculation Reports',
         ] ),
     ],
 
-    'project_management' => [
+    'mep_smart_systems' => [
         'option_key'       => 'dayanarc_service_project_mgmt_id',
-        'new_title'        => 'Infrastructure & Large-Scale',
-        'card_description' => 'Specialized engineering and design for high-complexity projects, such as international airports and major transportation hubs.',
-        'card_label'       => 'Infrastructure',
+        'new_title'        => 'MEP & Smart Systems',
+        'card_description' => 'Integrated mechanical, electrical, and plumbing systems with energy-efficient design and smart building technologies.',
+        'card_label'       => '',
         'what_we_offer'    => 'WHAT WE OFFER',
         'cta_heading'      => 'READY TO START YOUR PROJECT?',
         'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
         'cta_label'        => 'CONTACT US',
         'features'         => implode( "\n", [
-            'Timeline & Schedule Planning',
-            'Budget Management',
-            'Contractor Coordination',
-            'Quality Control & Inspection',
-            'Authority Approvals',
-            'Handover & Close-out',
+            'HVAC System Design',
+            'Electrical & Lighting Infrastructure',
+            'Plumbing & Sanitary Engineering',
+            'Building Management Systems (BMS)',
+            'Fire Protection Systems',
+            'Energy Efficiency Analysis',
+        ] ),
+    ],
+
+    'facade_landscape' => [
+        'option_key'       => 'dayanarc_service_5_id',
+        'new_title'        => 'Facade & Landscape Architecture',
+        'card_description' => 'Harmonized facade and landscape solutions combining aesthetics, materials, lighting, and environmental integration.',
+        'card_label'       => '',
+        'what_we_offer'    => 'WHAT WE OFFER',
+        'cta_heading'      => 'READY TO START YOUR PROJECT?',
+        'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
+        'cta_label'        => 'CONTACT US',
+        'features'         => implode( "\n", [
+            'Facade Engineering',
+            'Exterior Lighting Design',
+            'Landscape & Hardscape Design',
+            'Water Features & Pool Design',
+            'Climate-Appropriate Planting',
+            'Facade Structural Detailing',
+        ] ),
+    ],
+
+    'technical_coordination' => [
+        'option_key'       => 'dayanarc_service_6_id',
+        'new_title'        => 'Technical Coordination & Project Consultancy',
+        'card_description' => 'Seamless coordination across disciplines with expert consultancy to ensure accuracy, efficiency, and flawless project delivery.',
+        'card_label'       => '',
+        'what_we_offer'    => 'WHAT WE OFFER',
+        'cta_heading'      => 'READY TO START YOUR PROJECT?',
+        'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
+        'cta_label'        => 'CONTACT US',
+        'features'         => implode( "\n", [
+            'Interdisciplinary Coordination',
+            'Technical Engineering Consultancy',
+            'Code & Standards Compliance',
+            'Construction Documentation Management',
+            'Design Supervision',
+            'Value Engineering',
         ] ),
     ],
 
