@@ -103,8 +103,25 @@ function dayanarc_smart_import( $full_path ) {
 }
 
 // ══ IMAGE MAP ════════════════════════════════════════════════════════════════
+//
+// Types:
+//   'theme_mod'   → set_theme_mod( key, attachment_url )
+//   'logo_mod'    → set_theme_mod( key, attachment_id )   ← for header/footer logos
+//   'thumbnail'   → set_post_thumbnail( post from option, attachment_id )
 
 $image_map = [
+
+    // Logos (stored as attachment IDs in theme mods)
+    [
+        'file' => 'images/logos/header.jpg',
+        'type' => 'logo_mod',
+        'key'  => 'header_logo_id',
+    ],
+    [
+        'file' => 'images/logos/footer.jpg',
+        'type' => 'logo_mod',
+        'key'  => 'footer_logo_id',
+    ],
 
     // About section
     [
@@ -125,39 +142,39 @@ $image_map = [
         'key'  => 'our_service_image_1',
     ],
     [
-        'file' => 'images/our-service/image-2.jpg',
+        'file' => 'images/our-service/image-2.png',
         'type' => 'theme_mod',
         'key'  => 'our_service_image_2',
     ],
 
     // Service thumbnails — homepage cards + service detail pages
     [
-        'file'   => 'images/services/architecture/thumbnail.jpg',
+        'file'   => 'images/services/architecture/thumbnail.png',
         'type'   => 'thumbnail',
         'option' => 'dayanarc_service_architecture_id',
     ],
     [
-        'file'   => 'images/services/industrial-warehouse/thumbnail.jpg',
+        'file'   => 'images/services/industrial-warehouse/thumbnail.png',
         'type'   => 'thumbnail',
         'option' => 'dayanarc_service_interior_design_id',
     ],
     [
-        'file'   => 'images/services/structural-engineering/thumbnail.jpg',
+        'file'   => 'images/services/structural-engineering/thumbnail.png',
         'type'   => 'thumbnail',
         'option' => 'dayanarc_service_3d_viz_id',
     ],
     [
-        'file'   => 'images/services/mep-smart-systems/thumbnail.jpg',
+        'file'   => 'images/services/mep-smart-systems/thumbnail.png',
         'type'   => 'thumbnail',
         'option' => 'dayanarc_service_project_mgmt_id',
     ],
     [
-        'file'   => 'images/services/facade-landscape/thumbnail.jpg',
+        'file'   => 'images/services/facade-landscape/thumbnail.png',
         'type'   => 'thumbnail',
         'option' => 'dayanarc_service_5_id',
     ],
     [
-        'file'   => 'images/services/technical-coordination/thumbnail.jpg',
+        'file'   => 'images/services/technical-coordination/thumbnail.png',
         'type'   => 'thumbnail',
         'option' => 'dayanarc_service_6_id',
     ],
@@ -218,7 +235,12 @@ foreach ( $image_map as $entry ) {
     }
 
     // Assign to destination
-    if ( $entry['type'] === 'theme_mod' ) {
+    if ( $entry['type'] === 'logo_mod' ) {
+        set_theme_mod( $entry['key'], $att_id );
+        $verb = $status === 'imported' ? '✓' : '↺';
+        echo "  $verb Logo ID [{$entry['key']} = $att_id]\n";
+
+    } elseif ( $entry['type'] === 'theme_mod' ) {
         $url = wp_get_attachment_url( $att_id );
         set_theme_mod( $entry['key'], $url );
         $verb = $status === 'imported' ? '✓' : '↺';
