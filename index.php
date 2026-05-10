@@ -13,7 +13,7 @@ get_header();
     <?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
         <article>
             <h2 class="title-text" style="font-size:2rem; margin-bottom:1rem;">
-                <a href="<?php the_permalink(); ?>" style="text-decoration:none; color:#2c221a;"><?php the_title(); ?></a>
+                <a href="<?php the_permalink(); ?>" style="text-decoration:none; color:#231f20;"><?php the_title(); ?></a>
             </h2>
             <div style="color:#68635f; font-size:13px; margin-bottom:2rem;"><?php the_excerpt(); ?></div>
         </article>

@@ -7,8 +7,8 @@ exit;
 
     <!-- Section header -->
     <div style="text-align:center; margin-bottom:1.5rem;">
-        <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500; display:block; margin-bottom:1rem;">PORTFOLIO</span>
-        <h1 class="title-text" style="font-size:clamp(2rem,5vw,4rem); line-height:1.05; letter-spacing:-0.02em; color:#2c221a; text-transform:uppercase;"><?php echo esc_html( get_theme_mod( 'portfolio_heading', 'OUR WORKS' ) ); ?></h1>
+        <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#585058; font-weight:500; display:block; margin-bottom:1rem;">PORTFOLIO</span>
+        <h1 class="title-text" style="font-size:clamp(2rem,5vw,4rem); line-height:1.05; letter-spacing:-0.02em; color:#231f20; text-transform:uppercase;"><?php echo esc_html( get_theme_mod( 'portfolio_heading', 'OUR WORKS' ) ); ?></h1>
     </div>
 
     <?php dayanarc_breadcrumb(); ?>
@@ -67,7 +67,7 @@ exit;
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8" style="margin-bottom:auto;">
                         <div class="flex flex-col">
-                            <h2 class="title-text" style="font-size:clamp(1.5rem,3vw,2.25rem); margin-bottom:1.5rem; color:#2c221a; font-weight:500; letter-spacing:0.03em; text-transform:uppercase; line-height:1.1;">
+                            <h2 class="title-text" style="font-size:clamp(1.5rem,3vw,2.25rem); margin-bottom:1.5rem; color:#231f20; font-weight:500; letter-spacing:0.03em; text-transform:uppercase; line-height:1.1;">
                                 <?php the_title(); ?>
                             </h2>
                             <p style="font-size:14px; line-height:1.8; color:#68635f; font-weight:300;">
@@ -116,7 +116,7 @@ exit;
         wp_reset_postdata();
     else :
     ?>
-        <p style="text-align:center; color:#8c8783; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; margin-top:4rem;">No portfolio items found.</p>
+        <p style="text-align:center; color:#585058; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; margin-top:4rem;">No portfolio items found.</p>
     <?php endif; ?>
 
     <!-- Pagination -->

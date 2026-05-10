@@ -44,7 +44,7 @@
 
 <!-- Scroll to top (inner pages — window.scrollY based, not fullPage API) -->
 <button id="innerScrollTop" class="inner-scroll-top" aria-label="Scroll to top">
-    <svg width="16" height="16" viewBox="0 0 16 10" fill="none" stroke="#2c221a" stroke-width="1.2">
+    <svg width="16" height="16" viewBox="0 0 16 10" fill="none" stroke="#231f20" stroke-width="1.2">
         <path d="M8 9L8 1M8 1L4 5M8 1L12 5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
 </button>

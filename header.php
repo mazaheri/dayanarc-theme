@@ -17,7 +17,7 @@
             <circle class="progress-ring-bg" cx="31" cy="31" r="28"></circle>
             <circle class="progress-ring-circle" cx="31" cy="31" r="28"></circle>
         </svg>
-        <svg class="arrow-icon" viewBox="0 0 16 10" fill="none" stroke="#2c221a" stroke-width="1.2">
+        <svg class="arrow-icon" viewBox="0 0 16 10" fill="none" stroke="#231f20" stroke-width="1.2">
             <path d="M8 9L8 1M8 1L4 5M8 1L12 5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
     </div>

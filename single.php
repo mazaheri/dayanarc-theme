@@ -16,7 +16,7 @@
         <?php endif; ?>
 
         <div style="margin-bottom:1.5rem;">
-            <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500;">
+            <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#585058; font-weight:500;">
                 JOURNAL &mdash; <?php echo esc_html( get_the_date( 'F j, Y' ) ); ?>
             </span>
         </div>
@@ -33,8 +33,8 @@
             ?>
             <?php if ( $prev ) : ?>
                 <a href="<?php echo esc_url( get_permalink( $prev->ID ) ); ?>"
-                   style="text-decoration:none; color:#8c8783; display:flex; align-items:center; gap:0.75rem; transition:color 0.3s;"
-                   onmouseover="this.style.color='#2c221a'" onmouseout="this.style.color='#8c8783'">
+                   style="text-decoration:none; color:#585058; display:flex; align-items:center; gap:0.75rem; transition:color 0.3s;"
+                   onmouseover="this.style.color='#231f20'" onmouseout="this.style.color='#585058'">
                     <svg width="14" height="10" viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.5">
                         <path d="M19 8H5M5 8L12 15M5 8L12 1" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
@@ -46,8 +46,8 @@
 
             <?php if ( $next ) : ?>
                 <a href="<?php echo esc_url( get_permalink( $next->ID ) ); ?>"
-                   style="text-decoration:none; color:#8c8783; display:flex; align-items:center; gap:0.75rem; transition:color 0.3s;"
-                   onmouseover="this.style.color='#2c221a'" onmouseout="this.style.color='#8c8783'">
+                   style="text-decoration:none; color:#585058; display:flex; align-items:center; gap:0.75rem; transition:color 0.3s;"
+                   onmouseover="this.style.color='#231f20'" onmouseout="this.style.color='#585058'">
                     <?php echo esc_html( strtoupper( $next->post_title ) ); ?>
                     <svg width="14" height="10" viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.5">
                         <path d="M5 8H19M19 8L12 1M19 8L12 15" stroke-linecap="round" stroke-linejoin="round"/>

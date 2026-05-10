@@ -23,13 +23,13 @@ $total_posts = $journal_query->found_posts;
 
     <!-- Header -->
     <div style="margin-bottom:2rem;">
-        <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500; display:block; margin-bottom:0.75rem;">JOURNAL</span>
-        <h1 class="title-text" style="font-size:clamp(2rem,5vw,4rem); line-height:1.05; letter-spacing:-0.02em; color:#2c221a; text-transform:uppercase; margin-bottom:1.25rem;"><?php echo esc_html( get_theme_mod( 'journal_heading', 'DESIGN INSIGHTS' ) ); ?></h1>
+        <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#585058; font-weight:500; display:block; margin-bottom:0.75rem;">JOURNAL</span>
+        <h1 class="title-text" style="font-size:clamp(2rem,5vw,4rem); line-height:1.05; letter-spacing:-0.02em; color:#231f20; text-transform:uppercase; margin-bottom:1.25rem;"><?php echo esc_html( get_theme_mod( 'journal_heading', 'DESIGN INSIGHTS' ) ); ?></h1>
         <?php dayanarc_breadcrumb(); ?>
     </div>
 
     <?php if ( ! $journal_query->have_posts() ) : ?>
-        <p style="text-align:center; color:#8c8783; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; margin-top:4rem;">No posts found.</p>
+        <p style="text-align:center; color:#585058; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; margin-top:4rem;">No posts found.</p>
     <?php else : ?>
 
         <!-- Mosaic grid -->

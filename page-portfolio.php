@@ -16,8 +16,8 @@ $portfolio_query = new WP_Query( [
 <main class="inner-page-main" style="max-width:1400px; margin:0 auto;">
 
     <div style="margin-bottom:2.5rem;">
-        <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#a9a39f; font-weight:500; display:block; margin-bottom:1rem;">PORTFOLIO</span>
-        <h1 class="title-text" style="font-size:clamp(2rem,5vw,4rem); line-height:1.05; letter-spacing:-0.02em; color:#2c221a; text-transform:uppercase; margin-bottom:1.25rem;">OUR WORKS</h1>
+        <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#585058; font-weight:500; display:block; margin-bottom:1rem;">PORTFOLIO</span>
+        <h1 class="title-text" style="font-size:clamp(2rem,5vw,4rem); line-height:1.05; letter-spacing:-0.02em; color:#231f20; text-transform:uppercase; margin-bottom:1.25rem;">OUR WORKS</h1>
         <?php dayanarc_breadcrumb(); ?>
     </div>
 
@@ -47,11 +47,11 @@ $portfolio_query = new WP_Query( [
                     <?php endif; ?>
 
                     <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:0.5rem;">
-                        <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#a9a39f; font-weight:500;"><?php echo esc_html( $location ); ?></span>
-                        <span style="font-size:10px; letter-spacing:0.1em; color:#a9a39f;"><?php echo esc_html( $num ); ?></span>
+                        <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#585058; font-weight:500;"><?php echo esc_html( $location ); ?></span>
+                        <span style="font-size:10px; letter-spacing:0.1em; color:#585058;"><?php echo esc_html( $num ); ?></span>
                     </div>
 
-                    <h2 class="title-text" style="font-size:clamp(1.1rem,2vw,1.5rem); line-height:1.15; letter-spacing:0.02em; text-transform:uppercase; color:#2c221a; margin:0 0 0.75rem;">
+                    <h2 class="title-text" style="font-size:clamp(1.1rem,2vw,1.5rem); line-height:1.15; letter-spacing:0.02em; text-transform:uppercase; color:#231f20; margin:0 0 0.75rem;">
                         <?php the_title(); ?>
                     </h2>
 
@@ -88,7 +88,7 @@ $portfolio_query = new WP_Query( [
         <?php endif; ?>
 
     <?php else : ?>
-        <p style="text-align:center; color:#8c8783; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; margin-top:4rem;">No portfolio items found.</p>
+        <p style="text-align:center; color:#585058; font-size:13px; letter-spacing:0.1em; text-transform:uppercase; margin-top:4rem;">No portfolio items found.</p>
     <?php endif; ?>
 
 </main>

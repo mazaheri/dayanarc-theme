@@ -31,7 +31,7 @@ endif;
 
             <div style="margin-top:2rem; display:flex; flex-direction:column; gap:1.5rem; max-width:860px;">
                 <?php if ( $service_number ) : ?>
-                    <span style="font-size:10px; letter-spacing:0.25em; text-transform:uppercase; color:#8c8783; font-weight:500;"><?php echo esc_html( $service_number ); ?></span>
+                    <span style="font-size:10px; letter-spacing:0.25em; text-transform:uppercase; color:#585058; font-weight:500;"><?php echo esc_html( $service_number ); ?></span>
                 <?php endif; ?>
 
                 <h1 class="title-text" style="font-size:clamp(3rem,8vw,6rem); line-height:0.95; letter-spacing:0.02em; color:#fff;">
@@ -39,7 +39,7 @@ endif;
                 </h1>
 
                 <?php if ( has_excerpt() ) : ?>
-                    <p style="font-size:14px; line-height:1.8; color:#a9a39f; font-weight:300; max-width:480px;">
+                    <p style="font-size:14px; line-height:1.8; color:#585058; font-weight:300; max-width:480px;">
                         <?php echo esc_html( get_the_excerpt() ); ?>
                     </p>
                 <?php endif; ?>
@@ -66,13 +66,13 @@ endif;
 
             <!-- Left: description -->
             <div>
-                <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#8c8783; font-weight:500; display:block; margin-bottom:1.5rem;">OVERVIEW</span>
+                <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#585058; font-weight:500; display:block; margin-bottom:1.5rem;">OVERVIEW</span>
                 <div style="font-size:15px; line-height:1.9; color:#68635f; font-weight:300;">
                     <?php the_content(); ?>
                 </div>
 
                 <a href="<?php echo esc_url( $contact_url ); ?>"
-                   style="display:inline-flex; align-items:center; gap:0.75rem; margin-top:2.5rem; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; font-weight:600; color:#2c221a; text-decoration:none; border-bottom:1px solid #2c221a; padding-bottom:0.2rem;">
+                   style="display:inline-flex; align-items:center; gap:0.75rem; margin-top:2.5rem; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; font-weight:600; color:#231f20; text-decoration:none; border-bottom:1px solid #231f20; padding-bottom:0.2rem;">
                     GET IN TOUCH
                     <svg width="14" height="8" viewBox="0 0 16 10" fill="none" stroke="currentColor" stroke-width="1.2">
                         <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke-linecap="round" stroke-linejoin="round"/>
@@ -83,12 +83,12 @@ endif;
             <!-- Right: features list -->
             <?php if ( ! empty( $features ) ) : ?>
             <div>
-                <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#8c8783; font-weight:500; display:block; margin-bottom:1.5rem;"><?php echo esc_html( $offer_heading ); ?></span>
+                <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#585058; font-weight:500; display:block; margin-bottom:1.5rem;"><?php echo esc_html( $offer_heading ); ?></span>
                 <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0;">
                     <?php foreach ( $features as $feature ) : ?>
                         <li style="display:flex; align-items:center; gap:1rem; padding:1rem 0; border-bottom:1px solid #ece9e5;">
-                            <span style="width:5px; height:5px; border-radius:50%; background:#2c221a; flex-shrink:0;"></span>
-                            <span style="font-size:13px; letter-spacing:0.05em; text-transform:uppercase; color:#2c221a; font-weight:500;"><?php echo esc_html( $feature ); ?></span>
+                            <span style="width:5px; height:5px; border-radius:50%; background:#231f20; flex-shrink:0;"></span>
+                            <span style="font-size:13px; letter-spacing:0.05em; text-transform:uppercase; color:#231f20; font-weight:500;"><?php echo esc_html( $feature ); ?></span>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -101,14 +101,14 @@ endif;
     <!-- ── CTA strip ── -->
     <div style="background:#f5f2ee; margin-top:5rem; padding:4rem 1.5rem;">
         <div style="max-width:1440px; margin:0 auto; display:flex; flex-direction:column; align-items:center; text-align:center; gap:2rem;">
-            <h2 class="title-text" style="font-size:clamp(2rem,5vw,3.5rem); color:#2c221a; line-height:1.05;">
+            <h2 class="title-text" style="font-size:clamp(2rem,5vw,3.5rem); color:#231f20; line-height:1.05;">
                 <?php echo esc_html( $cta_heading ); ?>
             </h2>
             <p style="font-size:13px; line-height:1.8; color:#68635f; font-weight:300; max-width:440px;">
                 <?php echo esc_html( $cta_desc ); ?>
             </p>
             <a href="<?php echo esc_url( $contact_url ); ?>"
-               style="display:inline-flex; align-items:center; gap:0.75rem; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; font-weight:600; color:#2c221a; text-decoration:none; border-bottom:1px solid #2c221a; padding-bottom:0.2rem;">
+               style="display:inline-flex; align-items:center; gap:0.75rem; font-size:11px; letter-spacing:0.15em; text-transform:uppercase; font-weight:600; color:#231f20; text-decoration:none; border-bottom:1px solid #231f20; padding-bottom:0.2rem;">
                 <?php echo esc_html( $cta_label ); ?>
                 <svg width="14" height="8" viewBox="0 0 16 10" fill="none" stroke="currentColor" stroke-width="1.2">
                     <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke-linecap="round" stroke-linejoin="round"/>

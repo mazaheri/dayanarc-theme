@@ -112,8 +112,8 @@ $form_id = dayanarc_get_contact_form_id();
     <!-- ── Our Locations — full width, right after breadcrumb ── -->
     <section style="padding:2.5rem 0 0;">
         <div style="max-width:1440px; margin:0 auto; padding:0 1.5rem;">
-            <h2 class="title-text" style="font-size:clamp(2rem,4vw,2.75rem); letter-spacing:0.04em; color:#2c221a; margin-bottom:0.4rem;">OUR LOCATIONS</h2>
-            <p style="font-size:12px; color:#8c8783; letter-spacing:0.1em; text-transform:uppercase; font-weight:500; margin-bottom:0;">Click a pin to view details</p>
+            <h2 class="title-text" style="font-size:clamp(2rem,4vw,2.75rem); letter-spacing:0.04em; color:#231f20; margin-bottom:0.4rem;">OUR LOCATIONS</h2>
+            <p style="font-size:12px; color:#585058; letter-spacing:0.1em; text-transform:uppercase; font-weight:500; margin-bottom:0;">Click a pin to view details</p>
         </div>
 
         <div class="loc-map-outer">
@@ -127,8 +127,8 @@ $form_id = dayanarc_get_contact_form_id();
                     <div style="position:relative;">
                         <button class="pin-toggle" onclick="dayanarc_togglePin(this)" aria-label="Germany"
                                 style="background:none; border:none; cursor:pointer; padding:0;">
-                            <span style="position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#2c221a; background:#fff; border:1px solid #d1ccc8; padding:2px 8px; white-space:nowrap; margin-bottom:4px; letter-spacing:0.08em;">GERMANY</span>
-                            <svg width="26" height="26" fill="#2c221a" viewBox="0 0 20 20" style="display:block; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
+                            <span style="position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#231f20; background:#fff; border:1px solid #d1ccc8; padding:2px 8px; white-space:nowrap; margin-bottom:4px; letter-spacing:0.08em;">GERMANY</span>
+                            <svg width="26" height="26" fill="#231f20" viewBox="0 0 20 20" style="display:block; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
                                 <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                             </svg>
                         </button>
@@ -139,11 +139,11 @@ $form_id = dayanarc_get_contact_form_id();
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
                             </button>
-                            <p style="font-size:12px; font-weight:600; color:#2c221a; margin-bottom:0.5rem; letter-spacing:0.1em; text-transform:uppercase;"><?php echo esc_html( get_theme_mod( 'office_germany', 'Berlin, Germany' ) ); ?></p>
+                            <p style="font-size:12px; font-weight:600; color:#231f20; margin-bottom:0.5rem; letter-spacing:0.1em; text-transform:uppercase;"><?php echo esc_html( get_theme_mod( 'office_germany', 'Berlin, Germany' ) ); ?></p>
                             <p style="font-size:12px; color:#68635f; line-height:1.7; margin-bottom:0.75rem; padding-right:1.5rem;">
                                 Berlin Central Office, Alexanderplatz 1,<br>10178 Berlin, Germany
                             </p>
-                            <a href="<?php echo esc_url( dayanarc_contact_page_url() ); ?>" style="font-size:11px; color:#2c221a; text-decoration:underline; text-underline-offset:3px; letter-spacing:0.08em;">Get Direction</a>
+                            <a href="<?php echo esc_url( dayanarc_contact_page_url() ); ?>" style="font-size:11px; color:#231f20; text-decoration:underline; text-underline-offset:3px; letter-spacing:0.08em;">Get Direction</a>
                         </div>
                     </div>
                 </div>
@@ -153,8 +153,8 @@ $form_id = dayanarc_get_contact_form_id();
                     <div style="position:relative;">
                         <button class="pin-toggle" onclick="dayanarc_togglePin(this)" aria-label="Georgia"
                                 style="background:none; border:none; cursor:pointer; padding:0;">
-                            <span style="position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#2c221a; background:#fff; border:1px solid #d1ccc8; padding:2px 8px; white-space:nowrap; margin-bottom:4px; letter-spacing:0.08em;">GEORGIA</span>
-                            <svg width="26" height="26" fill="#2c221a" viewBox="0 0 20 20" style="display:block; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
+                            <span style="position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#231f20; background:#fff; border:1px solid #d1ccc8; padding:2px 8px; white-space:nowrap; margin-bottom:4px; letter-spacing:0.08em;">GEORGIA</span>
+                            <svg width="26" height="26" fill="#231f20" viewBox="0 0 20 20" style="display:block; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
                                 <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                             </svg>
                         </button>
@@ -165,11 +165,11 @@ $form_id = dayanarc_get_contact_form_id();
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
                             </button>
-                            <p style="font-size:12px; font-weight:600; color:#2c221a; margin-bottom:0.5rem; letter-spacing:0.1em; text-transform:uppercase;"><?php echo esc_html( get_theme_mod( 'office_georgia', 'Tbilisi, Georgia' ) ); ?></p>
+                            <p style="font-size:12px; font-weight:600; color:#231f20; margin-bottom:0.5rem; letter-spacing:0.1em; text-transform:uppercase;"><?php echo esc_html( get_theme_mod( 'office_georgia', 'Tbilisi, Georgia' ) ); ?></p>
                             <p style="font-size:12px; color:#68635f; line-height:1.7; margin-bottom:0.75rem; padding-right:1.5rem;">
                                 Tbilisi Office, Rustaveli Ave 1,<br>0108 Tbilisi, Georgia
                             </p>
-                            <a href="<?php echo esc_url( dayanarc_contact_page_url() ); ?>" style="font-size:11px; color:#2c221a; text-decoration:underline; text-underline-offset:3px; letter-spacing:0.08em;">Get Direction</a>
+                            <a href="<?php echo esc_url( dayanarc_contact_page_url() ); ?>" style="font-size:11px; color:#231f20; text-decoration:underline; text-underline-offset:3px; letter-spacing:0.08em;">Get Direction</a>
                         </div>
                     </div>
                 </div>
@@ -179,8 +179,8 @@ $form_id = dayanarc_get_contact_form_id();
                     <div style="position:relative;">
                         <button class="pin-toggle" onclick="dayanarc_togglePin(this)" aria-label="Dubai"
                                 style="background:none; border:none; cursor:pointer; padding:0;">
-                            <span style="position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#2c221a; background:#fff; border:1px solid #d1ccc8; padding:2px 8px; white-space:nowrap; margin-bottom:4px; letter-spacing:0.08em;">DUBAI</span>
-                            <svg width="26" height="26" fill="#2c221a" viewBox="0 0 20 20" style="display:block; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
+                            <span style="position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#231f20; background:#fff; border:1px solid #d1ccc8; padding:2px 8px; white-space:nowrap; margin-bottom:4px; letter-spacing:0.08em;">DUBAI</span>
+                            <svg width="26" height="26" fill="#231f20" viewBox="0 0 20 20" style="display:block; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
                                 <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                             </svg>
                         </button>
@@ -191,11 +191,11 @@ $form_id = dayanarc_get_contact_form_id();
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
                             </button>
-                            <p style="font-size:12px; font-weight:600; color:#2c221a; margin-bottom:0.5rem; letter-spacing:0.1em; text-transform:uppercase;"><?php echo esc_html( get_theme_mod( 'office_dubai', 'Business Bay, Dubai, UAE' ) ); ?></p>
+                            <p style="font-size:12px; font-weight:600; color:#231f20; margin-bottom:0.5rem; letter-spacing:0.1em; text-transform:uppercase;"><?php echo esc_html( get_theme_mod( 'office_dubai', 'Business Bay, Dubai, UAE' ) ); ?></p>
                             <p style="font-size:12px; color:#68635f; line-height:1.7; margin-bottom:0.75rem; padding-right:1.5rem;">
                                 Suites 207 &amp; 208, B-Wing, Building 06,<br>Dubai Design District, 333253, UAE
                             </p>
-                            <a href="<?php echo esc_url( dayanarc_contact_page_url() ); ?>" style="font-size:11px; color:#2c221a; text-decoration:underline; text-underline-offset:3px; letter-spacing:0.08em;">Get Direction</a>
+                            <a href="<?php echo esc_url( dayanarc_contact_page_url() ); ?>" style="font-size:11px; color:#231f20; text-decoration:underline; text-underline-offset:3px; letter-spacing:0.08em;">Get Direction</a>
                         </div>
                     </div>
                 </div>
@@ -213,8 +213,8 @@ $form_id = dayanarc_get_contact_form_id();
 
             <!-- Left: intro -->
             <div>
-                <span style="font-size:10px; letter-spacing:0.15em; color:#8c8783; text-transform:uppercase; font-weight:500; display:block; margin-bottom:1.5rem;">CONTACT US</span>
-                <h1 class="title-text" style="font-size:clamp(1.5rem,5vw,4rem); line-height:1.1; color:#2c221a; margin-bottom:2rem;">
+                <span style="font-size:10px; letter-spacing:0.15em; color:#585058; text-transform:uppercase; font-weight:500; display:block; margin-bottom:1.5rem;">CONTACT US</span>
+                <h1 class="title-text" style="font-size:clamp(1.5rem,5vw,4rem); line-height:1.1; color:#231f20; margin-bottom:2rem;">
                     <?php echo esc_html( get_theme_mod( 'contact_page_heading', "LET'S BEGIN A CONVERSATION" ) ); ?>
                 </h1>
                 <p style="font-size:14px; line-height:1.8; color:#68635f; font-weight:300; max-width:400px; margin-bottom:2.5rem;">
@@ -223,15 +223,15 @@ $form_id = dayanarc_get_contact_form_id();
 
                 <div style="display:flex; flex-direction:column; gap:1.5rem;">
                     <div>
-                        <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#8c8783; font-weight:500; display:block; margin-bottom:0.4rem;">Location</span>
+                        <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#585058; font-weight:500; display:block; margin-bottom:0.4rem;">Location</span>
                         <?php $location = get_theme_mod( 'contact_location', 'Business Bay, Dubai, UAE' ); ?>
-                        <p style="font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#2c221a; font-weight:600;"><?php echo esc_html( strtoupper( $location ) ); ?></p>
+                        <p style="font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:#231f20; font-weight:600;"><?php echo esc_html( strtoupper( $location ) ); ?></p>
                     </div>
                     <div>
                         <?php $email = get_theme_mod( 'contact_email', 'dayanarc.co@gmail.com' ); ?>
-                        <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#8c8783; font-weight:500; display:block; margin-bottom:0.4rem;">Email</span>
+                        <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#585058; font-weight:500; display:block; margin-bottom:0.4rem;">Email</span>
                         <a href="mailto:<?php echo antispambot( $email ); ?>"
-                           style="font-size:11px; letter-spacing:0.08em; color:#2c221a; font-weight:600; text-decoration:none;">
+                           style="font-size:11px; letter-spacing:0.08em; color:#231f20; font-weight:600; text-decoration:none;">
                             <?php echo antispambot( $email ); ?>
                         </a>
                     </div>
@@ -240,9 +240,9 @@ $form_id = dayanarc_get_contact_form_id();
                         $website         = get_theme_mod( 'contact_website', 'https://www.dayanarc.com' );
                         $website_display = preg_replace( '#^https?://#i', '', $website );
                         ?>
-                        <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#8c8783; font-weight:500; display:block; margin-bottom:0.4rem;">Website</span>
+                        <span style="font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#585058; font-weight:500; display:block; margin-bottom:0.4rem;">Website</span>
                         <a href="<?php echo esc_url( $website ); ?>"
-                           style="font-size:11px; letter-spacing:0.08em; color:#2c221a; font-weight:600; text-decoration:none;"
+                           style="font-size:11px; letter-spacing:0.08em; color:#231f20; font-weight:600; text-decoration:none;"
                            target="_blank" rel="noopener noreferrer">
                             <?php echo esc_html( $website_display ); ?>
                         </a>
@@ -255,10 +255,10 @@ $form_id = dayanarc_get_contact_form_id();
                 <?php if ( $form_id ) : ?>
                     <?php echo do_shortcode( '[contact-form-7 id="' . esc_attr( $form_id ) . '"]' ); ?>
                 <?php else : ?>
-                    <p style="font-size:13px; color:#8c8783; line-height:1.7;">
+                    <p style="font-size:13px; color:#585058; line-height:1.7;">
                         Contact form not configured yet. Please run the
                         <a href="<?php echo esc_url( admin_url( 'themes.php?page=dayanarc-demo-import' ) ); ?>"
-                           style="color:#2c221a; text-decoration:underline;">demo importer</a>
+                           style="color:#231f20; text-decoration:underline;">demo importer</a>
                         to activate it, or create a CF7 form named <em>Dayan Arc Contact</em>.
                     </p>
                 <?php endif; ?>

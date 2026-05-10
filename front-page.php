@@ -74,7 +74,7 @@
 
     <!-- ===== SECTION 2: ABOUT ===== -->
     <div class="section about-section relative w-full max-w-[1440px] mx-auto px-6 md:px-16 lg:px-20 pt-32 pb-20 flex flex-col justify-center" id="about">
-        <div class="absolute top-10 md:top-20 left-6 md:left-16 lg:left-20 text-[10px] tracking-[0.15em] text-[#a9a39f] uppercase font-medium">
+        <div class="absolute top-10 md:top-20 left-6 md:left-16 lg:left-20 text-[10px] tracking-[0.15em] text-[#585058] uppercase font-medium">
             <span class="reveal-mask block"><span class="reveal-text delay-100">ABOUT US</span></span>
         </div>
 
@@ -125,7 +125,7 @@
                         <div class="play-button-overlay">
                             <div class="play-btn-pulse"></div>
                             <div class="play-btn-icon">
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="#2c221a">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="#231f20">
                                     <path d="M8 5v14l11-7z"/>
                                 </svg>
                             </div>
@@ -145,7 +145,7 @@
     <!-- ===== SECTION 3: OUR SERVICE ===== -->
     <div class="section our-service-section relative w-full max-w-[1440px] mx-auto px-6 md:px-16 lg:px-20 pt-24 pb-16 flex flex-col justify-center" id="ourservice">
 
-        <div class="absolute top-10 md:top-20 left-6 md:left-16 lg:left-20 text-[10px] tracking-[0.15em] text-[#a9a39f] uppercase font-medium">
+        <div class="absolute top-10 md:top-20 left-6 md:left-16 lg:left-20 text-[10px] tracking-[0.15em] text-[#585058] uppercase font-medium">
             <span class="reveal-mask block"><span class="reveal-text delay-100">WHAT WE DO</span></span>
         </div>
 
@@ -154,7 +154,7 @@
             <!-- Left: text -->
             <div class="col-span-1 lg:col-span-5 flex flex-col pt-8 lg:pt-0">
                 <?php $osh = get_theme_mod( 'our_service_heading', 'OUR SERVICE' ); ?>
-                <h1 class="title-text text-4xl md:text-5xl lg:text-[4rem] leading-[1.05] tracking-tight mb-8 text-[#2c221a]">
+                <h1 class="title-text text-4xl md:text-5xl lg:text-[4rem] leading-[1.05] tracking-tight mb-8 text-[#231f20]">
                     <span class="reveal-mask block pb-1"><span class="reveal-text delay-200"><?php echo esc_html( $osh ); ?></span></span>
                 </h1>
                 <p class="text-[14px] md:text-[15px] leading-relaxed text-[#68635f] font-light max-w-[400px] reveal-mask block">
@@ -291,14 +291,14 @@
         <div class="relative w-full max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16 py-16 lg:py-20 flex flex-col justify-center">
             <div class="text-center mb-12 lg:mb-16">
                 <span class="reveal-mask block mb-4">
-                    <span class="reveal-text text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium">PROJECTS</span>
+                    <span class="reveal-text text-[10px] tracking-[0.2em] text-[#585058] uppercase font-medium">PROJECTS</span>
                 </span>
                 <?php $ph5 = get_theme_mod( 'portfolio_heading', 'OUR WORKS' ); ?>
-                <h1 class="title-text text-3xl md:text-4xl lg:text-5xl leading-tight text-[#2c221a]">
+                <h1 class="title-text text-3xl md:text-4xl lg:text-5xl leading-tight text-[#231f20]">
                     <span class="reveal-mask"><span class="reveal-text delay-100 uppercase tracking-tight"><?php echo esc_html( $ph5 ); ?></span></span>
                 </h1>
                 <div class="reveal-mask mt-5">
-                    <a href="<?php echo esc_url( dayanarc_portfolio_url() ); ?>" class="reveal-text delay-200 inline-flex items-center gap-2 text-[11px] tracking-widest uppercase font-medium text-[#a9a39f] hover:text-[#2c221a] transition-colors">
+                    <a href="<?php echo esc_url( dayanarc_portfolio_url() ); ?>" class="reveal-text delay-200 inline-flex items-center gap-2 text-[11px] tracking-widest uppercase font-medium text-[#585058] hover:text-[#231f20] transition-colors">
                         View all projects
                         <svg width="14" height="9" viewBox="0 0 16 10" fill="none">
                             <path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -312,12 +312,12 @@
 
                 <div class="relative md:absolute md:bottom-12 md:right-0 flex flex-col items-end gap-3 z-20 mt-6 md:mt-0">
                     <div class="flex gap-3">
-                        <button onclick="changePage(-1)" class="w-10 h-10 border border-[#e5e5e5] rounded-full flex items-center justify-center hover:border-[#2c221a] transition-all bg-white shadow-sm">
+                        <button onclick="changePage(-1)" class="w-10 h-10 border border-[#e5e5e5] rounded-full flex items-center justify-center hover:border-[#231f20] transition-all bg-white shadow-sm">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M19 12H5M5 12L12 19M5 12L12 5"/>
                             </svg>
                         </button>
-                        <button onclick="changePage(1)" class="w-10 h-10 border border-[#e5e5e5] rounded-full flex items-center justify-center hover:border-[#2c221a] transition-all bg-white shadow-sm">
+                        <button onclick="changePage(1)" class="w-10 h-10 border border-[#e5e5e5] rounded-full flex items-center justify-center hover:border-[#231f20] transition-all bg-white shadow-sm">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M5 12H19M19 12L12 5M19 12L12 19"/>
                             </svg>
@@ -335,13 +335,13 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
                 <div class="flex flex-col">
                     <span class="reveal-mask block mb-6">
-                        <span class="reveal-text delay-100 text-[10px] tracking-[0.15em] text-[#8c8783] uppercase font-medium">CONTACT US</span>
+                        <span class="reveal-text delay-100 text-[10px] tracking-[0.15em] text-[#585058] uppercase font-medium">CONTACT US</span>
                     </span>
                     <?php
                     $fch1 = get_theme_mod( 'fp_contact_heading_line1', "LET'S BEGIN A" );
                     $fch2 = get_theme_mod( 'fp_contact_heading_line2', 'CONVERSATION' );
                     ?>
-                    <h1 class="title-text text-4xl md:text-5xl lg:text-[4rem] leading-[1.1] tracking-tight mb-6 text-[#2c221a] break-words">
+                    <h1 class="title-text text-4xl md:text-5xl lg:text-[4rem] leading-[1.1] tracking-tight mb-6 text-[#231f20] break-words">
                         <span class="reveal-mask block pb-1"><span class="reveal-text delay-200"><?php echo esc_html( $fch1 ); ?></span></span>
                         <span class="reveal-mask block w-full"><span class="reveal-text delay-300"><span class="fancy-c"><?php echo esc_html( mb_substr( $fch2, 0, 1 ) ); ?></span><?php echo esc_html( mb_substr( $fch2, 1 ) ); ?></span></span>
                     </h1>
@@ -367,10 +367,10 @@
                         if ( $cf7_id ) :
                             echo do_shortcode( '[contact-form-7 id="' . esc_attr( $cf7_id ) . '" html_class="flex flex-col gap-8 w-full"]' );
                         else : ?>
-                            <p style="font-size:13px; color:#8c8783; line-height:1.8; padding:1rem 0;">
+                            <p style="font-size:13px; color:#585058; line-height:1.8; padding:1rem 0;">
                                 Contact form not set up yet. Run the
                                 <a href="<?php echo esc_url( admin_url( 'themes.php?page=dayanarc-demo-import' ) ); ?>"
-                                   style="color:#2c221a; text-decoration:underline;">demo importer</a> to activate it.
+                                   style="color:#231f20; text-decoration:underline;">demo importer</a> to activate it.
                             </p>
                         <?php endif; ?>
                     </div>
@@ -386,9 +386,9 @@
         <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 pt-10 pb-14">
             <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-0 mb-8">
                 <div>
-                    <span class="text-[10px] tracking-[0.2em] text-[#a9a39f] uppercase font-medium block mb-2">PROJECTS</span>
+                    <span class="text-[10px] tracking-[0.2em] text-[#585058] uppercase font-medium block mb-2">PROJECTS</span>
                     <?php $jh7 = get_theme_mod( 'journal_heading', 'DESIGN INSIGHTS' ); ?>
-                    <h2 class="title-text text-3xl md:text-4xl text-[#2c221a] leading-tight uppercase tracking-tight">
+                    <h2 class="title-text text-3xl md:text-4xl text-[#231f20] leading-tight uppercase tracking-tight">
                         <?php echo esc_html( $jh7 ); ?>
                     </h2>
                 </div>
