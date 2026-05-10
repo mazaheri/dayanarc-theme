@@ -15,6 +15,7 @@ add_action( 'admin_menu', 'dayanarc_demo_menu' );
 
 function dayanarc_demo_page() {
     $imported = false;
+    $reset    = false;
     $errors   = [];
 
     if ( isset( $_POST['dayanarc_run_import'] ) && check_admin_referer( 'dayanarc_import_nonce' ) ) {
@@ -25,13 +26,31 @@ function dayanarc_demo_page() {
             $imported = true;
         }
     }
+
+    if ( isset( $_POST['dayanarc_run_reset'] ) && check_admin_referer( 'dayanarc_import_nonce' ) ) {
+        dayanarc_reset_content();
+        $result = dayanarc_run_import();
+        if ( is_wp_error( $result ) ) {
+            $errors[] = $result->get_error_message();
+        } else {
+            $reset = true;
+        }
+    }
     ?>
     <div class="wrap">
-        <h1 style="font-family:Georgia,serif;">🏛 Dayan Arc — Import Demo Content</h1>
+        <h1 style="font-family:Georgia,serif;">🏛 Dayan Arc — Import &amp; Sync Content</h1>
 
         <?php if ( $imported ) : ?>
             <div class="notice notice-success is-dismissible">
-                <p><strong>Demo content imported successfully!</strong>
+                <p><strong>Import complete!</strong>
+                   <a href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank">View your site →</a>
+                </p>
+            </div>
+        <?php endif; ?>
+
+        <?php if ( $reset ) : ?>
+            <div class="notice notice-success is-dismissible">
+                <p><strong>Reset &amp; reimport complete!</strong> All content was cleared and reimported from scratch.
                    <a href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank">View your site →</a>
                 </p>
             </div>
@@ -41,25 +60,39 @@ function dayanarc_demo_page() {
             <div class="notice notice-error"><p><?php echo esc_html( $err ); ?></p></div>
         <?php endforeach; ?>
 
-        <div style="max-width:600px; margin-top:1.5rem;">
-            <p>This will create the following demo content in the database:</p>
+        <div style="max-width:640px; margin-top:1.5rem;">
+            <p>This will create and update the following content:</p>
             <ul style="list-style:disc; margin-left:2rem; line-height:2;">
-                <li><strong>4 Portfolio projects</strong> with gallery images (Georgia, GCC, Germany, Studio)</li>
+                <li><strong>Logos</strong> — header (black bg) &amp; footer (green bg) from <code>content/images/logos/</code></li>
+                <li><strong>About &amp; Our Service images</strong> from <code>content/images/</code></li>
+                <li><strong>3 Portfolio projects</strong> with gallery images (Georgia, GCC, Germany)</li>
                 <li><strong>3 Blog/Journal posts</strong> with featured images</li>
                 <li><strong>Home page</strong> set as the static front page</li>
                 <li><strong>Journal page</strong> set as the blog posts page</li>
-                <li><strong>Portfolio page</strong> at /portfolio/ with portfolio listing template</li>
-                <li><strong>Contact Form 7</strong> form created (configure reCAPTCHA v3 keys in Contact → Integration)</li>
+                <li><strong>Portfolio page</strong> at /portfolio/</li>
+                <li><strong>Contact Form 7</strong> form created</li>
                 <li><strong>Contact page</strong> at /contact/</li>
-                <li><strong>4 Service pages</strong>: Architecture, Interior Design, 3D Visualization, Project Management</li>
+                <li><strong>6 Service pages</strong>: Architectural &amp; Interior Design, Industrial Sheds &amp; Warehouses, Structural Engineering, MEP &amp; Smart Systems, Facade &amp; Landscape Architecture, Technical Coordination &amp; Project Consultancy</li>
+                <li><strong>All content theme mods</strong> — headings, descriptions, social links, contact info</li>
                 <li><strong>Primary navigation menu</strong> with all links</li>
             </ul>
-            <p style="color:#1a5c2e; background:#d4edda; padding:.75rem 1rem; border-left:4px solid #28a745; margin-top:1rem;">
-                Safe to run on a live site — existing posts, pages, and media are never deleted. Only missing items are created.
+
+            <!-- Normal import -->
+            <p style="color:#1a5c2e; background:#d4edda; padding:.75rem 1rem; border-left:4px solid #28a745; margin-top:1.5rem;">
+                <strong>Import / Sync</strong> — unchanged images are skipped (MD5 hash detection). Changed files are re-imported automatically. Safe to run anytime.
             </p>
-            <form method="post" style="margin-top:1.5rem;">
+            <form method="post" style="margin-top:.75rem;">
                 <?php wp_nonce_field( 'dayanarc_import_nonce' ); ?>
-                <?php submit_button( 'Import Demo Content', 'primary large', 'dayanarc_run_import', false ); ?>
+                <?php submit_button( 'Import / Sync Content', 'primary large', 'dayanarc_run_import', false ); ?>
+            </form>
+
+            <!-- Reset + reimport -->
+            <p style="color:#856404; background:#fff3cd; padding:.75rem 1rem; border-left:4px solid #ffc107; margin-top:2rem;">
+                <strong>Reset &amp; Reimport Everything</strong> — clears all stored IDs and theme mod values, then runs a full fresh import. Use this if something looks wrong or out of sync.
+            </p>
+            <form method="post" style="margin-top:.75rem;" onsubmit="return confirm('This will clear all stored content IDs and theme settings, then reimport everything. Continue?');">
+                <?php wp_nonce_field( 'dayanarc_import_nonce' ); ?>
+                <?php submit_button( 'Reset & Reimport Everything', 'secondary large', 'dayanarc_run_reset', false, [ 'style' => 'background:#856404;color:#fff;border-color:#856404;' ] ); ?>
             </form>
         </div>
     </div>
@@ -72,51 +105,139 @@ function dayanarc_run_import() {
     require_once ABSPATH . 'wp-admin/includes/file.php';
     require_once ABSPATH . 'wp-admin/includes/media.php';
 
-    // 1. Upload images
+    // Journal post asset images (project*.png from /assets/)
     $image_ids = dayanarc_import_images();
 
-    // 2. Portfolio items
-    dayanarc_import_portfolio( $image_ids );
-
-    // 3. Journal posts
-    dayanarc_import_journal_posts( $image_ids );
-
-    // 4. Home page + static front page
+    // Static pages
     dayanarc_import_home_page();
-
-    // 5. Journal page + blog posts page setting
     dayanarc_import_journal_page();
-
-    // 5b. Portfolio page
     dayanarc_import_portfolio_page();
-
-    // 6. Contact Form 7 form
     dayanarc_import_contact_form();
-
-    // 7. Contact page
     dayanarc_import_contact_page();
 
-    // 8. Service pages
-    dayanarc_import_service_pages( $image_ids );
+    // Service pages must exist before thumbnails are assigned
+    dayanarc_import_service_pages();
 
-    // 9. Apply all text theme mods from content manifest
-    dayanarc_apply_content_theme_mods();
-
-    // 10. Import content/images/ (about, our-service thumbnails)
+    // Logos, about, our-service images, and service thumbnails
     dayanarc_import_content_images();
 
-    // 11. Primary nav menu (runs last so Contact URL is available)
+    // Portfolio projects with folder-based gallery import
+    dayanarc_import_portfolio();
+
+    // Journal posts
+    dayanarc_import_journal_posts( $image_ids );
+
+    // All text/URL theme mods from manifest
+    dayanarc_apply_content_theme_mods();
+
+    // Nav menu (runs last so all page URLs are available)
     dayanarc_import_nav_menu();
 
-    // Rebuild rewrite rules so /portfolio/ archive URL resolves immediately.
     flush_rewrite_rules( false );
-    // Set flag so the next page load also flushes (more reliable in Studio/Playground).
     update_option( 'dayanarc_flush_rewrites_pending', '1' );
 
     return true;
 }
 
-// ── Helper: import one image from any absolute path ──────────────────────────
+// ── Reset: clear all stored IDs and theme mods ────────────────────────────────
+// Called before a fresh reimport so nothing is treated as "already done".
+function dayanarc_reset_content() {
+    // Clear all option IDs stored by the importer
+    $options = [
+        'dayanarc_service_architecture_id',
+        'dayanarc_service_interior_design_id',
+        'dayanarc_service_3d_viz_id',
+        'dayanarc_service_project_mgmt_id',
+        'dayanarc_service_5_id',
+        'dayanarc_service_6_id',
+        'dayanarc_portfolio_georgia_id',
+        'dayanarc_portfolio_gcc_id',
+        'dayanarc_portfolio_germany_id',
+        'dayanarc_contact_form_id',
+        'dayanarc_contact_page_id',
+        'dayanarc_portfolio_page_id',
+    ];
+    foreach ( $options as $opt ) {
+        delete_option( $opt );
+    }
+
+    // Clear all theme mods set by the importer
+    $mods = [
+        'header_logo_id', 'footer_logo_id',
+        'about_image_main', 'about_image_detail',
+        'our_service_image_1', 'our_service_image_2',
+        'hero_word_1', 'hero_word_2', 'hero_word_3', 'hero_cta_label', 'hero_tagline',
+        'about_heading_line1', 'about_heading_line2', 'about_cta_label', 'about_body',
+        'our_service_heading', 'our_service_description',
+        'our_service_image_1_desc', 'our_service_image_2_desc',
+        'portfolio_heading',
+        'services_heading_line1', 'services_heading_line2', 'services_cta_label',
+        'services_intro', 'services_tagline',
+        'journal_heading',
+        'fp_contact_heading_line1', 'fp_contact_heading_line2', 'fp_contact_description',
+        'contact_page_heading', 'contact_page_description',
+        'footer_tagline', 'contact_location', 'contact_email', 'contact_website',
+        'social_instagram', 'social_linkedin', 'social_facebook',
+        'social_phone', 'social_whatsapp',
+    ];
+    foreach ( $mods as $mod ) {
+        remove_theme_mod( $mod );
+    }
+}
+
+// ── Smart import: hash-based, skips unchanged files ──────────────────────────
+// Returns [ 'id' => int, 'status' => 'imported'|'skipped' ] or WP_Error.
+function dayanarc_smart_import_file( $full_path ) {
+    if ( ! file_exists( $full_path ) ) {
+        return new WP_Error( 'not_found', "File not found: $full_path" );
+    }
+
+    $hash      = md5_file( $full_path );
+    $norm_path = wp_normalize_path( $full_path );
+
+    $existing = get_posts( [
+        'post_type'      => 'attachment',
+        'post_status'    => 'any',
+        'posts_per_page' => 1,
+        'meta_query'     => [ [
+            'key'   => '_source_file_path',
+            'value' => $norm_path,
+        ] ],
+    ] );
+
+    if ( $existing ) {
+        $att_id = $existing[0]->ID;
+        if ( get_post_meta( $att_id, '_source_file_hash', true ) === $hash ) {
+            return [ 'id' => $att_id, 'status' => 'skipped' ];
+        }
+        // Hash changed — delete old and re-import
+        wp_delete_attachment( $att_id, true );
+    }
+
+    $filename = basename( $full_path );
+    $upload   = wp_upload_bits( $filename, null, file_get_contents( $full_path ) );
+    if ( ! empty( $upload['error'] ) ) {
+        return new WP_Error( 'upload_failed', $upload['error'] );
+    }
+
+    $mime   = wp_check_filetype( $upload['file'] );
+    $att_id = wp_insert_attachment( [
+        'guid'           => $upload['url'],
+        'post_mime_type' => $mime['type'],
+        'post_title'     => sanitize_file_name( $filename ),
+        'post_status'    => 'inherit',
+    ], $upload['file'] );
+
+    if ( is_wp_error( $att_id ) ) return $att_id;
+
+    wp_update_attachment_metadata( $att_id, wp_generate_attachment_metadata( $att_id, $upload['file'] ) );
+    update_post_meta( $att_id, '_source_file_path', $norm_path );
+    update_post_meta( $att_id, '_source_file_hash', $hash );
+
+    return [ 'id' => $att_id, 'status' => 'imported' ];
+}
+
+// ── Legacy import helper (used for journal post thumbnails only) ──────────────
 function dayanarc_import_image_file( $src_path, $key ) {
     if ( ! file_exists( $src_path ) ) return 0;
 
@@ -134,7 +255,6 @@ function dayanarc_import_image_file( $src_path, $key ) {
     $filename   = sanitize_file_name( basename( $src_path ) );
     $dest       = $upload_dir['path'] . '/' . $filename;
 
-    // Avoid filename collisions
     $n = 1;
     while ( file_exists( $dest ) ) {
         $info = pathinfo( $filename );
@@ -153,26 +273,18 @@ function dayanarc_import_image_file( $src_path, $key ) {
 
     if ( is_wp_error( $attach_id ) ) return 0;
 
-    $metadata = wp_generate_attachment_metadata( $attach_id, $dest );
-    wp_update_attachment_metadata( $attach_id, $metadata );
+    wp_update_attachment_metadata( $attach_id, wp_generate_attachment_metadata( $attach_id, $dest ) );
     update_post_meta( $attach_id, '_dayanarc_source_file', $key );
 
     return (int) $attach_id;
 }
 
-// ── 1. Upload theme asset images to Media Library ─────────────────────────────
+// ── 1. Upload theme asset images (journal post thumbnails) ────────────────────
 function dayanarc_import_images() {
     $theme_dir = get_template_directory();
     $ids       = [];
 
-    $files = [
-        'project1.png', 'project2.png', 'project3.png', 'project4.png',
-        'project5.png', 'project6.png', 'project7.png', 'project8.png',
-        'project9.png', 'project10.png', 'project11.png',
-        'interior1.jpg', 'interior2.jpg',
-    ];
-
-    foreach ( $files as $filename ) {
+    foreach ( [ 'project1.png', 'project2.png', 'project3.png', 'interior1.jpg', 'interior2.jpg' ] as $filename ) {
         $id = dayanarc_import_image_file( $theme_dir . '/assets/' . $filename, $filename );
         if ( $id ) $ids[ $filename ] = $id;
     }
@@ -180,22 +292,59 @@ function dayanarc_import_images() {
     return $ids;
 }
 
-// ── 1b. Cleanup: remove all portfolio CPT posts before fresh import ───────────
-function dayanarc_cleanup_portfolio_posts() {
-    $ids = get_posts( [
-        'post_type'      => 'portfolio',
-        'post_status'    => 'any',
-        'posts_per_page' => -1,
-        'fields'         => 'ids',
-    ] );
-    foreach ( $ids as $id ) {
-        wp_delete_post( $id, true );
+// ── Import content/images/ — logos, about, our-service, service thumbnails ────
+function dayanarc_import_content_images() {
+    $content_dir = get_template_directory() . '/content/images/';
+
+    // Logos — stored as attachment IDs in theme mods
+    foreach ( [
+        [ 'file' => 'logos/header.jpg', 'key' => 'header_logo_id' ],
+        [ 'file' => 'logos/footer.jpg', 'key' => 'footer_logo_id' ],
+    ] as $entry ) {
+        $result = dayanarc_smart_import_file( $content_dir . $entry['file'] );
+        if ( ! is_wp_error( $result ) ) {
+            set_theme_mod( $entry['key'], $result['id'] );
+        }
+    }
+
+    // About + Our Service images — stored as URLs in theme mods
+    foreach ( [
+        [ 'file' => 'about/main.jpg',         'key' => 'about_image_main' ],
+        [ 'file' => 'about/detail.jpg',        'key' => 'about_image_detail' ],
+        [ 'file' => 'our-service/image-1.jpg', 'key' => 'our_service_image_1' ],
+        [ 'file' => 'our-service/image-2.png', 'key' => 'our_service_image_2' ],
+    ] as $entry ) {
+        $result = dayanarc_smart_import_file( $content_dir . $entry['file'] );
+        if ( ! is_wp_error( $result ) ) {
+            set_theme_mod( $entry['key'], wp_get_attachment_url( $result['id'] ) );
+        }
+    }
+
+    // Service thumbnails — set as post featured images
+    foreach ( [
+        [ 'folder' => 'services/architecture/',           'option' => 'dayanarc_service_architecture_id' ],
+        [ 'folder' => 'services/industrial-warehouse/',   'option' => 'dayanarc_service_interior_design_id' ],
+        [ 'folder' => 'services/structural-engineering/', 'option' => 'dayanarc_service_3d_viz_id' ],
+        [ 'folder' => 'services/mep-smart-systems/',      'option' => 'dayanarc_service_project_mgmt_id' ],
+        [ 'folder' => 'services/facade-landscape/',       'option' => 'dayanarc_service_5_id' ],
+        [ 'folder' => 'services/technical-coordination/', 'option' => 'dayanarc_service_6_id' ],
+    ] as $entry ) {
+        $result = dayanarc_smart_import_file( $content_dir . $entry['folder'] . 'thumbnail.png' );
+        if ( ! is_wp_error( $result ) ) {
+            $post_id = (int) get_option( $entry['option'] );
+            if ( $post_id && get_post( $post_id ) ) {
+                set_post_thumbnail( $post_id, $result['id'] );
+            }
+        }
     }
 }
 
-// ── 2. Portfolio items (4 projects from sample images) ───────────────────────
-function dayanarc_import_portfolio( $image_ids ) {
-    $sample = ABSPATH . 'Dayan Arc website/sample/';
+// ── 2. Portfolio projects ─────────────────────────────────────────────────────
+// Finds or creates each CPT post, then imports images from content/images/portfolio/
+// First image in folder = cover, rest = gallery.
+function dayanarc_import_portfolio() {
+    $content_dir = get_template_directory() . '/content/images/';
+    $image_exts  = [ 'jpg', 'jpeg', 'png', 'webp', 'gif' ];
 
     $items = [
         [
@@ -205,17 +354,8 @@ function dayanarc_import_portfolio( $image_ids ) {
             'location' => 'Tbilisi, Georgia',
             'concept'  => 'Full residential design and fit-out',
             'palette'  => 'Warm neutrals, natural stone, textured plaster',
-            'thumb'    => $sample . 'Georgia/Georgia 01.jpg',
-            'thumb_key'=> 'georgia-01',
-            'gallery'  => [
-                [ $sample . 'Georgia/Georgia 02.jpg', 'georgia-02' ],
-                [ $sample . 'Georgia/Georgia 03.jpg', 'georgia-03' ],
-                [ $sample . 'Georgia/Georgia 04.jpg', 'georgia-04' ],
-                [ $sample . 'Georgia/Georgia 05.jpg', 'georgia-05' ],
-                [ $sample . 'Georgia/Georgia 06.jpg', 'georgia-06' ],
-                [ $sample . 'Georgia/Georgia 07.jpg', 'georgia-07' ],
-                [ $sample . 'Georgia/Georgia 08.jpg', 'georgia-08' ],
-            ],
+            'folder'   => 'portfolio/georgia/',
+            'option'   => 'dayanarc_portfolio_georgia_id',
         ],
         [
             'title'    => 'GCC Pavilion',
@@ -224,16 +364,8 @@ function dayanarc_import_portfolio( $image_ids ) {
             'location' => 'GCC Region',
             'concept'  => 'Complete hospitality design and fit-out',
             'palette'  => 'Monochromatic accents, reflective surfaces, deep tones',
-            'thumb'    => $sample . 'gcc final/gcc 1.jpg',
-            'thumb_key'=> 'gcc-01',
-            'gallery'  => [
-                [ $sample . 'gcc final/gcc 2.jpg', 'gcc-02' ],
-                [ $sample . 'gcc final/gcc 4.jpg', 'gcc-04' ],
-                [ $sample . 'gcc final/gcc 5.jpg', 'gcc-05' ],
-                [ $sample . 'gcc final/gcc 6.jpg', 'gcc-06' ],
-                [ $sample . 'gcc final/gcc 7.jpg', 'gcc-07' ],
-                [ $sample . 'gcc final/gcc 8.jpg', 'gcc-08' ],
-            ],
+            'folder'   => 'portfolio/gcc/',
+            'option'   => 'dayanarc_portfolio_gcc_id',
         ],
         [
             'title'    => 'Germany Office HQ',
@@ -242,60 +374,71 @@ function dayanarc_import_portfolio( $image_ids ) {
             'location' => 'Berlin, Germany',
             'concept'  => 'Office and workplace design',
             'palette'  => 'Concrete grey, warm oak, matte black accents',
-            'thumb'    => $sample . 'germany/Germany 01.jpg',
-            'thumb_key'=> 'germany-01',
-            'gallery'  => [
-                [ $sample . 'germany/Germany 02.jpg', 'germany-02' ],
-                [ $sample . 'germany/Germany 03.jpg', 'germany-03' ],
-                [ $sample . 'germany/Germany 04.jpg', 'germany-04' ],
-            ],
-        ],
-        [
-            'title'    => 'Modern Interior Studio',
-            'content'  => 'Transforming a raw open-plan space into a warm, functional creative studio. The brief called for a space that would inspire without distracting — achieved through a restrained material palette, considered lighting, and custom joinery.',
-            'excerpt'  => 'Transforming a raw space into a warm, functional studio that reflects the client\'s creative identity.',
-            'location' => 'Dubai, UAE',
-            'concept'  => 'Studio and creative workspace design',
-            'palette'  => 'Linen white, brushed brass, warm timber',
-            'thumb'    => null,
-            'thumb_key'=> null,
-            'thumb_id' => isset( $image_ids['interior1.jpg'] ) ? $image_ids['interior1.jpg'] : 0,
-            'gallery'  => [],
+            'folder'   => 'portfolio/germany/',
+            'option'   => 'dayanarc_portfolio_germany_id',
         ],
     ];
 
     foreach ( $items as $item ) {
-        if ( dayanarc_post_exists( $item['title'], 'portfolio' ) ) continue;
+        // Find or create portfolio post
+        $post_id = (int) get_option( $item['option'], 0 );
 
-        $post_id = wp_insert_post( [
-            'post_title'   => $item['title'],
-            'post_content' => $item['content'],
-            'post_excerpt' => $item['excerpt'],
-            'post_status'  => 'publish',
-            'post_type'    => 'portfolio',
-        ] );
-        if ( is_wp_error( $post_id ) ) continue;
+        if ( ! $post_id || ! get_post( $post_id ) ) {
+            $q = new WP_Query( [
+                'post_type'      => 'portfolio',
+                'title'          => $item['title'],
+                'post_status'    => 'any',
+                'posts_per_page' => 1,
+                'fields'         => 'ids',
+                'no_found_rows'  => true,
+            ] );
+            $post_id = $q->have_posts() ? $q->posts[0] : 0;
 
+            if ( ! $post_id ) {
+                $post_id = wp_insert_post( [
+                    'post_title'   => $item['title'],
+                    'post_content' => $item['content'],
+                    'post_excerpt' => $item['excerpt'],
+                    'post_status'  => 'publish',
+                    'post_type'    => 'portfolio',
+                ] );
+            }
+
+            if ( ! $post_id || is_wp_error( $post_id ) ) continue;
+            update_option( $item['option'], $post_id );
+        }
+
+        // Always update meta
         update_post_meta( $post_id, '_portfolio_location', $item['location'] );
         update_post_meta( $post_id, '_portfolio_concept',  $item['concept'] );
         update_post_meta( $post_id, '_portfolio_palette',  $item['palette'] );
 
-        // Featured image
-        if ( ! empty( $item['thumb_id'] ) ) {
-            set_post_thumbnail( $post_id, $item['thumb_id'] );
-        } elseif ( $item['thumb'] ) {
-            $thumb_id = dayanarc_import_image_file( $item['thumb'], $item['thumb_key'] );
-            if ( $thumb_id ) set_post_thumbnail( $post_id, $thumb_id );
+        // Import images from folder
+        $folder = $content_dir . $item['folder'];
+        if ( ! is_dir( $folder ) ) continue;
+
+        $files = [];
+        foreach ( scandir( $folder ) as $f ) {
+            $ext = strtolower( pathinfo( $f, PATHINFO_EXTENSION ) );
+            if ( in_array( $ext, $image_exts, true ) ) {
+                $files[] = $folder . $f;
+            }
+        }
+        sort( $files );
+
+        if ( empty( $files ) ) continue;
+
+        $att_ids = [];
+        foreach ( $files as $fp ) {
+            $result = dayanarc_smart_import_file( $fp );
+            if ( ! is_wp_error( $result ) ) {
+                $att_ids[] = $result['id'];
+            }
         }
 
-        // Gallery images
-        $gallery_ids = [];
-        foreach ( $item['gallery'] as $g ) {
-            $gid = dayanarc_import_image_file( $g[0], $g[1] );
-            if ( $gid ) $gallery_ids[] = $gid;
-        }
-        if ( ! empty( $gallery_ids ) ) {
-            update_post_meta( $post_id, '_portfolio_gallery', wp_json_encode( $gallery_ids ) );
+        if ( ! empty( $att_ids ) ) {
+            set_post_thumbnail( $post_id, $att_ids[0] );
+            update_post_meta( $post_id, '_portfolio_gallery', json_encode( array_slice( $att_ids, 1 ) ) );
         }
     }
 }
@@ -340,12 +483,10 @@ function dayanarc_import_journal_posts( $image_ids ) {
 
 // ── 4. Home page + static front page ─────────────────────────────────────────
 function dayanarc_import_home_page() {
-    // Already configured
     $existing_front = (int) get_option( 'page_on_front' );
     if ( $existing_front && get_post( $existing_front ) ) return;
 
     if ( dayanarc_post_exists( 'Home', 'page' ) ) {
-        // Page exists but option not set — look it up and re-apply
         $q = new WP_Query( [
             'post_type'      => 'page',
             'title'          => 'Home',
@@ -374,14 +515,10 @@ function dayanarc_import_home_page() {
     }
 }
 
-// ── 5. Journal page + set as blog posts page ─────────────────────────────────
+// ── 5. Journal page + set as blog posts page ──────────────────────────────────
 function dayanarc_import_journal_page() {
-    // Already configured to a valid page — skip
     $existing_posts_page = (int) get_option( 'page_for_posts' );
     if ( $existing_posts_page && get_post( $existing_posts_page ) ) return;
-
-    // Find or create the Journal page
-    $journal_id = null;
 
     $q = new WP_Query( [
         'post_type'      => 'page',
@@ -405,26 +542,21 @@ function dayanarc_import_journal_page() {
     }
 
     update_option( 'page_for_posts', $journal_id );
-    // Ensure static front page mode is still active
     update_option( 'show_on_front', 'page' );
 }
 
 // ── 5b. Portfolio page ────────────────────────────────────────────────────────
 function dayanarc_import_portfolio_page() {
-    // Try stored ID first — restore if trashed, return if live
     $stored_id = (int) get_option( 'dayanarc_portfolio_page_id', 0 );
     if ( $stored_id ) {
         $p = get_post( $stored_id );
         if ( $p ) {
-            if ( $p->post_status === 'trash' ) {
-                wp_untrash_post( $stored_id );
-            }
+            if ( $p->post_status === 'trash' ) wp_untrash_post( $stored_id );
             update_post_meta( $stored_id, '_wp_page_template', 'page-portfolio.php' );
             return $stored_id;
         }
     }
 
-    // Search for any page titled Portfolio (including trashed)
     $q = new WP_Query( [
         'post_type'      => 'page',
         'title'          => 'Portfolio',
@@ -436,15 +568,12 @@ function dayanarc_import_portfolio_page() {
     if ( $q->have_posts() ) {
         $id = $q->posts[0];
         $p  = get_post( $id );
-        if ( $p && $p->post_status === 'trash' ) {
-            wp_untrash_post( $id );
-        }
+        if ( $p && $p->post_status === 'trash' ) wp_untrash_post( $id );
         update_post_meta( $id, '_wp_page_template', 'page-portfolio.php' );
         update_option( 'dayanarc_portfolio_page_id', $id );
         return $id;
     }
 
-    // Create fresh
     $page_id = wp_insert_post( [
         'post_title'   => 'Portfolio',
         'post_content' => '',
@@ -461,78 +590,14 @@ function dayanarc_import_portfolio_page() {
     return $page_id;
 }
 
-// ── 9. Primary navigation menu ────────────────────────────────────────────────
-function dayanarc_import_nav_menu() {
-    $menu_name     = 'Primary Menu';
-    $portfolio_url = dayanarc_portfolio_url();
-    $journal_id    = (int) get_option( 'page_for_posts' );
-    $journal_url   = $journal_id ? get_permalink( $journal_id ) : home_url( '/journal/' );
-    $contact_url   = dayanarc_contact_page_url();
-
-    $desired_urls = [
-        'Portfolio' => $portfolio_url,
-        'Journal'   => $journal_url,
-        'Contact'   => $contact_url,
-    ];
-
-    $existing_menu = wp_get_nav_menu_object( $menu_name );
-
-    if ( $existing_menu ) {
-        // Menu already exists — update stale URLs
-        $items = wp_get_nav_menu_items( $existing_menu->term_id );
-        if ( $items ) {
-            foreach ( $items as $item ) {
-                if ( isset( $desired_urls[ $item->title ] ) && $item->url !== $desired_urls[ $item->title ] ) {
-                    wp_update_nav_menu_item( $existing_menu->term_id, $item->ID, [
-                        'menu-item-title'  => $item->title,
-                        'menu-item-url'    => $desired_urls[ $item->title ],
-                        'menu-item-status' => 'publish',
-                        'menu-item-type'   => 'custom',
-                    ] );
-                }
-            }
-        }
-        return;
-    }
-
-    // Create fresh menu
-    $menu_id = wp_create_nav_menu( $menu_name );
-    if ( is_wp_error( $menu_id ) ) return;
-
-    $items = [
-        [ 'label' => 'About Us',  'url' => home_url( '/' ) ],
-        [ 'label' => 'Portfolio', 'url' => $portfolio_url ],
-        [ 'label' => 'Services',  'url' => home_url( '/' ) ],
-        [ 'label' => 'Journal',   'url' => $journal_url ],
-        [ 'label' => 'Contact',   'url' => $contact_url ],
-    ];
-
-    foreach ( $items as $item ) {
-        wp_update_nav_menu_item( $menu_id, 0, [
-            'menu-item-title'  => $item['label'],
-            'menu-item-url'    => $item['url'],
-            'menu-item-status' => 'publish',
-            'menu-item-type'   => 'custom',
-        ] );
-    }
-
-    $locations            = get_theme_mod( 'nav_menu_locations', [] );
-    $locations['primary'] = $menu_id;
-    set_theme_mod( 'nav_menu_locations', $locations );
-}
-
 // ── 6. Contact Form 7 form ────────────────────────────────────────────────────
 function dayanarc_import_contact_form() {
-    // Already exists and valid
     $existing_id = (int) get_option( 'dayanarc_contact_form_id', 0 );
     if ( $existing_id && get_post( $existing_id ) && get_post_type( $existing_id ) === 'wpcf7_contact_form' ) {
         return $existing_id;
     }
 
-    // CF7 not installed
-    if ( ! post_type_exists( 'wpcf7_contact_form' ) ) {
-        return 0;
-    }
+    if ( ! post_type_exists( 'wpcf7_contact_form' ) ) return 0;
 
     $form_id = wp_insert_post( [
         'post_title'  => 'Dayan Arc Contact',
@@ -551,8 +616,8 @@ function dayanarc_import_contact_form() {
 <div>[textarea* your-message rows:5 class:form-textarea placeholder "Message"]</div>
 <div style="margin-top:0.25rem;">
 <button type="submit" style="border:none;background:transparent;cursor:pointer;padding:0;margin:0;display:inline-flex;align-items:center;gap:0.75rem;">
-<span style="font-size:11px;text-transform:uppercase;letter-spacing:0.15em;font-weight:600;color:#2c221a;">SEND REQUEST</span>
-<svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<span style="font-size:11px;text-transform:uppercase;letter-spacing:0.15em;font-weight:600;color:#231f20;">SEND REQUEST</span>
+<svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="#231f20" stroke-width="1.2"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke-linecap="round" stroke-linejoin="round"/></svg>
 </button>
 </div>';
 
@@ -585,7 +650,6 @@ function dayanarc_import_contact_form() {
     update_post_meta( $form_id, '_mail_2',              $mail_2 );
     update_post_meta( $form_id, '_messages',            [] );
     update_post_meta( $form_id, '_additional_settings', '' );
-
     update_option( 'dayanarc_contact_form_id', $form_id );
 
     return $form_id;
@@ -596,21 +660,20 @@ function dayanarc_import_contact_page() {
     $existing_id = (int) get_option( 'dayanarc_contact_page_id', 0 );
     if ( $existing_id && get_post( $existing_id ) ) return $existing_id;
 
-    if ( dayanarc_post_exists( 'Contact', 'page' ) ) {
-        $q = new WP_Query( [
-            'post_type'      => 'page',
-            'title'          => 'Contact',
-            'post_status'    => 'any',
-            'posts_per_page' => 1,
-            'fields'         => 'ids',
-            'no_found_rows'  => true,
-        ] );
-        if ( $q->have_posts() ) {
-            $id = $q->posts[0];
-            update_post_meta( $id, '_wp_page_template', 'page-contact.php' );
-            update_option( 'dayanarc_contact_page_id', $id );
-            return $id;
-        }
+    $q = new WP_Query( [
+        'post_type'      => 'page',
+        'title'          => 'Contact',
+        'post_status'    => 'any',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'no_found_rows'  => true,
+    ] );
+
+    if ( $q->have_posts() ) {
+        $id = $q->posts[0];
+        update_post_meta( $id, '_wp_page_template', 'page-contact.php' );
+        update_option( 'dayanarc_contact_page_id', $id );
+        return $id;
     }
 
     $page_id = wp_insert_post( [
@@ -629,98 +692,93 @@ function dayanarc_import_contact_page() {
     return $page_id;
 }
 
-// ── 8. Service pages ──────────────────────────────────────────────────────────
-function dayanarc_import_service_pages( $image_ids ) {
+// ── 8. Service pages (all 6) ──────────────────────────────────────────────────
+function dayanarc_import_service_pages() {
     $services = [
         [
-            'title'      => 'Residential Excellence',
-            'old_title'  => 'Architecture',
-            'slug'       => 'architecture',
-            'number'     => '01',
-            'card_label' => 'Residential',
-            'option'     => 'dayanarc_service_architecture_id',
-            'excerpt'    => 'Crafting bespoke luxury villas and high-end residential complexes that redefine modern living through elegance and comfort.',
-            'content'    => 'At Dayan Arc, our architectural services span the full design journey — from initial concept through schematic design, design development, construction documentation, and project administration. We work closely with each client to understand their vision, program requirements, and site conditions, delivering spaces that are both beautiful and precisely functional.
-
-Our architects bring deep expertise in residential, commercial, and hospitality projects across the region, blending innovative design thinking with a rigorous attention to detail and technical excellence.',
-            'features'   => "Concept Development\nSchematic Design\nDesign Development\nConstruction Documentation\nProject Administration\nSite Supervision",
-            'image'      => 'interior1.jpg',
-            'thumb_slug' => 'architecture',
+            'title'            => 'Architectural & Interior Design',
+            'old_titles'       => [ 'Architecture', 'Residential Excellence' ],
+            'slug'             => 'architecture',
+            'option'           => 'dayanarc_service_architecture_id',
+            'card_description' => 'From concept to detail, we design modern spaces that reflect lifestyle and precision—covering everything from form to interiors and custom elements.',
+            'card_label'       => '',
+            'features'         => "Concept Development\nSchematic Design\nDesign Development\nInterior Styling & Layouts\nCustom Furniture Design\nMaterial Selection and FF&E",
+            'content'          => 'At Dayan Arc, our architectural and interior design services span the full design journey — from initial concept through schematic design, design development, and construction documentation. We work closely with each client to understand their vision, delivering spaces that are both beautiful and precisely functional.',
         ],
         [
-            'title'      => 'Commercial & Hospitality',
-            'old_title'  => 'Interior Design',
-            'slug'       => 'interior-design',
-            'number'     => '02',
-            'card_label' => 'Commercial',
-            'option'     => 'dayanarc_service_interior_design_id',
-            'excerpt'    => 'Designing dynamic corporate offices, retail spaces, and world-class restaurants that enhance brand identity and user experience.',
-            'content'    => 'Our interior design team transforms spaces into experiences. Working from a deep understanding of light, material, proportion, and the human scale, we craft interiors that feel both intentional and alive. Every project begins with listening — understanding how a space will be lived in, worked in, or experienced — then translating that into a coherent design language.
-
-From concept mood boards through furniture selection, lighting design, and final installation, Dayan Arc manages the complete interior design process with precision and care.',
-            'features'   => "Space Planning\nConcept & Mood Boards\nMaterial & Finish Selection\nFurniture & FF&E Procurement\nLighting Design\n3D Visualization",
-            'image'      => 'interior2.jpg',
-            'thumb_slug' => 'interior-design',
+            'title'            => 'Industrial Sheds & Warehouses',
+            'old_titles'       => [ 'Interior Design', 'Commercial & Hospitality' ],
+            'slug'             => 'industrial-warehouse',
+            'option'           => 'dayanarc_service_interior_design_id',
+            'card_description' => 'End-to-end design and execution of wide-span industrial structures, optimized for cost, efficiency, and smart space integration.',
+            'card_label'       => '',
+            'features'         => "Wide-Span Structural Engineering\nSteel Structure Execution\nMezzanine & Office Integration\nMaterial Optimization\nDesign & Planning\nTurnkey Industrial Solutions",
+            'content'          => 'We deliver end-to-end design and execution of wide-span industrial structures. From warehouses to manufacturing facilities, our solutions are optimized for cost, operational efficiency, and smart space integration.',
         ],
         [
-            'title'      => 'Public & Institutional',
-            'old_title'  => '3D Visualization',
-            'slug'       => '3d-visualization',
-            'number'     => '03',
-            'card_label' => 'Public',
-            'option'     => 'dayanarc_service_3d_viz_id',
-            'excerpt'    => 'Creating functional and inspiring public environments, including cultural centers and educational facilities, tailored for community engagement.',
-            'content'    => 'Seeing a space before it is built changes everything. Our 3D visualization studio produces photorealistic still renders, animated walkthroughs, and interactive virtual tours that allow clients, contractors, and stakeholders to fully understand a design before a single wall is raised.
-
-Using the latest rendering technology, we capture light, texture, and atmosphere with a level of realism that blurs the line between the designed and the built — helping clients make confident decisions at every stage.',
-            'features'   => "Photorealistic Still Renders\nArchitectural Walkthroughs\nVirtual Reality Tours\nExterior & Interior Renders\nMaterial Studies\nPresentation Boards",
-            'image'      => 'project10.png',
-            'thumb_slug' => '3d-visualization',
+            'title'            => 'Structural Engineering',
+            'old_titles'       => [ '3D Visualization', 'Public & Institutional' ],
+            'slug'             => 'structural-engineering',
+            'option'           => 'dayanarc_service_3d_viz_id',
+            'card_description' => 'Robust steel and concrete structures designed for safety, efficiency, and full alignment with architectural vision.',
+            'card_label'       => '',
+            'features'         => "Concrete Structure Analysis & Design\nSteel Frame Engineering & Design\nSeismic & Lateral Load Analysis\nStructural Retrofitting\nSpecialized Foundation Design\nTechnical Calculation Reports",
+            'content'          => 'Our structural engineering team delivers robust steel and concrete structures designed for safety, efficiency, and full alignment with architectural vision. Every project is backed by rigorous analysis and technical precision.',
         ],
         [
-            'title'      => 'Infrastructure & Large-Scale',
-            'old_title'  => 'Project Management',
-            'slug'       => 'project-management',
-            'number'     => '04',
-            'card_label' => 'Infrastructure',
-            'option'     => 'dayanarc_service_project_mgmt_id',
-            'excerpt'    => 'Specialized engineering and design for high-complexity projects, such as international airports and major transportation hubs.',
-            'content'    => 'Great design is only realised through great execution. Dayan Arc offers comprehensive project management services that bridge the gap between the design studio and the construction site. Our project managers coordinate all parties — contractors, consultants, suppliers, and authorities — ensuring the project stays on schedule, within budget, and true to design intent.
-
-We are on-site when it matters most, resolving issues proactively and maintaining the quality standards that define every Dayan Arc project.',
-            'features'   => "Timeline & Schedule Planning\nBudget Management\nContractor Coordination\nQuality Control & Inspection\nAuthority Approvals\nHandover & Close-out",
-            'image'      => 'project9.png',
-            'thumb_slug' => 'project-management',
+            'title'            => 'MEP & Smart Systems',
+            'old_titles'       => [ 'Project Management', 'Infrastructure & Large-Scale' ],
+            'slug'             => 'mep-smart-systems',
+            'option'           => 'dayanarc_service_project_mgmt_id',
+            'card_description' => 'Integrated mechanical, electrical, and plumbing systems with energy-efficient design and smart building technologies.',
+            'card_label'       => '',
+            'features'         => "HVAC System Design\nElectrical & Lighting Infrastructure\nPlumbing & Sanitary Engineering\nBuilding Management Systems (BMS)\nFire Protection Systems\nEnergy Efficiency Analysis",
+            'content'          => 'We design and integrate mechanical, electrical, and plumbing systems with energy-efficient thinking and smart building technologies. Our MEP solutions are coordinated seamlessly with architecture and structure for efficient, comfortable buildings.',
+        ],
+        [
+            'title'            => 'Facade & Landscape Architecture',
+            'old_titles'       => [],
+            'slug'             => 'facade-landscape',
+            'option'           => 'dayanarc_service_5_id',
+            'card_description' => 'Harmonized facade and landscape solutions combining aesthetics, materials, lighting, and environmental integration.',
+            'card_label'       => '',
+            'features'         => "Facade Engineering\nExterior Lighting Design\nLandscape & Hardscape Design\nWater Features & Pool Design\nClimate-Appropriate Planting\nFacade Structural Detailing",
+            'content'          => 'Our facade and landscape practice creates harmonized exterior environments that combine aesthetics, durable materials, thoughtful lighting, and environmental sensitivity — designed as an extension of the building\'s architectural identity.',
+        ],
+        [
+            'title'            => 'Technical Coordination & Project Consultancy',
+            'old_titles'       => [],
+            'slug'             => 'technical-coordination',
+            'option'           => 'dayanarc_service_6_id',
+            'card_description' => 'Seamless coordination across disciplines with expert consultancy to ensure accuracy, efficiency, and flawless project delivery.',
+            'card_label'       => '',
+            'features'         => "Interdisciplinary Coordination\nTechnical Engineering Consultancy\nCode & Standards Compliance\nConstruction Documentation Management\nDesign Supervision\nValue Engineering",
+            'content'          => 'Great projects are built on seamless coordination. Our technical coordination and consultancy service bridges every discipline — architecture, structure, MEP, facade — ensuring accuracy, efficiency, and flawless delivery from design through handover.',
         ],
     ];
 
-    $theme_dir = get_template_directory();
-
     foreach ( $services as $svc ) {
-        $existing_id = (int) get_option( $svc['option'], 0 );
+        $page_id = (int) get_option( $svc['option'], 0 );
 
-        if ( $existing_id && get_post( $existing_id ) ) {
-            // Update existing page with new title
-            $page_id = $existing_id;
+        if ( $page_id && get_post( $page_id ) ) {
             wp_update_post( [ 'ID' => $page_id, 'post_title' => $svc['title'] ] );
         } else {
-            // Search by new title, then old title
-            $page_id = 0;
-            foreach ( [ $svc['title'], $svc['old_title'] ] as $search_title ) {
-                if ( dayanarc_post_exists( $search_title, 'page' ) ) {
-                    $q = new WP_Query( [
-                        'post_type'      => 'page',
-                        'title'          => $search_title,
-                        'post_status'    => 'any',
-                        'posts_per_page' => 1,
-                        'fields'         => 'ids',
-                        'no_found_rows'  => true,
-                    ] );
-                    if ( $q->have_posts() ) {
-                        $page_id = $q->posts[0];
-                        wp_update_post( [ 'ID' => $page_id, 'post_title' => $svc['title'] ] );
-                        break;
-                    }
+            $page_id      = 0;
+            $search_titles = array_merge( [ $svc['title'] ], $svc['old_titles'] );
+
+            foreach ( $search_titles as $search_title ) {
+                $q = new WP_Query( [
+                    'post_type'      => 'page',
+                    'title'          => $search_title,
+                    'post_status'    => 'any',
+                    'posts_per_page' => 1,
+                    'fields'         => 'ids',
+                    'no_found_rows'  => true,
+                ] );
+                if ( $q->have_posts() ) {
+                    $page_id = $q->posts[0];
+                    wp_update_post( [ 'ID' => $page_id, 'post_title' => $svc['title'] ] );
+                    break;
                 }
             }
 
@@ -728,7 +786,6 @@ We are on-site when it matters most, resolving issues proactively and maintainin
                 $page_id = wp_insert_post( [
                     'post_title'   => $svc['title'],
                     'post_content' => $svc['content'],
-                    'post_excerpt' => $svc['excerpt'],
                     'post_status'  => 'publish',
                     'post_type'    => 'page',
                     'post_name'    => $svc['slug'],
@@ -739,179 +796,129 @@ We are on-site when it matters most, resolving issues proactively and maintainin
         if ( ! $page_id || is_wp_error( $page_id ) ) continue;
 
         update_post_meta( $page_id, '_wp_page_template',         'page-service.php' );
-        update_post_meta( $page_id, '_service_number',           $svc['number'] );
-        update_post_meta( $page_id, '_service_card_description', $svc['excerpt'] );
+        update_post_meta( $page_id, '_service_card_description', $svc['card_description'] );
         update_post_meta( $page_id, '_service_card_tagline',     $svc['card_label'] );
+        update_post_meta( $page_id, '_service_what_we_offer',    'WHAT WE OFFER' );
+        update_post_meta( $page_id, '_service_cta_heading',      'READY TO START YOUR PROJECT?' );
+        update_post_meta( $page_id, '_service_cta_description',  "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc." );
+        update_post_meta( $page_id, '_service_cta_label',        'CONTACT US' );
         update_post_meta( $page_id, '_service_features',         $svc['features'] );
-
-        // Import thumbnail from content/images/services/ if available
-        $thumb_file = $theme_dir . '/content/images/services/' . $svc['thumb_slug'] . '/thumbnail.jpg';
-        if ( file_exists( $thumb_file ) ) {
-            $upload = wp_upload_bits( basename( $thumb_file ), null, file_get_contents( $thumb_file ) );
-            if ( empty( $upload['error'] ) ) {
-                $mime   = wp_check_filetype( $upload['file'] );
-                $att_id = wp_insert_attachment( [
-                    'guid'           => $upload['url'],
-                    'post_mime_type' => $mime['type'],
-                    'post_title'     => sanitize_file_name( basename( $thumb_file ) ),
-                    'post_status'    => 'inherit',
-                ], $upload['file'] );
-                if ( ! is_wp_error( $att_id ) ) {
-                    wp_update_attachment_metadata( $att_id, wp_generate_attachment_metadata( $att_id, $upload['file'] ) );
-                    set_post_thumbnail( $page_id, $att_id );
-                }
-            }
-        } elseif ( isset( $image_ids[ $svc['image'] ] ) ) {
-            set_post_thumbnail( $page_id, $image_ids[ $svc['image'] ] );
-        }
 
         update_option( $svc['option'], $page_id );
     }
 }
 
-// ── Apply all text theme mods (mirrors content/manifest.php) ─────────────────
+// ── 9. Apply all text/URL theme mods (mirrors content/manifest.php) ───────────
 function dayanarc_apply_content_theme_mods() {
     $mods = [
         // Hero
-        'hero_word_1'               => 'VISION.',
-        'hero_word_2'               => 'DESIGN.',
-        'hero_word_3'               => 'REALITY.',
-        'hero_cta_label'            => 'Get in touch',
-        'hero_tagline'              => 'At Dayan Arc, we blend creativity and expertise to craft exceptional architectural and interior design experiences. From concept to completion, we bring spaces to life with innovation, precision, and a passion for design excellence.',
+        'hero_word_1'              => 'VISION.',
+        'hero_word_2'              => 'DESIGN.',
+        'hero_word_3'              => 'REALITY.',
+        'hero_cta_label'           => 'Get in touch',
+        'hero_tagline'             => 'At Dayan Arc, we blend creativity and expertise to craft exceptional architectural and interior design experiences. From concept to completion, we bring spaces to life with innovation, precision, and a passion for design excellence.',
         // About
-        'about_heading_line1'       => 'A VISION BEYOND',
-        'about_heading_line2'       => 'BORDERS',
-        'about_cta_label'           => 'GET IN TOUCH',
-        'about_body'                => 'At Dayan Arc, we believe that architecture is more than just designing structures; it is the art of crafting experiences and building legacies. With over 20 years of expertise and a track record of more than 400 global projects, my team and I have bridged the gap between German engineering precision and creative luxury. From our strategic hubs in Germany, Dubai, and Georgia, we personally ensure that every project — whether a bespoke villa or a complex international airport — meets the highest global standards of excellence.',
-        // Our Service
-        'our_service_heading'       => 'OUR SERVICE',
-        'our_service_description'   => 'From architectural vision to flawless execution — our integrated services cover every discipline, every scale, and every geography.',
-        'our_service_image_1_desc'  => 'Concept development and schematic design services tailored to your architectural vision.',
-        'our_service_image_2_desc'  => 'Comprehensive construction documentation and technical drawings executed with precision.',
-        // Portfolio
-        'portfolio_heading'         => 'OUR WORKS',
-        // Services
-        'services_heading_line1'    => 'CORE DESIGN',
-        'services_heading_line2'    => 'CONCEPTS',
-        'services_cta_label'        => 'GET IN TOUCH',
-        'services_intro'            => 'Our integrated design services are applied across a diverse range of sectors, ensuring that every concept — from private luxury to public infrastructure — is executed with unrivaled precision and global standards.',
-        'services_tagline'          => 'Transforming ideas into inspiring, functional spaces.',
-        // Journal
-        'journal_heading'           => 'OUR GLOBAL FOOTPRINT',
-        // Contact
-        'fp_contact_heading_line1'  => "LET'S BEGIN A",
-        'fp_contact_heading_line2'  => 'CONVERSATION',
-        'fp_contact_description'    => "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention.",
-        'contact_page_heading'      => "LET'S BEGIN A CONVERSATION",
-        'contact_page_description'  => "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention.",
+        'about_heading_line1'      => 'A VISION BEYOND',
+        'about_heading_line2'      => 'BORDERS',
+        'about_cta_label'          => 'GET IN TOUCH',
+        'about_body'               => 'At Dayan Arc, we believe that architecture is more than just designing structures; it is the art of crafting experiences and building legacies. With over 20 years of expertise and a track record of more than 400 global projects, my team and I have bridged the gap between German engineering precision and creative luxury. From our strategic hubs in Germany, Dubai, and Georgia, we personally ensure that every project — whether a bespoke villa or a complex international airport — meets the highest global standards of excellence.',
+        // Our Service section
+        'our_service_heading'      => 'WHAT WE DO',
+        'our_service_description'  => 'From architectural vision to flawless execution — our integrated services cover every discipline, every scale, and every geography.',
+        'our_service_image_1_desc' => 'We turn your vision into reality through innovative design and precise planning—creating residential and commercial spaces that balance beauty and functionality.',
+        'our_service_image_2_desc' => 'We deliver advanced engineering solutions, from complex structures to large-scale facilities, ensuring efficiency, durability, and precision.',
+        // Portfolio section
+        'portfolio_heading'        => 'OUR PROJECTS',
+        // Services section
+        'services_heading_line1'   => 'CORE DESIGN',
+        'services_heading_line2'   => 'CONCEPTS',
+        'services_cta_label'       => 'GET IN TOUCH',
+        'services_intro'           => 'Our integrated design services are applied across a diverse range of sectors, ensuring that every concept — from private luxury to public infrastructure — is executed with unrivaled precision and global standards.',
+        'services_tagline'         => 'Transforming ideas into inspiring, functional spaces.',
+        // Journal section
+        'journal_heading'          => 'LATEST PROJECTS',
+        // Homepage contact section
+        'fp_contact_heading_line1' => "LET'S BEGIN A",
+        'fp_contact_heading_line2' => 'CONVERSATION',
+        'fp_contact_description'   => "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention.",
+        // Contact page
+        'contact_page_heading'     => "LET'S BEGIN A CONVERSATION",
+        'contact_page_description' => "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention.",
         // Footer / Brand
-        'footer_tagline'            => 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.',
-        'contact_location'          => 'Business Bay, Dubai, UAE',
-        'contact_email'             => 'support@dayanarc.com',
-        'contact_website'           => 'http://dayanarc.com',
+        'footer_tagline'           => 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.',
+        'contact_location'         => 'Business Bay, Dubai, UAE',
+        'contact_email'            => 'support@dayanarc.com',
+        'contact_website'          => 'http://dayanarc.com',
         // Social
-        'social_instagram'          => '#',
-        'social_pinterest'          => '#',
-        'social_youtube'            => '#',
-        'social_linkedin'           => '#',
+        'social_instagram'         => 'https://www.instagram.com/dayan.arc.co',
+        'social_linkedin'          => 'https://www.linkedin.com/company/dayanarc-de/?viewAsMember=true',
+        'social_facebook'          => 'https://www.facebook.com/share/1B5ciXyKgT/?mibextid=wwXIfr',
+        'social_phone'             => '+971564160061',
+        'social_whatsapp'          => '+971564160061',
     ];
 
     foreach ( $mods as $key => $value ) {
         set_theme_mod( $key, $value );
     }
-
-    // Also update service page meta for the new card descriptions / titles
-    $service_meta = [
-        'dayanarc_service_architecture_id'   => [
-            'title'            => 'Residential Excellence',
-            'card_description' => 'Crafting bespoke luxury villas and high-end residential complexes that redefine modern living through elegance and comfort.',
-            'card_tagline'     => 'Residential',
-            'what_we_offer'    => 'WHAT WE OFFER',
-            'cta_heading'      => 'READY TO START YOUR PROJECT?',
-            'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
-            'cta_label'        => 'CONTACT US',
-            'features'         => "Concept Development\nSchematic Design\nDesign Development\nConstruction Documentation\nProject Administration\nSite Supervision",
-        ],
-        'dayanarc_service_interior_design_id' => [
-            'title'            => 'Commercial & Hospitality',
-            'card_description' => 'Designing dynamic corporate offices, retail spaces, and world-class restaurants that enhance brand identity and user experience.',
-            'card_tagline'     => 'Commercial',
-            'what_we_offer'    => 'WHAT WE OFFER',
-            'cta_heading'      => 'READY TO START YOUR PROJECT?',
-            'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
-            'cta_label'        => 'CONTACT US',
-            'features'         => "Space Planning\nConcept & Mood Boards\nMaterial & Finish Selection\nFurniture & FF&E Procurement\nLighting Design\n3D Visualization",
-        ],
-        'dayanarc_service_3d_viz_id' => [
-            'title'            => 'Public & Institutional',
-            'card_description' => 'Creating functional and inspiring public environments, including cultural centers and educational facilities, tailored for community engagement.',
-            'card_tagline'     => 'Public',
-            'what_we_offer'    => 'WHAT WE OFFER',
-            'cta_heading'      => 'READY TO START YOUR PROJECT?',
-            'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
-            'cta_label'        => 'CONTACT US',
-            'features'         => "Photorealistic Still Renders\nArchitectural Walkthroughs\nVirtual Reality Tours\nExterior & Interior Renders\nMaterial Studies\nPresentation Boards",
-        ],
-        'dayanarc_service_project_mgmt_id' => [
-            'title'            => 'Infrastructure & Large-Scale',
-            'card_description' => 'Specialized engineering and design for high-complexity projects, such as international airports and major transportation hubs.',
-            'card_tagline'     => 'Infrastructure',
-            'what_we_offer'    => 'WHAT WE OFFER',
-            'cta_heading'      => 'READY TO START YOUR PROJECT?',
-            'cta_description'  => "Let's discuss your vision and bring it to life with the expertise and care that defines Dayan Arc.",
-            'cta_label'        => 'CONTACT US',
-            'features'         => "Timeline & Schedule Planning\nBudget Management\nContractor Coordination\nQuality Control & Inspection\nAuthority Approvals\nHandover & Close-out",
-        ],
-    ];
-
-    foreach ( $service_meta as $option_key => $data ) {
-        $post_id = (int) get_option( $option_key );
-        if ( ! $post_id || ! get_post( $post_id ) ) continue;
-        wp_update_post( [ 'ID' => $post_id, 'post_title' => $data['title'] ] );
-        update_post_meta( $post_id, '_service_card_description', $data['card_description'] );
-        update_post_meta( $post_id, '_service_card_tagline',     $data['card_tagline'] );
-        update_post_meta( $post_id, '_service_what_we_offer',    $data['what_we_offer'] );
-        update_post_meta( $post_id, '_service_cta_heading',      $data['cta_heading'] );
-        update_post_meta( $post_id, '_service_cta_description',  $data['cta_description'] );
-        update_post_meta( $post_id, '_service_cta_label',        $data['cta_label'] );
-        update_post_meta( $post_id, '_service_features',         $data['features'] );
-    }
 }
 
-// ── Import content/images/ (about + our-service) ──────────────────────────────
-function dayanarc_import_content_images() {
-    $content_dir = get_template_directory() . '/content/images/';
+// ── Nav menu ──────────────────────────────────────────────────────────────────
+function dayanarc_import_nav_menu() {
+    $menu_name     = 'Primary Menu';
+    $portfolio_url = dayanarc_portfolio_url();
+    $journal_id    = (int) get_option( 'page_for_posts' );
+    $journal_url   = $journal_id ? get_permalink( $journal_id ) : home_url( '/journal/' );
+    $contact_url   = dayanarc_contact_page_url();
 
-    $map = [
-        [ 'file' => 'about/main.jpg',       'type' => 'theme_mod', 'key' => 'about_image_main' ],
-        [ 'file' => 'about/detail.jpg',     'type' => 'theme_mod', 'key' => 'about_image_detail' ],
-        [ 'file' => 'our-service/image-1.jpg', 'type' => 'theme_mod', 'key' => 'our_service_image_1' ],
-        [ 'file' => 'our-service/image-2.jpg', 'type' => 'theme_mod', 'key' => 'our_service_image_2' ],
+    $desired_urls = [
+        'Portfolio' => $portfolio_url,
+        'Journal'   => $journal_url,
+        'Contact'   => $contact_url,
     ];
 
-    foreach ( $map as $entry ) {
-        $full_path = $content_dir . $entry['file'];
-        if ( ! file_exists( $full_path ) ) continue;
+    $existing_menu = wp_get_nav_menu_object( $menu_name );
 
-        $upload = wp_upload_bits( basename( $full_path ), null, file_get_contents( $full_path ) );
-        if ( ! empty( $upload['error'] ) ) continue;
-
-        $mime   = wp_check_filetype( $upload['file'] );
-        $att_id = wp_insert_attachment( [
-            'guid'           => $upload['url'],
-            'post_mime_type' => $mime['type'],
-            'post_title'     => sanitize_file_name( basename( $full_path ) ),
-            'post_status'    => 'inherit',
-        ], $upload['file'] );
-
-        if ( is_wp_error( $att_id ) ) continue;
-
-        wp_update_attachment_metadata( $att_id, wp_generate_attachment_metadata( $att_id, $upload['file'] ) );
-        set_theme_mod( $entry['key'], $upload['url'] );
+    if ( $existing_menu ) {
+        $items = wp_get_nav_menu_items( $existing_menu->term_id );
+        if ( $items ) {
+            foreach ( $items as $item ) {
+                if ( isset( $desired_urls[ $item->title ] ) && $item->url !== $desired_urls[ $item->title ] ) {
+                    wp_update_nav_menu_item( $existing_menu->term_id, $item->ID, [
+                        'menu-item-title'  => $item->title,
+                        'menu-item-url'    => $desired_urls[ $item->title ],
+                        'menu-item-status' => 'publish',
+                        'menu-item-type'   => 'custom',
+                    ] );
+                }
+            }
+        }
+        return;
     }
+
+    $menu_id = wp_create_nav_menu( $menu_name );
+    if ( is_wp_error( $menu_id ) ) return;
+
+    foreach ( [
+        [ 'label' => 'About Us',  'url' => home_url( '/' ) ],
+        [ 'label' => 'Portfolio', 'url' => $portfolio_url ],
+        [ 'label' => 'Services',  'url' => home_url( '/' ) ],
+        [ 'label' => 'Journal',   'url' => $journal_url ],
+        [ 'label' => 'Contact',   'url' => $contact_url ],
+    ] as $item ) {
+        wp_update_nav_menu_item( $menu_id, 0, [
+            'menu-item-title'  => $item['label'],
+            'menu-item-url'    => $item['url'],
+            'menu-item-status' => 'publish',
+            'menu-item-type'   => 'custom',
+        ] );
+    }
+
+    $locations            = get_theme_mod( 'nav_menu_locations', [] );
+    $locations['primary'] = $menu_id;
+    set_theme_mod( 'nav_menu_locations', $locations );
 }
 
-// ── Helper: check if post exists ──────────────────────────────────────────────
+// ── Helper: check if post exists by title ─────────────────────────────────────
 function dayanarc_post_exists( $title, $post_type ) {
     $q = new WP_Query( [
         'post_type'              => $post_type,
