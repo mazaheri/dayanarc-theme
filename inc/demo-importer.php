@@ -36,6 +36,8 @@ function dayanarc_demo_page() {
             $reset = true;
         }
     }
+
+    $check = dayanarc_check_import_status();
     ?>
     <div class="wrap">
         <h1 style="font-family:Georgia,serif;">🏛 Dayan Arc — Import &amp; Sync Content</h1>
@@ -50,7 +52,7 @@ function dayanarc_demo_page() {
 
         <?php if ( $reset ) : ?>
             <div class="notice notice-success is-dismissible">
-                <p><strong>Reset &amp; reimport complete!</strong> All content was cleared and reimported from scratch.
+                <p><strong>Reset &amp; reimport complete!</strong> All content and images were cleared and reimported from scratch.
                    <a href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank">View your site →</a>
                 </p>
             </div>
@@ -60,21 +62,43 @@ function dayanarc_demo_page() {
             <div class="notice notice-error"><p><?php echo esc_html( $err ); ?></p></div>
         <?php endforeach; ?>
 
+        <?php if ( ! $imported && ! $reset ) : ?>
+            <?php if ( $check['status'] === 'ok' ) : ?>
+                <div class="notice notice-success" style="margin-top:1rem;">
+                    <p>✅ <strong>Site content is up to date.</strong> Run <em>Import / Sync</em> if you pushed new images or text changes.</p>
+                </div>
+            <?php elseif ( $check['status'] === 'needs_sync' ) : ?>
+                <div class="notice notice-warning" style="margin-top:1rem;">
+                    <p>⚠️ <strong>Content update detected.</strong> Some values are out of sync with the theme files. Run <em>Import / Sync</em> to apply.</p>
+                    <ul style="margin:.5rem 0 .5rem 1.5rem; list-style:disc;">
+                        <?php foreach ( $check['warnings'] as $w ) : ?>
+                            <li style="font-size:13px;"><?php echo $w; ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php else : ?>
+                <div class="notice notice-error" style="margin-top:1rem;">
+                    <p>🔴 <strong>Content not fully set up.</strong> Run <em>Reset &amp; Reimport Everything</em> to build the site from scratch.</p>
+                    <ul style="margin:.5rem 0 .5rem 1.5rem; list-style:disc;">
+                        <?php foreach ( $check['problems'] as $p ) : ?>
+                            <li style="font-size:13px;"><?php echo esc_html( $p ); ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+
         <div style="max-width:640px; margin-top:1.5rem;">
-            <p>This will create and update the following content:</p>
+            <p>Manages the following content:</p>
             <ul style="list-style:disc; margin-left:2rem; line-height:2;">
                 <li><strong>Logos</strong> — header (black bg) &amp; footer (green bg) from <code>content/images/logos/</code></li>
                 <li><strong>About &amp; Our Service images</strong> from <code>content/images/</code></li>
                 <li><strong>3 Portfolio projects</strong> with gallery images (Georgia, GCC, Germany)</li>
                 <li><strong>3 Blog/Journal posts</strong> with featured images</li>
-                <li><strong>Home page</strong> set as the static front page</li>
-                <li><strong>Journal page</strong> set as the blog posts page</li>
-                <li><strong>Portfolio page</strong> at /portfolio/</li>
-                <li><strong>Contact Form 7</strong> form created</li>
-                <li><strong>Contact page</strong> at /contact/</li>
+                <li><strong>Home, Journal, Portfolio, Contact pages</strong></li>
                 <li><strong>6 Service pages</strong>: Architectural &amp; Interior Design, Industrial Sheds &amp; Warehouses, Structural Engineering, MEP &amp; Smart Systems, Facade &amp; Landscape Architecture, Technical Coordination &amp; Project Consultancy</li>
                 <li><strong>All content theme mods</strong> — headings, descriptions, social links, contact info</li>
-                <li><strong>Primary navigation menu</strong> with all links</li>
+                <li><strong>Primary navigation menu</strong></li>
             </ul>
 
             <!-- Normal import -->
@@ -88,15 +112,78 @@ function dayanarc_demo_page() {
 
             <!-- Reset + reimport -->
             <p style="color:#856404; background:#fff3cd; padding:.75rem 1rem; border-left:4px solid #ffc107; margin-top:2rem;">
-                <strong>Reset &amp; Reimport Everything</strong> — clears all stored IDs and theme mod values, then runs a full fresh import. Use this if something looks wrong or out of sync.
+                <strong>Reset &amp; Reimport Everything</strong> — deletes all importer-managed images and clears all stored IDs and theme mods, then runs a full fresh import. Use when content looks wrong or after a major update.
             </p>
-            <form method="post" style="margin-top:.75rem;" onsubmit="return confirm('This will clear all stored content IDs and theme settings, then reimport everything. Continue?');">
+            <form method="post" style="margin-top:.75rem;" onsubmit="return confirm('This will delete all imported images and reset all content. Continue?');">
                 <?php wp_nonce_field( 'dayanarc_import_nonce' ); ?>
                 <?php submit_button( 'Reset & Reimport Everything', 'secondary large', 'dayanarc_run_reset', false, [ 'style' => 'background:#856404;color:#fff;border-color:#856404;' ] ); ?>
             </form>
         </div>
     </div>
     <?php
+}
+
+// ── Status check: tells us whether sync, reset, or nothing is needed ──────────
+function dayanarc_check_import_status() {
+    $problems = [];
+    $warnings = [];
+
+    // Service pages — all 6 must exist
+    $missing_svc = 0;
+    foreach ( [
+        'dayanarc_service_architecture_id',
+        'dayanarc_service_interior_design_id',
+        'dayanarc_service_3d_viz_id',
+        'dayanarc_service_project_mgmt_id',
+        'dayanarc_service_5_id',
+        'dayanarc_service_6_id',
+    ] as $opt ) {
+        $id = (int) get_option( $opt );
+        if ( ! $id || ! get_post( $id ) ) $missing_svc++;
+    }
+    if ( $missing_svc ) $problems[] = "$missing_svc of 6 service pages not found";
+
+    // Portfolio posts — all 3 must exist
+    $missing_pf = 0;
+    foreach ( [
+        'dayanarc_portfolio_georgia_id',
+        'dayanarc_portfolio_gcc_id',
+        'dayanarc_portfolio_germany_id',
+    ] as $opt ) {
+        $id = (int) get_option( $opt );
+        if ( ! $id || ! get_post( $id ) ) $missing_pf++;
+    }
+    if ( $missing_pf ) $problems[] = "$missing_pf of 3 portfolio projects not found";
+
+    // Logos must be set
+    if ( ! get_theme_mod( 'header_logo_id' ) ) $problems[] = 'Header logo not imported';
+    if ( ! get_theme_mod( 'footer_logo_id' ) ) $problems[] = 'Footer logo not imported';
+
+    // Key theme mod values must match current manifest
+    foreach ( [
+        'our_service_heading' => 'WHAT WE DO',
+        'portfolio_heading'   => 'OUR PROJECTS',
+        'journal_heading'     => 'LATEST PROJECTS',
+        'hero_word_1'         => 'VISION.',
+    ] as $key => $expected ) {
+        if ( get_theme_mod( $key, '' ) !== $expected ) {
+            $warnings[] = "Outdated value: <code>$key</code>";
+        }
+    }
+
+    // Social links must not be empty or placeholder
+    $instagram = get_theme_mod( 'social_instagram', '' );
+    if ( ! $instagram || $instagram === '#' ) {
+        $warnings[] = 'Social links are missing or set to placeholder values';
+    }
+
+    if ( ! empty( $problems ) ) {
+        return [ 'status' => 'needs_reset', 'problems' => $problems, 'warnings' => $warnings ];
+    }
+    if ( ! empty( $warnings ) ) {
+        return [ 'status' => 'needs_sync', 'problems' => [], 'warnings' => $warnings ];
+    }
+    return [ 'status' => 'ok', 'problems' => [], 'warnings' => [] ];
 }
 
 // ── Main import runner ────────────────────────────────────────────────────────
@@ -139,11 +226,28 @@ function dayanarc_run_import() {
     return true;
 }
 
-// ── Reset: clear all stored IDs and theme mods ────────────────────────────────
+// ── Reset: clear all stored IDs, theme mods, and importer-managed images ──────
 // Called before a fresh reimport so nothing is treated as "already done".
 function dayanarc_reset_content() {
+    // Delete all importer-managed attachments (smart-import and legacy)
+    // This forces a clean re-import of every image on the next run.
+    $managed = get_posts( [
+        'post_type'      => 'attachment',
+        'post_status'    => 'any',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'meta_query'     => [ [
+            'relation' => 'OR',
+            [ 'key' => '_source_file_path',    'compare' => 'EXISTS' ],
+            [ 'key' => '_dayanarc_source_file', 'compare' => 'EXISTS' ],
+        ] ],
+    ] );
+    foreach ( $managed as $att_id ) {
+        wp_delete_attachment( $att_id, true );
+    }
+
     // Clear all option IDs stored by the importer
-    $options = [
+    foreach ( [
         'dayanarc_service_architecture_id',
         'dayanarc_service_interior_design_id',
         'dayanarc_service_3d_viz_id',
@@ -156,13 +260,12 @@ function dayanarc_reset_content() {
         'dayanarc_contact_form_id',
         'dayanarc_contact_page_id',
         'dayanarc_portfolio_page_id',
-    ];
-    foreach ( $options as $opt ) {
+    ] as $opt ) {
         delete_option( $opt );
     }
 
     // Clear all theme mods set by the importer
-    $mods = [
+    foreach ( [
         'header_logo_id', 'footer_logo_id',
         'about_image_main', 'about_image_detail',
         'our_service_image_1', 'our_service_image_2',
@@ -179,8 +282,7 @@ function dayanarc_reset_content() {
         'footer_tagline', 'contact_location', 'contact_email', 'contact_website',
         'social_instagram', 'social_linkedin', 'social_facebook',
         'social_phone', 'social_whatsapp',
-    ];
-    foreach ( $mods as $mod ) {
+    ] as $mod ) {
         remove_theme_mod( $mod );
     }
 }
