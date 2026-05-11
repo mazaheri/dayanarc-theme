@@ -90,7 +90,7 @@
                 </h1>
 
                 <div class="mb-12">
-                    <p class="text-[14px] md:text-[15px] leading-relaxed text-[#68635f] font-light max-w-[420px] reveal-mask block">
+                    <p class="text-[14px] md:text-[15px] leading-relaxed text-[#585058] font-light max-w-[420px] reveal-mask block">
                         <span class="reveal-text delay-400"><?php echo esc_html( get_theme_mod( 'about_body', 'At Dayan Arc, we believe that architecture is more than just designing structures; it is the art of crafting experiences and building legacies. With over 20 years of expertise and a track record of more than 400 global projects, my team and I have bridged the gap between German engineering precision and creative luxury.' ) ); ?></span>
                     </p>
                 </div>
@@ -157,7 +157,7 @@
                 <h1 class="title-text text-4xl md:text-5xl lg:text-[4rem] leading-[1.05] tracking-tight mb-8 text-[#231f20]">
                     <span class="reveal-mask block pb-1"><span class="reveal-text delay-200"><?php echo esc_html( $osh ); ?></span></span>
                 </h1>
-                <p class="text-[14px] md:text-[15px] leading-relaxed text-[#68635f] font-light max-w-[400px] reveal-mask block">
+                <p class="text-[14px] md:text-[15px] leading-relaxed text-[#585058] font-light max-w-[400px] reveal-mask block">
                     <span class="reveal-text delay-300"><?php echo esc_html( get_theme_mod( 'our_service_description', 'From architectural vision to flawless execution — our integrated services cover every discipline, every scale, and every geography.' ) ); ?></span>
                 </p>
             </div>
@@ -175,7 +175,7 @@
                     <a href="<?php echo esc_url( $si['img'] ); ?>" class="our-service-img curtain-container w-full glightbox" data-type="image" data-gallery="our-service-gallery">
                         <img src="<?php echo esc_url( $si['img'] ); ?>" alt="" class="curtain-img" style="transition-delay:300ms,300ms;">
                     </a>
-                    <p class="mt-4 text-[12px] leading-relaxed text-[#68635f] font-light text-center max-w-[240px]"><?php echo esc_html( $si['desc'] ); ?></p>
+                    <p class="mt-4 text-[12px] leading-relaxed text-[#585058] font-light text-center max-w-[240px]"><?php echo esc_html( $si['desc'] ); ?></p>
                 </div>
                 <?php endforeach; ?>
             </div>
@@ -252,7 +252,7 @@
             <a href="<?php echo esc_url( get_permalink() ); ?>" class="lg:col-span-3 card-wrapper <?php echo esc_attr( $card_d ); ?><?php echo $svc_i >= 3 ? ' card-row2' : ''; ?>" style="text-decoration:none; color:inherit; display:block;">
                 <div class="service-card group bg-white text-[#231f20] p-5 lg:p-6 relative cursor-pointer shadow-2xl">
                     <div class="flex justify-between items-start w-full">
-                        <span class="text-[11px] text-[#68635f] tracking-widest"><?php echo esc_html( $svc_num ); ?></span>
+                        <span class="text-[11px] text-[#585058] tracking-widest"><?php echo esc_html( $svc_num ); ?></span>
                         <div class="img-container curtain-container">
                             <img src="<?php echo esc_url( $svc_thumb ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>" class="curtain-img <?php echo esc_attr( $img_d ); ?> object-cover w-full h-full">
                         </div>
@@ -262,7 +262,7 @@
                         <div class="card-content-grid">
                             <div class="card-inner-content">
                                 <div class="pt-4 flex flex-col gap-5">
-                                    <p class="text-[13px] leading-relaxed text-[#68635f] font-light"><?php echo esc_html( $svc_desc ); ?></p>
+                                    <p class="text-[13px] leading-relaxed text-[#585058] font-light"><?php echo esc_html( $svc_desc ); ?></p>
                                     <div class="flex justify-between items-center text-[12px] text-[#585058]">
                                         <?php if ( $svc_label ) : ?><span><?php echo esc_html( $svc_label ); ?></span><?php endif; ?>
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#231f20" stroke-width="1.5" class="arrow-hover">
@@ -345,7 +345,7 @@
                         <span class="reveal-mask block pb-1"><span class="reveal-text delay-200"><?php echo esc_html( $fch1 ); ?></span></span>
                         <span class="reveal-mask block w-full"><span class="reveal-text delay-300"><span class="fancy-c"><?php echo esc_html( mb_substr( $fch2, 0, 1 ) ); ?></span><?php echo esc_html( mb_substr( $fch2, 1 ) ); ?></span></span>
                     </h1>
-                    <p class="text-[14px] leading-relaxed text-[#68635f] font-light max-w-[420px] reveal-mask block mb-8">
+                    <p class="text-[14px] leading-relaxed text-[#585058] font-light max-w-[420px] reveal-mask block mb-8">
                         <span class="reveal-text delay-400"><?php echo esc_html( get_theme_mod( 'fp_contact_description', "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention." ) ); ?></span>
                     </p>
                     <span class="reveal-mask block">

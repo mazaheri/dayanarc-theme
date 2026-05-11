@@ -15,7 +15,7 @@ get_header();
             <h2 class="title-text" style="font-size:2rem; margin-bottom:1rem;">
                 <a href="<?php the_permalink(); ?>" style="text-decoration:none; color:#231f20;"><?php the_title(); ?></a>
             </h2>
-            <div style="color:#68635f; font-size:13px; margin-bottom:2rem;"><?php the_excerpt(); ?></div>
+            <div style="color:#585058; font-size:13px; margin-bottom:2rem;"><?php the_excerpt(); ?></div>
         </article>
     <?php endwhile; endif; ?>
 </main>

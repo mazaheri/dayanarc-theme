@@ -67,7 +67,7 @@ endif;
             <!-- Left: description -->
             <div>
                 <span style="font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:#585058; font-weight:500; display:block; margin-bottom:1.5rem;">OVERVIEW</span>
-                <div style="font-size:15px; line-height:1.9; color:#68635f; font-weight:300;">
+                <div style="font-size:15px; line-height:1.9; color:#585058; font-weight:300;">
                     <?php the_content(); ?>
                 </div>
 
@@ -104,7 +104,7 @@ endif;
             <h2 class="title-text" style="font-size:clamp(2rem,5vw,3.5rem); color:#231f20; line-height:1.05;">
                 <?php echo esc_html( $cta_heading ); ?>
             </h2>
-            <p style="font-size:13px; line-height:1.8; color:#68635f; font-weight:300; max-width:440px;">
+            <p style="font-size:13px; line-height:1.8; color:#585058; font-weight:300; max-width:440px;">
                 <?php echo esc_html( $cta_desc ); ?>
             </p>
             <a href="<?php echo esc_url( $contact_url ); ?>"

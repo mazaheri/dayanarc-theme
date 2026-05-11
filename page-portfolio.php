@@ -55,7 +55,7 @@ $portfolio_query = new WP_Query( [
                         <?php the_title(); ?>
                     </h2>
 
-                    <p style="font-size:13px; line-height:1.7; color:#68635f; font-weight:300; margin:0 0 1rem;">
+                    <p style="font-size:13px; line-height:1.7; color:#585058; font-weight:300; margin:0 0 1rem;">
                         <?php echo esc_html( $excerpt ); ?>
                     </p>
 

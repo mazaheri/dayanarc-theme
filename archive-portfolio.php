@@ -61,8 +61,8 @@ exit;
                 <!-- Right: details -->
                 <div class="flex flex-col" style="min-height:400px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3rem;">
-                        <span style="font-size:12px; color:#68635f; font-weight:300;"><?php echo esc_html( $location ); ?></span>
-                        <span style="font-size:12px; color:#68635f; font-weight:300; letter-spacing:0.15em;"><?php echo esc_html( $num ); ?></span>
+                        <span style="font-size:12px; color:#585058; font-weight:300;"><?php echo esc_html( $location ); ?></span>
+                        <span style="font-size:12px; color:#585058; font-weight:300; letter-spacing:0.15em;"><?php echo esc_html( $num ); ?></span>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8" style="margin-bottom:auto;">
@@ -70,7 +70,7 @@ exit;
                             <h2 class="title-text" style="font-size:clamp(1.5rem,3vw,2.25rem); margin-bottom:1.5rem; color:#231f20; font-weight:500; letter-spacing:0.03em; text-transform:uppercase; line-height:1.1;">
                                 <?php the_title(); ?>
                             </h2>
-                            <p style="font-size:14px; line-height:1.8; color:#68635f; font-weight:300;">
+                            <p style="font-size:14px; line-height:1.8; color:#585058; font-weight:300;">
                                 <?php echo esc_html( $excerpt ); ?>
                             </p>
                         </div>
@@ -82,7 +82,7 @@ exit;
                                      style="width:100%; height:100%; object-fit:cover; clip-path:inset(0 0 0 0); transform:scale(1);">
                             </div>
                             <?php if ( $palette ) : ?>
-                                <p style="font-size:11px; color:#68635f; font-weight:300; margin-top:1rem; text-align:right; max-width:280px; margin-left:auto; line-height:1.6;">
+                                <p style="font-size:11px; color:#585058; font-weight:300; margin-top:1rem; text-align:right; max-width:280px; margin-left:auto; line-height:1.6;">
                                     <?php echo esc_html( $palette ); ?>
                                 </p>
                             <?php endif; ?>
@@ -91,7 +91,7 @@ exit;
 
                     <div style="margin-top:2.5rem; padding-top:2rem; border-top:1px solid #e5e5e5; display:flex; justify-content:space-between; align-items:flex-end;">
                         <?php if ( $concept ) : ?>
-                            <p style="font-size:12px; color:#68635f; font-weight:300; line-height:1.6; max-width:260px;">
+                            <p style="font-size:12px; color:#585058; font-weight:300; line-height:1.6; max-width:260px;">
                                 <?php echo esc_html( $concept ); ?>
                             </p>
                         <?php else : ?>

@@ -135,12 +135,12 @@ $form_id = dayanarc_get_contact_form_id();
                         <div class="loc-pin-card">
                             <button onclick="dayanarc_closePin(this)"
                                     style="position:absolute; top:0.75rem; right:0.75rem; background:none; border:none; cursor:pointer; padding:4px; line-height:1;">
-                                <svg width="12" height="12" fill="none" stroke="#68635f" viewBox="0 0 24 24">
+                                <svg width="12" height="12" fill="none" stroke="#585058" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
                             </button>
                             <p style="font-size:12px; font-weight:600; color:#231f20; margin-bottom:0.5rem; letter-spacing:0.1em; text-transform:uppercase;"><?php echo esc_html( get_theme_mod( 'office_germany', 'Berlin, Germany' ) ); ?></p>
-                            <p style="font-size:12px; color:#68635f; line-height:1.7; margin-bottom:0.75rem; padding-right:1.5rem;">
+                            <p style="font-size:12px; color:#585058; line-height:1.7; margin-bottom:0.75rem; padding-right:1.5rem;">
                                 Berlin Central Office, Alexanderplatz 1,<br>10178 Berlin, Germany
                             </p>
                             <a href="<?php echo esc_url( dayanarc_contact_page_url() ); ?>" style="font-size:11px; color:#231f20; text-decoration:underline; text-underline-offset:3px; letter-spacing:0.08em;">Get Direction</a>
@@ -161,12 +161,12 @@ $form_id = dayanarc_get_contact_form_id();
                         <div class="loc-pin-card">
                             <button onclick="dayanarc_closePin(this)"
                                     style="position:absolute; top:0.75rem; right:0.75rem; background:none; border:none; cursor:pointer; padding:4px; line-height:1;">
-                                <svg width="12" height="12" fill="none" stroke="#68635f" viewBox="0 0 24 24">
+                                <svg width="12" height="12" fill="none" stroke="#585058" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
                             </button>
                             <p style="font-size:12px; font-weight:600; color:#231f20; margin-bottom:0.5rem; letter-spacing:0.1em; text-transform:uppercase;"><?php echo esc_html( get_theme_mod( 'office_georgia', 'Tbilisi, Georgia' ) ); ?></p>
-                            <p style="font-size:12px; color:#68635f; line-height:1.7; margin-bottom:0.75rem; padding-right:1.5rem;">
+                            <p style="font-size:12px; color:#585058; line-height:1.7; margin-bottom:0.75rem; padding-right:1.5rem;">
                                 Tbilisi Office, Rustaveli Ave 1,<br>0108 Tbilisi, Georgia
                             </p>
                             <a href="<?php echo esc_url( dayanarc_contact_page_url() ); ?>" style="font-size:11px; color:#231f20; text-decoration:underline; text-underline-offset:3px; letter-spacing:0.08em;">Get Direction</a>
@@ -187,12 +187,12 @@ $form_id = dayanarc_get_contact_form_id();
                         <div class="loc-pin-card">
                             <button onclick="dayanarc_closePin(this)"
                                     style="position:absolute; top:0.75rem; right:0.75rem; background:none; border:none; cursor:pointer; padding:4px; line-height:1;">
-                                <svg width="12" height="12" fill="none" stroke="#68635f" viewBox="0 0 24 24">
+                                <svg width="12" height="12" fill="none" stroke="#585058" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                                 </svg>
                             </button>
                             <p style="font-size:12px; font-weight:600; color:#231f20; margin-bottom:0.5rem; letter-spacing:0.1em; text-transform:uppercase;"><?php echo esc_html( get_theme_mod( 'office_dubai', 'Business Bay, Dubai, UAE' ) ); ?></p>
-                            <p style="font-size:12px; color:#68635f; line-height:1.7; margin-bottom:0.75rem; padding-right:1.5rem;">
+                            <p style="font-size:12px; color:#585058; line-height:1.7; margin-bottom:0.75rem; padding-right:1.5rem;">
                                 Suites 207 &amp; 208, B-Wing, Building 06,<br>Dubai Design District, 333253, UAE
                             </p>
                             <a href="<?php echo esc_url( dayanarc_contact_page_url() ); ?>" style="font-size:11px; color:#231f20; text-decoration:underline; text-underline-offset:3px; letter-spacing:0.08em;">Get Direction</a>
@@ -217,7 +217,7 @@ $form_id = dayanarc_get_contact_form_id();
                 <h1 class="title-text" style="font-size:clamp(1.5rem,5vw,4rem); line-height:1.1; color:#231f20; margin-bottom:2rem;">
                     <?php echo esc_html( get_theme_mod( 'contact_page_heading', "LET'S BEGIN A CONVERSATION" ) ); ?>
                 </h1>
-                <p style="font-size:14px; line-height:1.8; color:#68635f; font-weight:300; max-width:400px; margin-bottom:2.5rem;">
+                <p style="font-size:14px; line-height:1.8; color:#585058; font-weight:300; max-width:400px; margin-bottom:2.5rem;">
                     <?php echo esc_html( get_theme_mod( 'contact_page_description', "Tell us more about your space, your ideas, and your aspirations. We'll guide you through the next steps with care and intention." ) ); ?>
                 </p>
 

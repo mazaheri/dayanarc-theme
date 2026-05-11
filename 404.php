@@ -17,7 +17,7 @@ get_header( 'inner' );
         NOT<br>FOUND
     </h1>
 
-    <p style="font-size:14px; line-height:1.8; color:#68635f; font-weight:300; max-width:360px; margin-bottom:3rem;">
+    <p style="font-size:14px; line-height:1.8; color:#585058; font-weight:300; max-width:360px; margin-bottom:3rem;">
         The page you're looking for doesn't exist or has been moved. Let's get you back on track.
     </p>
 

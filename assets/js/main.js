@@ -156,20 +156,20 @@
                 '</div>' +
                 '<div class="order-1 lg:order-2 flex flex-col">' +
                     '<div class="flex justify-between items-center mb-8">' +
-                        '<span class="text-[11px] text-[#68635f] font-light">' + escHtml(data.date) + '</span>' +
-                        '<span class="text-[11px] text-[#68635f] font-light tracking-widest">' + escHtml(data.id) + '</span>' +
+                        '<span class="text-[11px] text-[#585058] font-light">' + escHtml(data.date) + '</span>' +
+                        '<span class="text-[11px] text-[#585058] font-light tracking-widest">' + escHtml(data.id) + '</span>' +
                     '</div>' +
-                    '<h2 class="title-text text-2xl lg:text-3xl xl:text-4xl mb-5 text-[#2c221a] font-medium tracking-wide uppercase leading-tight">' + escHtml(data.title) + '</h2>' +
-                    '<p class="text-[13px] leading-relaxed text-[#68635f] font-light mb-0">' + escHtml(data.description) + '</p>' +
+                    '<h2 class="title-text text-2xl lg:text-3xl xl:text-4xl mb-5 text-[#231f20] font-medium tracking-wide uppercase leading-tight">' + escHtml(data.title) + '</h2>' +
+                    '<p class="text-[13px] leading-relaxed text-[#585058] font-light mb-0">' + escHtml(data.description) + '</p>' +
                     '<div class="mt-auto pt-6">' +
                         (data.permalink ? '<a href="' + escHtml(data.permalink) + '" class="link-wrapper" style="opacity:1;transform:none;width:auto;gap:0.75rem;min-width:100px;border-bottom:none;margin-bottom:1.5rem;"><span class="link-text" style="font-size:11px;">READ MORE</span><div class="arrow-graphic"><svg width="14" height="9" viewBox="0 0 16 10" fill="none"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></a>' : '') +
                         '<div class="pt-6 border-t border-[#e5e5e5] flex justify-end">' +
                             '<div class="flex gap-3">' +
                                 '<button onclick="prevJournalSlide()" class="nav-btn">' +
-                                    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>' +
+                                    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#231f20" stroke-width="1.2"><path d="M19 12H5M5 12L12 19M5 12L12 5"/></svg>' +
                                 '</button>' +
                                 '<button onclick="nextJournalSlide()" class="nav-btn">' +
-                                    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2c221a" stroke-width="1.2"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg>' +
+                                    '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#231f20" stroke-width="1.2"><path d="M5 12H19M19 12L12 5M19 12L12 19"/></svg>' +
                                 '</button>' +
                             '</div>' +
                         '</div>' +
@@ -226,8 +226,8 @@
 
         nums.innerHTML = portfolioPages.map(function (_, i) {
             const active = i === pageIndex
-                ? 'text-[#2c221a] border-b border-[#2c221a] pb-1'
-                : 'text-[#a9a39f] hover:text-[#2c221a]';
+                ? 'text-[#231f20] border-b border-[#231f20] pb-1'
+                : 'text-[#585058] hover:text-[#231f20]';
             return '<span class="cursor-pointer transition-colors ' + active + '" onclick="goToPortfolioPage(' + i + ')">0' + (i + 1) + '</span>';
         }).join('');
 
@@ -243,16 +243,16 @@
                             '</div>' +
                         '</div>' +
                         '<div class="hover-overlay shadow-sm">' +
-                            '<h3 class="title-text ' + hSize + ' text-[#2c221a] uppercase mb-3 leading-tight">' + escHtml(post.title) + '</h3>' +
-                            '<p class="text-[12px] md:text-[13px] leading-relaxed text-[#68635f] font-light px-2 mb-4">' + escHtml(post.desc) + '</p>' +
-                            '<span class="read-more-btn text-[10px] tracking-widest font-semibold flex items-center gap-2 text-[#2c221a]">' +
+                            '<h3 class="title-text ' + hSize + ' text-[#231f20] uppercase mb-3 leading-tight">' + escHtml(post.title) + '</h3>' +
+                            '<p class="text-[12px] md:text-[13px] leading-relaxed text-[#585058] font-light px-2 mb-4">' + escHtml(post.desc) + '</p>' +
+                            '<span class="read-more-btn text-[10px] tracking-widest font-semibold flex items-center gap-2 text-[#231f20]">' +
                                 'VIEW PROJECT ' +
                                 '<svg width="14" height="8" viewBox="0 0 16 10" fill="none" stroke="currentColor"><path d="M11 1L15 5M15 5L11 9M15 5H0" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
                             '</span>' +
                         '</div>' +
                     '</div>' +
                     '<div class="w-full mt-3">' +
-                        '<span class="title-text ' + conf.titleSize + ' uppercase tracking-wider text-[#2c221a] block">' + escHtml(post.title) + '</span>' +
+                        '<span class="title-text ' + conf.titleSize + ' uppercase tracking-wider text-[#231f20] block">' + escHtml(post.title) + '</span>' +
                     '</div>' +
                 '</a>'
             );
