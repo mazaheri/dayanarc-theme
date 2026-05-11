@@ -4,8 +4,7 @@
 
     <!-- ===== SECTION 1: HERO ===== -->
     <div class="section hero-section">
-        <?php $hero_bg = get_theme_mod( 'hero_bg_image', '' ); ?>
-        <div class="background-image"<?php if ( $hero_bg ) echo ' style="background-image:url(' . esc_url( $hero_bg ) . ')"'; ?>></div>
+        <div class="background-image"></div>
         <div class="overlay"></div>
         <div class="spotlight" id="spotlight" style="--x: 50%; --y: 50%;"></div>
 

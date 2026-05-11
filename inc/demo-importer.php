@@ -266,7 +266,6 @@ function dayanarc_reset_content() {
 
     // Clear all theme mods set by the importer
     foreach ( [
-        'hero_bg_image',
         'header_logo_id', 'footer_logo_id',
         'about_image_main', 'about_image_detail',
         'our_service_image_1', 'our_service_image_2',
@@ -411,9 +410,8 @@ function dayanarc_import_content_images() {
         }
     }
 
-    // About + Our Service + Hero images — stored as URLs in theme mods
+    // About + Our Service images — stored as URLs in theme mods
     foreach ( [
-        [ 'file' => 'hero/bg.jpg',             'key' => 'hero_bg_image' ],
         [ 'file' => 'about/main.jpg',         'key' => 'about_image_main' ],
         [ 'file' => 'about/detail.jpg',        'key' => 'about_image_detail' ],
         [ 'file' => 'our-service/image-1.jpg', 'key' => 'our_service_image_1' ],
