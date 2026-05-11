@@ -266,9 +266,11 @@ function dayanarc_reset_content() {
 
     // Clear all theme mods set by the importer
     foreach ( [
+        'hero_bg_image',
         'header_logo_id', 'footer_logo_id',
         'about_image_main', 'about_image_detail',
         'our_service_image_1', 'our_service_image_2',
+        'about_video_url',
         'hero_word_1', 'hero_word_2', 'hero_word_3', 'hero_cta_label', 'hero_tagline',
         'about_heading_line1', 'about_heading_line2', 'about_cta_label', 'about_body',
         'our_service_heading', 'our_service_description',
@@ -409,8 +411,9 @@ function dayanarc_import_content_images() {
         }
     }
 
-    // About + Our Service images — stored as URLs in theme mods
+    // About + Our Service + Hero images — stored as URLs in theme mods
     foreach ( [
+        [ 'file' => 'hero/bg.jpg',             'key' => 'hero_bg_image' ],
         [ 'file' => 'about/main.jpg',         'key' => 'about_image_main' ],
         [ 'file' => 'about/detail.jpg',        'key' => 'about_image_detail' ],
         [ 'file' => 'our-service/image-1.jpg', 'key' => 'our_service_image_1' ],
@@ -913,6 +916,8 @@ function dayanarc_import_service_pages() {
 // ── 9. Apply all text/URL theme mods (mirrors content/manifest.php) ───────────
 function dayanarc_apply_content_theme_mods() {
     $mods = [
+        // Hero video
+        'about_video_url'          => 'https://dayanarc.com/wp-content/uploads/videos/dayan_arc_services.mp4',
         // Hero
         'hero_word_1'              => 'VISION.',
         'hero_word_2'              => 'DESIGN.',

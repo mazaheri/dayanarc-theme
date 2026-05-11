@@ -111,6 +111,13 @@ function dayanarc_smart_import( $full_path ) {
 
 $image_map = [
 
+    // Hero background image
+    [
+        'file' => 'images/hero/bg.jpg',
+        'type' => 'theme_mod',
+        'key'  => 'hero_bg_image',
+    ],
+
     // Logos (stored as attachment IDs in theme mods)
     [
         'file' => 'images/logos/header.jpg',

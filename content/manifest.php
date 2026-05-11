@@ -51,9 +51,7 @@ $customizer['about_body']          =
     . 'villa or a complex international airport — meets the highest global standards '
     . 'of excellence.';
 
-// about_video_url and about_video_thumb are set via the Customizer or import-images.php
-// $customizer['about_video_url']   = '';  // set in Customizer
-// $customizer['about_video_thumb'] = '';  // set by import-images.php
+$customizer['about_video_url'] = 'https://dayanarc.com/wp-content/uploads/videos/dayan_arc_services.mp4';
 
 // ══ HOMEPAGE — OUR SERVICE SECTION ═══════════════════════════════════════════
 
