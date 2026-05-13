@@ -113,24 +113,24 @@ $image_map = [
 
     // Logos (stored as attachment IDs in theme mods)
     [
-        'file' => 'images/logos/header.jpg',
+        'file' => 'images/logos/header.png',
         'type' => 'logo_mod',
         'key'  => 'header_logo_id',
     ],
     [
-        'file' => 'images/logos/footer.jpg',
+        'file' => 'images/logos/footer.png',
         'type' => 'logo_mod',
         'key'  => 'footer_logo_id',
     ],
 
     // About section
     [
-        'file' => 'images/about/main.jpg',
+        'file' => 'images/about/main.webp',
         'type' => 'theme_mod',
         'key'  => 'about_image_main',
     ],
     [
-        'file' => 'images/about/detail.jpg',
+        'file' => 'images/about/detail.webp',
         'type' => 'theme_mod',
         'key'  => 'about_image_detail',
     ],

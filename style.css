@@ -1559,6 +1559,57 @@ html.admin-bar .inner-nav {
 
 /* ── Mobile overrides (≤ 767px) ─────────────────────────────────────────── */
 @media (max-width: 767px) {
+    /* Allow native page scroll in fullPage responsive mode */
+    body {
+        overflow-y: auto !important;
+    }
+
+    /* Logo: scale down from the desktop 150px to fit the mobile nav bar */
+    .logo img,
+    .inner-nav-logo img,
+    .footer-logo-img {
+        height: 80px !important;
+    }
+
+    /* Reset fullPage.js container — clear desktop transforms so sections
+       stack as normal block elements instead of overlapping */
+    #fullpage {
+        transform: none !important;
+        -webkit-transform: none !important;
+        transition: none !important;
+        height: auto !important;
+        position: static !important;
+    }
+
+    /* Sections: remove absolute positioning and transforms left by fullPage.js */
+    .fp-section,
+    .section {
+        position: relative !important;
+        transform: none !important;
+        -webkit-transform: none !important;
+        top: auto !important;
+        left: auto !important;
+    }
+
+    /* Let tall sections size to their content so they flow in page scroll */
+    .about-section,
+    .our-service-section,
+    .services-section,
+    .blog-section,
+    #contact {
+        height: auto !important;
+        min-height: unset !important;
+        overflow: visible !important;
+    }
+
+    /* fp-overflow wrappers added by fullPage.js create a scroll jail on mobile
+       (user must exhaust inner scroll before outer page can scroll) — remove it */
+    .fp-overflow {
+        max-height: none !important;
+        overflow: visible !important;
+        -webkit-overflow-scrolling: auto !important;
+    }
+
     /* Marquee: 5rem is too large on phones */
     .marquee-text {
         font-size: 2.5rem;
@@ -1591,9 +1642,34 @@ html.admin-bar .inner-nav {
         min-width: 160px;
     }
 
-    /* About: big image fills full width on mobile (small image is hidden) */
+    /* About: stack images vertically, full width, 9:16 each, no hover swap */
+    .about-images-wrapper {
+        height: auto !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 1rem;
+    }
+
     .about-img-big {
-        width: 100%;
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 9 / 16;
+        transition: none !important;
+    }
+
+    .about-img-small {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 9 / 16;
+        margin-top: 0 !important;
+        transition: none !important;
+    }
+
+    /* Disable the size-swap hover effect on mobile */
+    .about-images-wrapper:has(.about-img-small:hover) .about-img-big,
+    .about-images-wrapper:has(.about-img-small:hover) .about-img-small {
+        width: 100% !important;
     }
 
     /* Portfolio cards: cap heights on phones */

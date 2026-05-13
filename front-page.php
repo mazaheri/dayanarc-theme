@@ -12,7 +12,7 @@
             <header class="flex justify-between items-center py-6">
                 <div class="logo">
                     <a href="<?php echo esc_url( home_url( '/' ) ); ?>" style="display:inline-block; text-decoration:none;">
-                        <img src="<?php echo esc_url( wp_get_attachment_image_url( get_theme_mod( 'header_logo_id', 86 ), 'full' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>" style="height:44px; width:auto;">
+                        <img src="<?php echo esc_url( wp_get_attachment_image_url( get_theme_mod( 'header_logo_id', 86 ), 'full' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>" style="height:150px; width:auto;">
                     </a>
                 </div>
                 <nav class="hidden md:flex space-x-12">
@@ -413,7 +413,7 @@
                 <div class="flex flex-col">
                     <div class="mb-6">
                         <a href="<?php echo esc_url( home_url( '/' ) ); ?>" style="display:inline-block; text-decoration:none;">
-                            <img src="<?php echo esc_url( wp_get_attachment_image_url( get_theme_mod( 'footer_logo_id', 87 ), 'full' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>" style="height:48px; width:auto;">
+                            <img src="<?php echo esc_url( wp_get_attachment_image_url( get_theme_mod( 'footer_logo_id', 87 ), 'full' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="footer-logo-img" style="height:150px; width:auto;">
                         </a>
                     </div>
                     <p class="text-[12px] leading-relaxed font-light max-w-[260px] mb-8"><?php echo esc_html( get_theme_mod( 'footer_tagline', 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.' ) ); ?></p>

@@ -133,6 +133,31 @@
             afterLoad: function (origin, destination) {
                 triggerSectionAnimations(destination.index + 1);
                 updateScrollProgress(destination.index, document.querySelectorAll('.section').length);
+            },
+            afterResponsive: function (isResponsive) {
+                document.body.style.overflowY = isResponsive ? 'auto' : '';
+                if (isResponsive) {
+                    // Clear transforms fullPage.js applied in desktop mode
+                    var fp = document.getElementById('fullpage');
+                    if (fp) {
+                        fp.style.transform = '';
+                        fp.style.webkitTransform = '';
+                        fp.style.transition = '';
+                        fp.style.height = '';
+                    }
+                    document.querySelectorAll('.section').forEach(function (s) {
+                        s.style.height = '';
+                        s.style.transform = '';
+                        s.style.webkitTransform = '';
+                        s.style.top = '';
+                        s.style.position = '';
+                    });
+                    // Remove scroll jail from fp-overflow wrappers
+                    document.querySelectorAll('.fp-overflow').forEach(function (el) {
+                        el.style.maxHeight = '';
+                        el.style.overflow = '';
+                    });
+                }
             }
         });
     }
