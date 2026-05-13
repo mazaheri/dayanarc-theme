@@ -401,8 +401,8 @@ function dayanarc_import_content_images() {
 
     // Logos — stored as attachment IDs in theme mods
     foreach ( [
-        [ 'file' => 'logos/header.jpg', 'key' => 'header_logo_id' ],
-        [ 'file' => 'logos/footer.jpg', 'key' => 'footer_logo_id' ],
+        [ 'file' => 'logos/header.png', 'key' => 'header_logo_id' ],
+        [ 'file' => 'logos/footer.png', 'key' => 'footer_logo_id' ],
     ] as $entry ) {
         $result = dayanarc_smart_import_file( $content_dir . $entry['file'] );
         if ( ! is_wp_error( $result ) ) {
@@ -412,8 +412,8 @@ function dayanarc_import_content_images() {
 
     // About + Our Service images — stored as URLs in theme mods
     foreach ( [
-        [ 'file' => 'about/main.jpg',         'key' => 'about_image_main' ],
-        [ 'file' => 'about/detail.jpg',        'key' => 'about_image_detail' ],
+        [ 'file' => 'about/main.webp',        'key' => 'about_image_main' ],
+        [ 'file' => 'about/detail.webp',      'key' => 'about_image_detail' ],
         [ 'file' => 'our-service/image-1.jpg', 'key' => 'our_service_image_1' ],
         [ 'file' => 'our-service/image-2.png', 'key' => 'our_service_image_2' ],
     ] as $entry ) {
