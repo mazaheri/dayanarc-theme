@@ -16,111 +16,194 @@ add_action( 'admin_menu', 'dayanarc_demo_menu' );
 function dayanarc_demo_page() {
     $imported = false;
     $reset    = false;
+    $synced   = [];
     $errors   = [];
 
     if ( isset( $_POST['dayanarc_run_import'] ) && check_admin_referer( 'dayanarc_import_nonce' ) ) {
         $result = dayanarc_run_import();
-        if ( is_wp_error( $result ) ) {
-            $errors[] = $result->get_error_message();
-        } else {
-            $imported = true;
-        }
+        if ( is_wp_error( $result ) ) $errors[] = $result->get_error_message();
+        else $imported = true;
     }
 
     if ( isset( $_POST['dayanarc_run_reset'] ) && check_admin_referer( 'dayanarc_import_nonce' ) ) {
         dayanarc_reset_content();
         $result = dayanarc_run_import();
-        if ( is_wp_error( $result ) ) {
-            $errors[] = $result->get_error_message();
-        } else {
-            $reset = true;
-        }
+        if ( is_wp_error( $result ) ) $errors[] = $result->get_error_message();
+        else $reset = true;
     }
 
-    $check = dayanarc_check_import_status();
+    if ( isset( $_POST['dayanarc_sync_selected'] ) && check_admin_referer( 'dayanarc_import_nonce' ) ) {
+        require_once ABSPATH . 'wp-admin/includes/image.php';
+        require_once ABSPATH . 'wp-admin/includes/file.php';
+        require_once ABSPATH . 'wp-admin/includes/media.php';
+        $selected = isset( $_POST['components'] ) ? array_map( 'sanitize_key', (array) $_POST['components'] ) : [];
+        foreach ( $selected as $key ) {
+            $comp = dayanarc_get_component( $key );
+            if ( $comp && is_callable( $comp['fn'] ) ) {
+                call_user_func( $comp['fn'] );
+                $synced[] = $comp['label'];
+            }
+        }
+        flush_rewrite_rules( false );
+    }
+
+    $check      = dayanarc_check_import_status();
+    $components = dayanarc_get_components();
     ?>
     <div class="wrap">
-        <h1 style="font-family:Georgia,serif;">🏛 Dayan Arc — Import &amp; Sync Content</h1>
+        <h1 style="font-family:Georgia,serif;">🏛 Dayan Arc — Import &amp; Sync</h1>
 
         <?php if ( $imported ) : ?>
-            <div class="notice notice-success is-dismissible">
-                <p><strong>Import complete!</strong>
-                   <a href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank">View your site →</a>
-                </p>
-            </div>
+            <div class="notice notice-success is-dismissible"><p><strong>Full sync complete!</strong> <a href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank">View site →</a></p></div>
         <?php endif; ?>
 
         <?php if ( $reset ) : ?>
-            <div class="notice notice-success is-dismissible">
-                <p><strong>Reset &amp; reimport complete!</strong> All content and images were cleared and reimported from scratch.
-                   <a href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank">View your site →</a>
-                </p>
-            </div>
+            <div class="notice notice-success is-dismissible"><p><strong>Reset &amp; reimport complete!</strong> <a href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank">View site →</a></p></div>
+        <?php endif; ?>
+
+        <?php if ( ! empty( $synced ) ) : ?>
+            <div class="notice notice-success is-dismissible"><p><strong>Synced:</strong> <?php echo esc_html( implode( ', ', $synced ) ); ?> — <a href="<?php echo esc_url( home_url( '/' ) ); ?>" target="_blank">View site →</a></p></div>
         <?php endif; ?>
 
         <?php foreach ( $errors as $err ) : ?>
             <div class="notice notice-error"><p><?php echo esc_html( $err ); ?></p></div>
         <?php endforeach; ?>
 
-        <?php if ( ! $imported && ! $reset ) : ?>
+        <div style="max-width:700px; margin-top:1.5rem;">
+
             <?php if ( $check['status'] === 'ok' ) : ?>
-                <div class="notice notice-success" style="margin-top:1rem;">
-                    <p>✅ <strong>Site content is up to date.</strong> Run <em>Import / Sync</em> if you pushed new images or text changes.</p>
-                </div>
+                <div class="notice notice-success inline" style="margin-bottom:1.5rem;"><p>✅ Site content is up to date.</p></div>
             <?php elseif ( $check['status'] === 'needs_sync' ) : ?>
-                <div class="notice notice-warning" style="margin-top:1rem;">
-                    <p>⚠️ <strong>Content update detected.</strong> Some values are out of sync with the theme files. Run <em>Import / Sync</em> to apply.</p>
-                    <ul style="margin:.5rem 0 .5rem 1.5rem; list-style:disc;">
-                        <?php foreach ( $check['warnings'] as $w ) : ?>
-                            <li style="font-size:13px;"><?php echo $w; ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
+                <div class="notice notice-warning inline" style="margin-bottom:1.5rem;"><p>⚠️ Some values are out of sync with theme files. Run a sync to apply.</p></div>
             <?php else : ?>
-                <div class="notice notice-error" style="margin-top:1rem;">
-                    <p>🔴 <strong>Content not fully set up.</strong> Run <em>Reset &amp; Reimport Everything</em> to build the site from scratch.</p>
-                    <ul style="margin:.5rem 0 .5rem 1.5rem; list-style:disc;">
-                        <?php foreach ( $check['problems'] as $p ) : ?>
-                            <li style="font-size:13px;"><?php echo esc_html( $p ); ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                </div>
+                <div class="notice notice-error inline" style="margin-bottom:1.5rem;"><p>🔴 Content not fully set up. Use <strong>Reset &amp; Reimport Everything</strong> below.</p></div>
             <?php endif; ?>
-        <?php endif; ?>
 
-        <div style="max-width:640px; margin-top:1.5rem;">
-            <p>Manages the following content:</p>
-            <ul style="list-style:disc; margin-left:2rem; line-height:2;">
-                <li><strong>Logos</strong> — header (black bg) &amp; footer (green bg) from <code>content/images/logos/</code></li>
-                <li><strong>About &amp; Our Service images</strong> from <code>content/images/</code></li>
-                <li><strong>3 Portfolio projects</strong> with gallery images (Georgia, GCC, Germany)</li>
-                <li><strong>3 Blog/Journal posts</strong> with featured images</li>
-                <li><strong>Home, Journal, Portfolio, Contact pages</strong></li>
-                <li><strong>6 Service pages</strong>: Architectural &amp; Interior Design, Industrial Sheds &amp; Warehouses, Structural Engineering, MEP &amp; Smart Systems, Facade &amp; Landscape Architecture, Technical Coordination &amp; Project Consultancy</li>
-                <li><strong>All content theme mods</strong> — headings, descriptions, social links, contact info</li>
-                <li><strong>Primary navigation menu</strong></li>
-            </ul>
-
-            <!-- Normal import -->
-            <p style="color:#1a5c2e; background:#d4edda; padding:.75rem 1rem; border-left:4px solid #28a745; margin-top:1.5rem;">
-                <strong>Import / Sync</strong> — unchanged images are skipped (MD5 hash detection). Changed files are re-imported automatically. Safe to run anytime.
-            </p>
-            <form method="post" style="margin-top:.75rem;">
+            <!-- ── Component selector ──────────────────────────────────────── -->
+            <form method="post">
                 <?php wp_nonce_field( 'dayanarc_import_nonce' ); ?>
-                <?php submit_button( 'Import / Sync Content', 'primary large', 'dayanarc_run_import', false ); ?>
+
+                <h3 style="margin-bottom:.25rem;">Select what to sync</h3>
+                <p style="color:#666;font-size:13px;margin-top:0;margin-bottom:1rem;">
+                    Only the checked items will be updated. Unchanged files are skipped automatically (MD5 hash check).
+                </p>
+
+                <table class="wp-list-table widefat striped" style="margin-bottom:1rem;">
+                    <thead>
+                        <tr>
+                            <th style="width:36px;padding:8px 10px;">
+                                <input type="checkbox" id="da-select-all" title="Select / deselect all">
+                            </th>
+                            <th style="padding:8px 10px;">Component</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ( $components as $key => $comp ) : ?>
+                        <tr>
+                            <td style="padding:10px;"><input type="checkbox" name="components[]" value="<?php echo esc_attr( $key ); ?>"></td>
+                            <td style="padding:10px;">
+                                <strong><?php echo $comp['label']; ?></strong><br>
+                                <span style="color:#666;font-size:12px;"><?php echo esc_html( $comp['desc'] ); ?></span>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+
+                <script>
+                document.getElementById('da-select-all').addEventListener('change', function () {
+                    document.querySelectorAll('input[name="components[]"]').forEach(function (cb) {
+                        cb.checked = document.getElementById('da-select-all').checked;
+                    });
+                });
+                </script>
+
+                <?php submit_button( 'Sync Selected', 'primary large', 'dayanarc_sync_selected', false ); ?>
             </form>
 
-            <!-- Reset + reimport -->
-            <p style="color:#856404; background:#fff3cd; padding:.75rem 1rem; border-left:4px solid #ffc107; margin-top:2rem;">
-                <strong>Reset &amp; Reimport Everything</strong> — deletes all importer-managed images and clears all stored IDs and theme mods, then runs a full fresh import. Use when content looks wrong or after a major update.
-            </p>
-            <form method="post" style="margin-top:.75rem;" onsubmit="return confirm('This will delete all imported images and reset all content. Continue?');">
-                <?php wp_nonce_field( 'dayanarc_import_nonce' ); ?>
-                <?php submit_button( 'Reset & Reimport Everything', 'secondary large', 'dayanarc_run_reset', false, [ 'style' => 'background:#856404;color:#fff;border-color:#856404;' ] ); ?>
-            </form>
+            <!-- ── Sync all ─────────────────────────────────────────────────── -->
+            <details style="margin-top:2rem;">
+                <summary style="cursor:pointer;font-weight:600;color:#1a5c2e;font-size:14px;">▶ Sync all components at once</summary>
+                <div style="margin-top:.75rem;padding:.75rem 1rem;background:#d4edda;border-left:4px solid #28a745;">
+                    <p style="margin:0 0 .75rem;font-size:13px;">Runs every component in one shot. Unchanged files are skipped.</p>
+                    <form method="post">
+                        <?php wp_nonce_field( 'dayanarc_import_nonce' ); ?>
+                        <?php submit_button( 'Sync All', 'secondary', 'dayanarc_run_import', false ); ?>
+                    </form>
+                </div>
+            </details>
+
+            <!-- ── Reset ────────────────────────────────────────────────────── -->
+            <details style="margin-top:.75rem;">
+                <summary style="cursor:pointer;font-weight:600;color:#856404;font-size:14px;">▶ Reset &amp; Reimport Everything (destructive)</summary>
+                <div style="margin-top:.75rem;padding:.75rem 1rem;background:#fff3cd;border-left:4px solid #ffc107;">
+                    <p style="margin:0 0 .75rem;font-size:13px;">Deletes <em>all</em> importer-managed images and clears every stored ID and theme mod, then runs a full fresh import. Use only when content looks seriously broken.</p>
+                    <form method="post" onsubmit="return confirm('This will delete all imported images and reset all content. Are you sure?');">
+                        <?php wp_nonce_field( 'dayanarc_import_nonce' ); ?>
+                        <?php submit_button( 'Reset & Reimport Everything', 'secondary', 'dayanarc_run_reset', false, [ 'style' => 'background:#856404;color:#fff;border-color:#856404;' ] ); ?>
+                    </form>
+                </div>
+            </details>
+
         </div>
     </div>
     <?php
+}
+
+// ── Component registry ────────────────────────────────────────────────────────
+function dayanarc_get_components() {
+    return [
+        'logos'       => [
+            'label' => 'Header &amp; Footer Logos',
+            'desc'  => 'PNG logo used in the site header and footer',
+            'fn'    => 'dayanarc_import_logo_images',
+        ],
+        'about'       => [
+            'label' => 'About Section Images',
+            'desc'  => 'Main image and detail image in the About Us section',
+            'fn'    => 'dayanarc_import_about_images',
+        ],
+        'our_service' => [
+            'label' => 'What We Do Images',
+            'desc'  => 'Two side-by-side images in the Our Service (What We Do) section',
+            'fn'    => 'dayanarc_import_our_service_images',
+        ],
+        'services'    => [
+            'label' => 'Service Cards (6)',
+            'desc'  => '6 service pages with titles, descriptions, and thumbnail images',
+            'fn'    => 'dayanarc_import_services_full',
+        ],
+        'portfolio'   => [
+            'label' => 'Portfolio Projects',
+            'desc'  => '3 portfolio projects (Georgia, GCC, Germany) with gallery images',
+            'fn'    => 'dayanarc_import_portfolio',
+        ],
+        'journal'     => [
+            'label' => 'Journal / Blog Posts',
+            'desc'  => '3 journal posts with featured images',
+            'fn'    => 'dayanarc_import_journal_full',
+        ],
+        'pages'       => [
+            'label' => 'Static Pages &amp; Contact Form',
+            'desc'  => 'Home, Journal, Portfolio, Contact pages + CF7 contact form',
+            'fn'    => 'dayanarc_import_pages_full',
+        ],
+        'text'        => [
+            'label' => 'Site Text &amp; Copy',
+            'desc'  => 'All headings, taglines, descriptions, social links, and contact info',
+            'fn'    => 'dayanarc_apply_content_theme_mods',
+        ],
+        'menu'        => [
+            'label' => 'Navigation Menu',
+            'desc'  => 'Primary navigation menu links',
+            'fn'    => 'dayanarc_import_nav_menu',
+        ],
+    ];
+}
+
+function dayanarc_get_component( $key ) {
+    $components = dayanarc_get_components();
+    return isset( $components[ $key ] ) ? $components[ $key ] : null;
 }
 
 // ── Status check: tells us whether sync, reset, or nothing is needed ──────────
@@ -395,35 +478,43 @@ function dayanarc_import_images() {
     return $ids;
 }
 
-// ── Import content/images/ — logos, about, our-service, service thumbnails ────
-function dayanarc_import_content_images() {
-    $content_dir = get_template_directory() . '/content/images/';
+// ── Image imports split by component ─────────────────────────────────────────
 
-    // Logos — stored as attachment IDs in theme mods
+function dayanarc_import_logo_images() {
+    $dir = get_template_directory() . '/content/images/';
     foreach ( [
         [ 'file' => 'logos/header.png', 'key' => 'header_logo_id' ],
         [ 'file' => 'logos/footer.png', 'key' => 'footer_logo_id' ],
     ] as $entry ) {
-        $result = dayanarc_smart_import_file( $content_dir . $entry['file'] );
-        if ( ! is_wp_error( $result ) ) {
-            set_theme_mod( $entry['key'], $result['id'] );
-        }
+        $result = dayanarc_smart_import_file( $dir . $entry['file'] );
+        if ( ! is_wp_error( $result ) ) set_theme_mod( $entry['key'], $result['id'] );
     }
+}
 
-    // About + Our Service images — stored as URLs in theme mods
+function dayanarc_import_about_images() {
+    $dir = get_template_directory() . '/content/images/';
     foreach ( [
-        [ 'file' => 'about/main.webp',        'key' => 'about_image_main' ],
-        [ 'file' => 'about/detail.webp',      'key' => 'about_image_detail' ],
+        [ 'file' => 'about/main.webp',   'key' => 'about_image_main' ],
+        [ 'file' => 'about/detail.webp', 'key' => 'about_image_detail' ],
+    ] as $entry ) {
+        $result = dayanarc_smart_import_file( $dir . $entry['file'] );
+        if ( ! is_wp_error( $result ) ) set_theme_mod( $entry['key'], wp_get_attachment_url( $result['id'] ) );
+    }
+}
+
+function dayanarc_import_our_service_images() {
+    $dir = get_template_directory() . '/content/images/';
+    foreach ( [
         [ 'file' => 'our-service/image-1.jpg', 'key' => 'our_service_image_1' ],
         [ 'file' => 'our-service/image-2.png', 'key' => 'our_service_image_2' ],
     ] as $entry ) {
-        $result = dayanarc_smart_import_file( $content_dir . $entry['file'] );
-        if ( ! is_wp_error( $result ) ) {
-            set_theme_mod( $entry['key'], wp_get_attachment_url( $result['id'] ) );
-        }
+        $result = dayanarc_smart_import_file( $dir . $entry['file'] );
+        if ( ! is_wp_error( $result ) ) set_theme_mod( $entry['key'], wp_get_attachment_url( $result['id'] ) );
     }
+}
 
-    // Service thumbnails — set as post featured images
+function dayanarc_import_service_thumbnails() {
+    $dir = get_template_directory() . '/content/images/';
     foreach ( [
         [ 'folder' => 'services/architecture/',           'option' => 'dayanarc_service_architecture_id' ],
         [ 'folder' => 'services/industrial-warehouse/',   'option' => 'dayanarc_service_interior_design_id' ],
@@ -432,14 +523,40 @@ function dayanarc_import_content_images() {
         [ 'folder' => 'services/facade-landscape/',       'option' => 'dayanarc_service_5_id' ],
         [ 'folder' => 'services/technical-coordination/', 'option' => 'dayanarc_service_6_id' ],
     ] as $entry ) {
-        $result = dayanarc_smart_import_file( $content_dir . $entry['folder'] . 'thumbnail.png' );
+        $result = dayanarc_smart_import_file( $dir . $entry['folder'] . 'thumbnail.png' );
         if ( ! is_wp_error( $result ) ) {
             $post_id = (int) get_option( $entry['option'] );
-            if ( $post_id && get_post( $post_id ) ) {
-                set_post_thumbnail( $post_id, $result['id'] );
-            }
+            if ( $post_id && get_post( $post_id ) ) set_post_thumbnail( $post_id, $result['id'] );
         }
     }
+}
+
+// Wrapper — keeps dayanarc_run_import() working unchanged
+function dayanarc_import_content_images() {
+    dayanarc_import_logo_images();
+    dayanarc_import_about_images();
+    dayanarc_import_our_service_images();
+    dayanarc_import_service_thumbnails();
+}
+
+// ── Component wrapper functions ───────────────────────────────────────────────
+
+function dayanarc_import_services_full() {
+    dayanarc_import_service_pages();
+    dayanarc_import_service_thumbnails();
+}
+
+function dayanarc_import_journal_full() {
+    $ids = dayanarc_import_images();
+    dayanarc_import_journal_posts( $ids );
+}
+
+function dayanarc_import_pages_full() {
+    dayanarc_import_home_page();
+    dayanarc_import_journal_page();
+    dayanarc_import_portfolio_page();
+    dayanarc_import_contact_form();
+    dayanarc_import_contact_page();
 }
 
 // ── 2. Portfolio projects ─────────────────────────────────────────────────────
