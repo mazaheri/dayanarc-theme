@@ -386,7 +386,7 @@
         <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 pt-10 pb-14">
             <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-0 mb-8">
                 <div>
-                    <span class="text-[10px] tracking-[0.2em] text-[#585058] uppercase font-medium block mb-2">PROJECTS</span>
+                    <span class="text-[10px] tracking-[0.2em] text-[#585058] uppercase font-medium block mb-2">JOURNAL</span>
                     <?php $jh7 = get_theme_mod( 'journal_heading', 'DESIGN INSIGHTS' ); ?>
                     <h2 class="title-text text-3xl md:text-4xl text-[#231f20] leading-tight uppercase tracking-tight">
                         <?php echo esc_html( $jh7 ); ?>

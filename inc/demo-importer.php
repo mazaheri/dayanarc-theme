@@ -1439,7 +1439,7 @@ function dayanarc_apply_content_theme_mods() {
         'services_intro'           => 'Our integrated design services are applied across a diverse range of sectors, ensuring that every concept — from private luxury to public infrastructure — is executed with unrivaled precision and global standards.',
         'services_tagline'         => 'Transforming ideas into inspiring, functional spaces.',
         // Journal section
-        'journal_heading'          => 'LATEST PROJECTS',
+        'journal_heading'          => 'LATEST JOURNAL',
         // Homepage contact section
         'fp_contact_heading_line1' => "LET'S BEGIN A",
         'fp_contact_heading_line2' => 'CONVERSATION',
