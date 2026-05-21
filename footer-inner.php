@@ -13,10 +13,10 @@
         <div class="flex flex-col">
             <div class="mb-6">
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>" style="display:inline-block; text-decoration:none;">
-                    <img src="<?php echo esc_url( wp_get_attachment_image_url( get_theme_mod( 'footer_logo_id', 87 ), 'full' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>" style="height:48px; width:auto;">
+                    <img src="<?php echo esc_url( wp_get_attachment_image_url( get_theme_mod( 'footer_logo_id', 87 ), 'full' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>" style="height:63px; width:auto;">
                 </a>
             </div>
-            <p class="text-[12px] leading-relaxed font-light max-w-[260px] mb-8"><?php echo esc_html( get_theme_mod( 'footer_tagline', 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.' ) ); ?></p>
+            <p class="text-[14px] leading-relaxed font-light max-w-[260px] mb-8"><?php echo esc_html( get_theme_mod( 'footer_tagline', 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.' ) ); ?></p>
 
             <!-- Social icons -->
             <?php
@@ -59,21 +59,21 @@
 
         <!-- Col 2: Contact -->
         <div class="flex flex-col gap-2">
-            <span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted mb-4">CONTACT</span>
+            <span class="text-[12px] uppercase tracking-[0.15em] font-medium footer-muted mb-4">CONTACT</span>
             <?php
             $location        = get_theme_mod( 'contact_location', 'Business Bay, Dubai, UAE' );
             $email           = get_theme_mod( 'contact_email',    'support@dayanarc.com' );
             $website         = get_theme_mod( 'contact_website',  'http://dayanarc.com' );
             $website_display = preg_replace( '#^https?://#i', '', $website );
             ?>
-            <p class="text-[11px] font-semibold tracking-widest uppercase"><?php echo esc_html( strtoupper( $location ) ); ?></p>
-            <a href="mailto:<?php echo antispambot( $email ); ?>" class="footer-link text-[11px] font-semibold tracking-widest lowercase mt-2"><?php echo antispambot( $email ); ?></a>
-            <a href="<?php echo esc_url( $website ); ?>" class="footer-link text-[11px] font-semibold tracking-widest lowercase"><?php echo esc_html( $website_display ); ?></a>
+            <p class="text-[13px] font-semibold tracking-widest uppercase"><?php echo esc_html( strtoupper( $location ) ); ?></p>
+            <a href="mailto:<?php echo antispambot( $email ); ?>" class="footer-link text-[13px] font-semibold tracking-widest lowercase mt-2"><?php echo antispambot( $email ); ?></a>
+            <a href="<?php echo esc_url( $website ); ?>" class="footer-link text-[13px] font-semibold tracking-widest lowercase"><?php echo esc_html( $website_display ); ?></a>
         </div>
 
         <!-- Col 3: Our Offices with flags -->
         <div class="flex flex-col gap-2">
-            <span class="text-[10px] uppercase tracking-[0.15em] font-medium footer-muted mb-4">OUR OFFICES</span>
+            <span class="text-[12px] uppercase tracking-[0.15em] font-medium footer-muted mb-4">OUR OFFICES</span>
             <?php
             $contact_url = dayanarc_contact_page_url();
             $offices = [
@@ -84,7 +84,7 @@
             foreach ( $offices as $office ) :
                 if ( ! $office['text'] ) continue;
             ?>
-            <a href="<?php echo esc_url( $contact_url ); ?>" class="footer-link flex items-center gap-3 text-[11px] font-semibold tracking-widest uppercase mb-2">
+            <a href="<?php echo esc_url( $contact_url ); ?>" class="footer-link flex items-center gap-3 text-[13px] font-semibold tracking-widest uppercase mb-2">
                 <span style="font-size:1.2rem; line-height:1;"><?php echo $office['flag']; ?></span>
                 <?php echo esc_html( strtoupper( $office['text'] ) ); ?>
             </a>
@@ -114,7 +114,7 @@
     <!-- Copyright -->
     <div class="flex flex-col items-center">
         <div class="w-1/5 h-[1px] mb-4" style="background:rgba(246,240,218,0.2);"></div>
-        <div class="text-center text-[10px] tracking-widest uppercase font-medium footer-muted">
+        <div class="text-center text-[12px] tracking-widest uppercase font-medium footer-muted">
             COPYRIGHT <?php echo esc_html( date( 'Y' ) ); ?> &copy; DESIGNED BY <a href="https://valasolution.com/" target="_blank" rel="noopener noreferrer" class="footer-link">VALASOLUTION</a>
         </div>
     </div>
