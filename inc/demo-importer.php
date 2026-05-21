@@ -175,7 +175,7 @@ function dayanarc_get_components() {
         ],
         'portfolio'   => [
             'label' => 'Portfolio Projects',
-            'desc'  => '3 portfolio projects (Georgia, GCC, Germany) with gallery images',
+            'desc'  => '15 portfolio projects with gallery images from uploaded files',
             'fn'    => 'dayanarc_import_portfolio',
         ],
         'journal'     => [
@@ -226,17 +226,9 @@ function dayanarc_check_import_status() {
     }
     if ( $missing_svc ) $problems[] = "$missing_svc of 6 service pages not found";
 
-    // Portfolio posts — all 3 must exist
-    $missing_pf = 0;
-    foreach ( [
-        'dayanarc_portfolio_georgia_id',
-        'dayanarc_portfolio_gcc_id',
-        'dayanarc_portfolio_germany_id',
-    ] as $opt ) {
-        $id = (int) get_option( $opt );
-        if ( ! $id || ! get_post( $id ) ) $missing_pf++;
-    }
-    if ( $missing_pf ) $problems[] = "$missing_pf of 3 portfolio projects not found";
+    // Portfolio posts — all 15 must exist
+    $portfolio_count = (int) wp_count_posts( 'portfolio' )->publish;
+    if ( $portfolio_count < 15 ) $problems[] = "Only $portfolio_count of 15 portfolio projects found";
 
     // Logos must be set
     if ( ! get_theme_mod( 'header_logo_id' ) ) $problems[] = 'Header logo not imported';
@@ -337,9 +329,21 @@ function dayanarc_reset_content() {
         'dayanarc_service_project_mgmt_id',
         'dayanarc_service_5_id',
         'dayanarc_service_6_id',
-        'dayanarc_portfolio_georgia_id',
-        'dayanarc_portfolio_gcc_id',
-        'dayanarc_portfolio_germany_id',
+        'dayanarc_portfolio_moon_restaurant_id',
+        'dayanarc_portfolio_signaghi_warehouse_id',
+        'dayanarc_portfolio_alhudaib_villa_id',
+        'dayanarc_portfolio_ankara_tower_id',
+        'dayanarc_portfolio_hotel_ballroom_id',
+        'dayanarc_portfolio_frankfurt_villa_id',
+        'dayanarc_portfolio_cologne_warehouse_id',
+        'dayanarc_portfolio_french_restaurant_id',
+        'dayanarc_portfolio_nini_villa_id',
+        'dayanarc_portfolio_yas_palace_id',
+        'dayanarc_portfolio_emirates_hills_id',
+        'dayanarc_portfolio_private_villa_dubai_id',
+        'dayanarc_portfolio_mina_residential_id',
+        'dayanarc_portfolio_erbil_penthouse_id',
+        'dayanarc_portfolio_sharjah_warehouse_id',
         'dayanarc_contact_form_id',
         'dayanarc_contact_page_id',
         'dayanarc_portfolio_page_id',
@@ -559,89 +563,305 @@ function dayanarc_import_pages_full() {
     dayanarc_import_contact_page();
 }
 
-// ── 2. Portfolio projects ─────────────────────────────────────────────────────
-// Finds or creates each CPT post, then imports images from content/images/portfolio/
-// First image in folder = cover, rest = gallery.
-function dayanarc_import_portfolio() {
-    $content_dir = get_template_directory() . '/content/images/';
-    $image_exts  = [ 'jpg', 'jpeg', 'png', 'webp', 'gif' ];
+// ── Helper: register an image already present in wp-content/uploads/ ─────────
+// Does not copy or re-upload — just inserts an attachment record and generates metadata.
+function dayanarc_register_upload_image( $file_path, $title = '' ) {
+    if ( ! file_exists( $file_path ) ) return 0;
 
-    $items = [
+    $norm = wp_normalize_path( $file_path );
+
+    $existing = get_posts( [
+        'post_type'      => 'attachment',
+        'post_status'    => 'any',
+        'posts_per_page' => 1,
+        'fields'         => 'ids',
+        'meta_query'     => [ [ 'key' => '_dayan_upload_path', 'value' => $norm ] ],
+    ] );
+    if ( $existing ) return (int) $existing[0];
+
+    $upload_dir = wp_upload_dir();
+    $base_dir   = wp_normalize_path( $upload_dir['basedir'] );
+    $file_url   = str_replace( $base_dir, $upload_dir['baseurl'], $norm );
+
+    $mime   = wp_check_filetype( $file_path );
+    $att_id = wp_insert_attachment( [
+        'guid'           => $file_url,
+        'post_mime_type' => $mime['type'] ?: 'image/webp',
+        'post_title'     => $title ?: pathinfo( $file_path, PATHINFO_FILENAME ),
+        'post_status'    => 'inherit',
+    ], $file_path );
+
+    if ( is_wp_error( $att_id ) || ! $att_id ) return 0;
+
+    wp_update_attachment_metadata( $att_id, wp_generate_attachment_metadata( $att_id, $file_path ) );
+    update_post_meta( $att_id, '_dayan_upload_path', $norm );
+
+    return (int) $att_id;
+}
+
+// ── 2. Portfolio projects (15 projects — images already in wp-content/uploads/dayan projects/) ──
+// Deletes all existing portfolio posts, then creates 15 fresh ones.
+// Images are registered in-place from the uploads folder; no file copying needed.
+function dayanarc_import_portfolio() {
+    require_once ABSPATH . 'wp-admin/includes/image.php';
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+    require_once ABSPATH . 'wp-admin/includes/media.php';
+
+    $upload_dir   = wp_upload_dir();
+    $projects_dir = $upload_dir['basedir'] . '/dayan projects/';
+
+    // Delete all existing portfolio posts before creating fresh ones
+    $existing = get_posts( [
+        'post_type'      => 'portfolio',
+        'post_status'    => 'any',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+    ] );
+    foreach ( $existing as $pid ) {
+        wp_delete_post( $pid, true );
+    }
+
+    $projects = [
         [
-            'title'    => 'Georgia Residence',
-            'content'  => 'A refined residential project in Tbilisi blending contemporary design with local architectural traditions. Dayan Arc delivered the full scope from concept through execution, creating warm and livable spaces that honour both the setting and the client\'s lifestyle.',
-            'excerpt'  => 'A refined residential project blending contemporary design with local architectural traditions.',
-            'location' => 'Tbilisi, Georgia',
-            'concept'  => 'Full residential design and fit-out',
-            'palette'  => 'Warm neutrals, natural stone, textured plaster',
-            'folder'   => 'portfolio/georgia/',
-            'option'   => 'dayanarc_portfolio_georgia_id',
+            'option'    => 'dayanarc_portfolio_moon_restaurant_id',
+            'folder'    => ' 002  MOON RESTURANT',
+            'title'     => 'MOON RESTAURANT & TEA LOUNGE',
+            'excerpt'   => 'A commercial hospitality project in Georgia using fluid, curvilinear spatial zoning to orchestrate guest circulation and elevate the dining experience into a visual narrative.',
+            'location'  => 'Georgia',
+            'year'      => '2018',
+            'typology'  => 'Commercial Food & Beverage Architecture',
+            'aesthetic' => 'Hospitality-Driven Elegance, Curvilinear Zoning, Textural Gastronomy',
+            'materials' => 'White Engineered Stone, Walnut Veneers, Textured Silver Leaf, Bas-Relief Stone, Wool Weave Fabrics',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Site Supervision)',
+            'content'   => '<p>This commercial food and beverage hospitality project relies on fluid, curvilinear spatial zoning to orchestrate guest circulation and elevate the dining experience into a visual narrative. Departing from rigid commercial grids, the design incorporates sweeping architectural enclosures, bespoke organic millwork, and micro-zoned seating clusters that balance grand presentation with cozy, human-scale privacy.</p>
+<p>The Tea Lounge volume is shaped by a sweeping, semi-circular screen wall featuring integrated artisanal display niches for curation, reflecting an overhead oval ceiling recess finished in textured silver leaf. Soft, tub-shaped armchairs upholstered in textured grey wool weave create a spacious yet communal landscape over seamless, high-polished marble flooring.</p>
+<p>The dining zone introduces a richer material canvas featuring deep walnut-toned paneling and structured geometric shelving units, anchored by a monolithic capsule-shaped buffet island clad in seamless white engineered stone, backed by a dramatic wall featuring custom-carved floral bas-relief masonry.</p>',
         ],
         [
-            'title'    => 'GCC Pavilion',
-            'content'  => 'A landmark hospitality and commercial pavilion designed from concept to execution with precision and care. Every detail — from the structural skin to the interior finishes — was orchestrated to create an immersive and memorable guest experience.',
-            'excerpt'  => 'A landmark hospitality space designed from concept to execution with precision and care.',
-            'location' => 'GCC Region',
-            'concept'  => 'Complete hospitality design and fit-out',
-            'palette'  => 'Monochromatic accents, reflective surfaces, deep tones',
-            'folder'   => 'portfolio/gcc/',
-            'option'   => 'dayanarc_portfolio_gcc_id',
+            'option'    => 'dayanarc_portfolio_signaghi_warehouse_id',
+            'folder'    => ' 014 warehouse heorgia signaghi',
+            'title'     => 'SIGNAGHI INDUSTRIAL WAREHOUSE',
+            'excerpt'   => 'An industrial architecture project in Signaghi optimizing a high-clearance warehouse shell through calculated tectonic insertions, maximizing floor-area ratio through a comprehensive steel mezzanine framework.',
+            'location'  => 'Signaghi, Georgia',
+            'year'      => '2026',
+            'typology'  => 'Industrial Warehouse & Office Architecture',
+            'aesthetic' => 'Industrial Tectonics, Pragmatic Minimalism, Structural Optimization',
+            'materials' => 'I-Beams, HSS Steel Columns, Prefabricated Decking, Insulated Sandwich Panels, Concrete Screed',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Structural Supervision)',
+            'content'   => '<p>This industrial architecture project in Signaghi optimizes a high-clearance warehouse shell through calculated tectonic insertions. The design prioritizes structural integrity and precise spatial coordination, introducing a comprehensive steel mezzanine framework to maximize floor-area ratio. By exposing the industrial skeleton and treating functional circulation as a prominent graphic element, the space achieves maximum storage and operational efficiency while maintaining an uncompromised structural layout.</p>
+<p>The vertical volume is zoned via a heavy-duty structural steel mezzanine system, supported by a precision matrix of hollow structural section (HSS) columns. Vertical movement is handled by a custom-fabricated steel utility staircase with open risers, bordered by a modular, high-visibility white safety guardrail system that wraps continuously around the mezzanine perimeter.</p>',
         ],
         [
-            'title'    => 'Germany Office HQ',
-            'content'  => 'A modern office headquarters in Berlin that balances open collaboration with focused workspaces. The design draws on Bauhaus proportions while integrating contemporary materials and biophilic elements for a productive and inspiring environment.',
-            'excerpt'  => 'A modern office design that balances open collaboration with focused work environments.',
-            'location' => 'Berlin, Germany',
-            'concept'  => 'Office and workplace design',
-            'palette'  => 'Concrete grey, warm oak, matte black accents',
-            'folder'   => 'portfolio/germany/',
-            'option'   => 'dayanarc_portfolio_germany_id',
+            'option'    => 'dayanarc_portfolio_alhudaib_villa_id',
+            'folder'    => '001 ALHUDAIB VILLA',
+            'title'     => 'ALHUDAIB VILLA',
+            'excerpt'   => 'A private villa in Istanbul reinterpreting contemporary minimalism by treating structural mass as a sculptural entity — bold stacked rectangular volumes and extensive floor-to-ceiling glass envelopes.',
+            'location'  => 'Istanbul, Turkey',
+            'year'      => '2026',
+            'typology'  => 'Private Residential Villa',
+            'aesthetic' => 'Contemporary Minimalism, Cantilevered Geometry, Transparent Volumes',
+            'materials' => 'White Architectural Render, Dark Basalt Stone Cladding, Panoramic Glass, Anodized Aluminium',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Site Supervision)',
+            'content'   => '<p>This private villa architecture in Istanbul reinterprets contemporary minimalism by treating structural mass as a sculptural entity. Positioned to engage with the natural terrain, the design trades traditional solid perimeter walls for bold, stacked rectangular volumes and extensive floor-to-ceiling glass envelopes. The architecture establishes an intentional visual tension between heavy, grounded stone surfaces and dramatic, floating cantilevers that reach out toward the landscape.</p>
+<p>The exterior architecture utilizes a multi-level layout of intersecting horizontal planes. A heavy, dark-textured natural stone block forms the foundational anchor of the lower level, supporting an upper residential volume finished in smooth white architectural render that cantilevers sharply over the outdoor terrace. Floor-to-ceiling panoramic glass panels completely dissolve the barrier between indoor spaces and manicured lawns.</p>',
+        ],
+        [
+            'option'    => 'dayanarc_portfolio_ankara_tower_id',
+            'folder'    => '003 ANKARA RESIDENTIAL TOWER',
+            'title'     => 'ANKARA RESIDENTIAL TOWER',
+            'excerpt'   => 'A mid-rise residential architecture in Ankara introducing soft, undulating floor plates that mimic organic movement, establishing a prominent landmark in the city\'s evolving architectural fabric.',
+            'location'  => 'Ankara, Turkey',
+            'year'      => '2024',
+            'typology'  => 'Luxury High-Rise Residential',
+            'aesthetic' => 'Modern Sensual Minimalism, Organic High-Rise Contours, Biophilic Integration',
+            'materials' => 'White Architectural Render, Slatted Exterior Timber, Panoramic Glass, Curved Frameless Glass Balustrades',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Site Supervision)',
+            'content'   => '<p>Breaking away from rigid, block-like urban high-rises, this mid-rise residential architecture introduces soft, undulating floor plates that mimic organic movement. The design language emphasizes continuous horizontal bands and sweeping curvilinear balconies, creating a highly dynamic facade that balances deep transparency with structural warmth, establishing a prominent landmark within Ankara\'s evolving architectural fabric.</p>
+<p>The facade is defined by staggered, floating concrete balconies with softly rounded edges, underscored by warm, natural timber-clad soffits. Floor-to-ceiling panoramic glass windows maximize natural daylight while sweeping views are framed by lush, integrated balcony planters that inject vibrant biophilic elements directly into the vertical architecture.</p>',
+        ],
+        [
+            'option'    => 'dayanarc_portfolio_hotel_ballroom_id',
+            'folder'    => '004 BRIDAL SALON',
+            'title'     => '5-STAR HOTEL BALLROOM',
+            'excerpt'   => 'A luxury hospitality interior in Georgia coordinating massive spatial volume with a multi-layered ornamental envelope — deep grid geometry and highly reflective faceted planes creating a grand, celebratory atmosphere.',
+            'location'  => 'Georgia',
+            'year'      => '2019',
+            'typology'  => 'Luxury Hospitality Architecture',
+            'aesthetic' => 'High-End Hospitality, Layered Geometry, Textural Opulence',
+            'materials' => 'Faceted Glass Panels, Mashrabiya Metal Lattice, Polished Marble, Brass Trim, Velvet',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Site Supervision)',
+            'content'   => '<p>This hospitality interior architecture coordinates massive spatial volume with an intricate, multi-layered ornamental envelope. The design utilizes deep grid geometry and highly reflective, faceted planes to expand the overhead limits of the space, creating a grand, celebratory atmosphere where clean structural framing balances highly detailed surface textures.</p>
+<p>The ceiling functions as the primary architectural focal point, executed via a deeply recessed coffered grid with intricate, faceted geometric glass paneling mimicking raw crystal formations, outlined by integrated linear brass channels. Monolithic stone portals frame expansive wall panels inset with mashrabiya-inspired metal lattice screens, while a grand multi-flight monumental staircase wrapped in custom metal balustrades serves as the primary visual anchor of the sprawling, double-height volume.</p>',
+        ],
+        [
+            'option'    => 'dayanarc_portfolio_frankfurt_villa_id',
+            'folder'    => '005 frankfurt villa n01villa',
+            'title'     => 'FRANKFURT VILLA',
+            'excerpt'   => 'A residential interior in Frankfurt coordinating a highly precise European minimal layout with warm organic accents — bold monochromatic volumes, graphite fluted paneling, and a biophilic vertical green wall.',
+            'location'  => 'Frankfurt, Germany',
+            'year'      => '2017',
+            'typology'  => 'Private Residential Villa',
+            'aesthetic' => 'High-Contrast Minimalism, European Contemporary, Biophilic Integration',
+            'materials' => 'White Marble, Matte Black Lacquer, Slatted Timber, Fluted Panels, Concrete Screed',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Site Supervision)',
+            'content'   => '<p>This residential interior architecture coordinates a highly precise, European minimal layout with warm organic accents to mitigate Germany\'s overcast seasonal light. The spatial hierarchy centers on a bold monochromatic foundation — matte black volumes, graphite fluted paneling, and clean concrete screed floors — intersected by rich timber surfaces and lush indoor verticality.</p>
+<p>The open-concept kitchen and lounge represent a study in stark, sophisticated contrast: floor-to-ceiling cabinetry in ultra-matte black creates a seamless structural wall integrated with a professional wine-cellar enclosure, broken by a monolithic white marble island. The formal dining space shifts toward a softer canvas with a rich timber slatted baffle ceiling and a dense, floor-to-ceiling vertical green wall that brings natural life directly into the interior.</p>',
+        ],
+        [
+            'option'    => 'dayanarc_portfolio_cologne_warehouse_id',
+            'folder'    => '006 germany-koln-warehouse',
+            'title'     => 'COLOGNE INDUSTRIAL WAREHOUSE',
+            'excerpt'   => 'An industrial architecture project in Cologne focusing on structural modification of a high-volume warehouse facility, utilizing heavy-duty skeletal framing to insert a wide-span mezzanine deck.',
+            'location'  => 'Cologne, Germany',
+            'year'      => '2024',
+            'typology'  => 'Industrial Warehouse & Office Architecture',
+            'aesthetic' => 'Pragmatic Tectonics, Utilitarian Minimalism, Structural Logistics',
+            'materials' => 'Wide-Flange Steel Columns, Steel Gabled Trusses, Corrugated Roof Panels, Concrete Slab, Skylights',
+            'scope'     => 'Full Cycle (Concept, Detail Design & On-Site Structural Supervision)',
+            'content'   => '<p>This industrial architecture project in Cologne focuses on the core structural modification of a high-volume warehouse facility to meet intensive logistics and operational demands. The intervention centers on a calculated space-planning strategy, utilizing heavy-duty skeletal framing to insert a wide-span mezzanine deck — leaving engineering components exposed and optimizing natural light penetration for high volumetric flexibility.</p>
+<p>The main architectural insertion consists of a rigid structural steel platform system coated in an anti-corrosive industrial forest green finish. The gabled steel truss system supports corrugated metal roof sandwich panels, integrated with rows of linear frosted skylight panels that flood the facility with natural daylight. A continuous steel safety guardrail wraps the upper mezzanine edge while a deep concrete vehicle ramp connects the internal floor to external shipping points.</p>',
+        ],
+        [
+            'option'    => 'dayanarc_portfolio_french_restaurant_id',
+            'folder'    => '007 paris-france-FRENCH RESTURANT',
+            'title'     => 'JE T\'AIME FRENCH RESTAURANT',
+            'excerpt'   => 'A fine-dining restaurant interior in Paris capturing the romance of the city through bold, high-contrast structural intervention — monumental intersecting arches, deep crimson planes, and highly reflective metallic accents.',
+            'location'  => 'Paris, France',
+            'year'      => '2018',
+            'typology'  => 'Commercial Food & Beverage Architecture',
+            'aesthetic' => 'Contemporary Parisian, High-Contrast Luxury, Dramatic Symmetrical Forms',
+            'materials' => 'Brushed Gold Leaf, Velvet Fabric Wall Coverings, Dark Marble, Crystal Rods, Velvet Upholstery',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Site Supervision)',
+            'content'   => '<p>This fine-dining restaurant interior architecture captures the romance of Paris through a bold, high-contrast structural intervention. The design updates classical French symmetry with a contemporary, theatrical pulse — using monumental intersecting arches, deep crimson vertical planes, and highly reflective metallic accents to partition the expansive dining room into intimate, atmospheric sub-zones.</p>
+<p>The main spatial volume is structured by a series of sweeping, sharp-pointed gothic arches finished in rich, brushed gold leaf running sequentially through the floor plan. Deep crimson fabric wall coverings provide a velvet-textured backdrop that contrasts with the clean cream masonry. The culinary theater is grounded by dark, heavily veined marble dining tables paired with curved tub chairs in muted taupe velvet, while massive rectangular crystal-rod chandeliers cascade from the arches overhead.</p>',
+        ],
+        [
+            'option'    => 'dayanarc_portfolio_nini_villa_id',
+            'folder'    => '008 NINI VILLA',
+            'title'     => 'NINI VILLA',
+            'excerpt'   => 'A residential architecture project in Batumi reinterpreting classical European monumentalism for a modern coastal context — strict axial symmetry, deep window embrasures, and rhythmic structural massing.',
+            'location'  => 'Batumi, Georgia',
+            'year'      => '2025',
+            'typology'  => 'Private Residential Villa',
+            'aesthetic' => 'Classical European, Neoclassical Symmetry, Coastal Permanence',
+            'materials' => 'Architectural Plaster Molding, Light Stone Cladding, Wrought Iron, Dark-Aluminium Glazing Profiles',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Site Supervision)',
+            'content'   => '<p>This residential architecture project in Batumi reinterprets classical European monumentalism for a modern coastal context. Moving away from purely decorative historical pastiche, the design focuses on strict axial symmetry, deep window embrasures, and rhythmic structural massing. The resulting exterior presents a powerful, enduring silhouette that responds gracefully to changing daylight while maintaining absolute privacy for the private estate.</p>
+<p>The primary facade is defined by a rigid grid of classical pilasters and pristine white plaster molding work, balanced by clean, dark-profiled window framing and minimalist wrought-iron balustrades. The lower level incorporates a deep, stone-framed loggia creating a soft structural transition between the landscaped gardens and the interior core, while integrated accent lighting shifts the monumental facade into a soft, illuminated sculpture at night.</p>',
+        ],
+        [
+            'option'    => 'dayanarc_portfolio_yas_palace_id',
+            'folder'    => '009 villa riyaz ahmed',
+            'title'     => 'YAS PALACE VILLA',
+            'excerpt'   => 'A palatial estate interior in Riyadh synthesizing grand neoclassical volumes with custom-tailored luxury elements — soaring verticality, axial symmetry, and highly detailed textural surfaces.',
+            'location'  => 'Riyadh, Saudi Arabia',
+            'year'      => '2025',
+            'typology'  => 'Private Residential Villa',
+            'aesthetic' => 'Neoclassical Palatial, Royal Majlis Elegance, Intricate Symmetry',
+            'materials' => 'Gold Onyx, Hand-Carved Timber, Plaster Molding, Silk Wall Coverings, Bronze, Crystal',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Site Supervision)',
+            'content'   => '<p>This palatial estate interior architecture synthesizes grand neoclassical volumes with custom-tailored luxury elements. Designed to function effortlessly for both intimate residential living and high-profile formal hosting, the spatial layout relies on soaring verticality, axial symmetry, and highly detailed textural surfaces to establish a permanent sense of architectural permanence.</p>
+<p>The Grand Majlis Hall — a double-height volume for formal assembly — is anchored by a massive custom-framed golden mosaic mural juxtaposed against a monumental hand-carved timber portal door. The formal dining hall is defined by repeating wall molding panels inset with silk fabric coverings and illuminated by a trio of crystal chandeliers. The powder room features a custom-engineered monolithic counter sculpted from heavily veined gold onyx, set against hand-painted silk wall coverings depicting subtle organic motifs.</p>',
+        ],
+        [
+            'option'    => 'dayanarc_portfolio_emirates_hills_id',
+            'folder'    => '010 VILLA ABU DHABI',
+            'title'     => 'EMIRATES HILLS VILLA',
+            'excerpt'   => 'A private villa interior in Emirates Hills embracing dark, grounded materiality — monolithic bronze columns, deep timber planes, and expansive glazing zoning a highly communicative family living and dining hall.',
+            'location'  => 'Dubai, UAE',
+            'year'      => '2026',
+            'typology'  => 'Private Residential Villa',
+            'aesthetic' => 'Sensual Minimalism, Earthy Luxury, Bold Structural Contrasts',
+            'materials' => 'Brushed Bronze, Dark Walnut Veneer, Slate Micro-Cement, Matte Stone Tiles, Linen',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Site Supervision)',
+            'content'   => '<p>This private villa interior architecture in Emirates Hills embraces a dark, grounded materiality that contrasts with Dubai\'s high-glare desert light. The design strips away decorative overlay to let large structural components do the visual work, relying on monolithic bronze columns, deep timber planes, and expansive glazing to zone a highly communicative family living and dining hall.</p>
+<p>The open floor plan is anchored by a massive, floor-to-ceiling structural column clad in matte, brushed bronze, coordinating with an oversized custom-sculpted suspension light assembly of sweeping bronze bands. Deep walnut-veneer wall paneling intersects with textured slate-grey micro-cement slabs, while the furniture layout remains intentionally low-profile to preserve outward sightlines through panoramic floor-to-ceiling glass apertures.</p>',
+        ],
+        [
+            'option'    => 'dayanarc_portfolio_private_villa_dubai_id',
+            'folder'    => '011 Villa 06-villa erbil.no6',
+            'title'     => 'PRIVATE VILLA RESIDENCE',
+            'excerpt'   => 'A private residential architecture in Dubai rejecting sterile modernism in favor of layered textures and fluid geometry — massive glass envelopes combined with architectural screening and rich material thresholds.',
+            'location'  => 'Dubai, UAE',
+            'year'      => '2026',
+            'typology'  => 'Private Residential Villa',
+            'aesthetic' => 'Sensual Minimalism, High-End Residential, Organic Geometry',
+            'materials' => 'Raw Stone Cladding, Walnut Veneer, Bas-Relief Stone, Velvet, Fluted Glass',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Site Supervision)',
+            'content'   => '<p>This private residential architecture rejects sterile modernism in favor of layered textures and fluid geometry. The design prioritizes spatial liberation, using massive floor-to-ceiling glass envelopes to invite natural light while employing architectural screening, deep recesses, and rich material thresholds to maintain absolute residential sanctuary.</p>
+<p>Double-height architectural volumes are grounded by a monumental, raw-textured stone cladding feature wall paired with a cascading linear light installation. The private powder rooms feature deep, curved walnut-veneer wall panels framing twin arched vanities with custom-sculpted stone bas-relief work highlighted by hidden halo illumination. The master and guest suites feature seamless architectural wall transitions integrating flush-mount doors, fluted glass sliders, and built-in minimalist wardrobes.</p>',
+        ],
+        [
+            'option'    => 'dayanarc_portfolio_mina_residential_id',
+            'folder'    => '012 mina residential',
+            'title'     => 'MINA RESIDENTIAL TOWER',
+            'excerpt'   => 'A residential interior in Riyadh centered on Sensual Minimalism — where sharp angles yield to organic curves and human-centric proportions create an understated, earthy sanctuary.',
+            'location'  => 'Riyadh, Saudi Arabia',
+            'year'      => '2023',
+            'typology'  => 'Luxury High-Rise Residential',
+            'aesthetic' => 'Sensual Minimalism, Warm Organic, Monochromatic Luxury',
+            'materials' => 'Travertine, Linear Timber, Fluted Rose Marble, Bouclé Fabrics, Micro-Cement',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Site Supervision)',
+            'content'   => '<p>Departing from rigid high-rise geometry, this interior architecture centers on Sensual Minimalism — where sharp angles yield to organic curves and human-centric proportions. The spatial flow is deliberate, establishing an understated, earthy sanctuary amid Riyadh\'s urban landscape through seamless, open-plan connectivity.</p>
+<p>Visual rhythm dictates the overhead volume: the lounge introduces a dynamic linear timber baffle ceiling for structural depth, contrasting with seamless micro-cement walls and warm cream travertine floor slabs. The master bath extends the micro-minimalist aesthetic with soft stone-textured wall tiles punctuated by a striking fluted accent wall in muted rose marble, floating stone vanities, and concealed under-cabinet halo lighting.</p>',
+        ],
+        [
+            'option'    => 'dayanarc_portfolio_erbil_penthouse_id',
+            'folder'    => '013 PENTHOUSE LUAY',
+            'title'     => 'ERBIL PENTHOUSE',
+            'excerpt'   => 'An exclusive penthouse interior in Erbil challenging standard open-plan layouts through structural transparency — operable metallic partitions and glass dividers balancing grand communal visibility with intimate privacy.',
+            'location'  => 'Erbil',
+            'year'      => '2019',
+            'typology'  => 'Luxury High-Rise Residential',
+            'aesthetic' => 'High-End Hospitality-Infused Residential, Bold Geometric Luxury',
+            'materials' => 'Polished Gold Metal, Fluted Glass, High-Gloss Marble, Velvet, Dark Wood',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Site Supervision)',
+            'content'   => '<p>Designed for an exclusive penthouse within a prominent residential tower, this interior architecture challenges standard open-plan layouts through structural transparency. By utilizing operable, high-polished metallic partitions and glass dividers, the space balances grand communal visibility with immediate, intimate privacy — the flow feels naturally continuous, guided by deep perspective lines and a deliberate interplay of light and reflection.</p>
+<p>Space division relies on custom-fabricated, floor-to-ceiling gold metallic folding screens and fluted glass panels that allow the main living lounge to open toward both an indoor pool sanctuary and a dramatic sunken majlis. High-gloss marble floor slabs run throughout the circulation paths, contrasted by dark wood decking surrounding the pool and the plush velvet upholstery of the deep-set sunken lounge.</p>',
+        ],
+        [
+            'option'    => 'dayanarc_portfolio_sharjah_warehouse_id',
+            'folder'    => '016 -warehouse sharjeh',
+            'title'     => 'SHARJAH INDUSTRIAL WAREHOUSE',
+            'excerpt'   => 'An industrial interior in Sharjah converting a vast warehouse shell into a multi-level corporate hub — a precise floating mezzanine insertion and extensive steel-framed glazing grids achieving absolute spatial efficiency.',
+            'location'  => 'Sharjah, UAE',
+            'year'      => '2026',
+            'typology'  => 'Industrial Warehouse & Office Architecture',
+            'aesthetic' => 'Industrial Minimalism, Structural Tectonics, High-Efficiency Workspaces',
+            'materials' => 'IPE Steel Beams, Black Steel Window Profiles, Polished Concrete, Clear Glass, Minimalist Planters',
+            'scope'     => 'Full Cycle (Concept, Detail Design & Construction Supervision)',
+            'content'   => '<p>This industrial interior architecture converts a vast, high-volume warehouse shell into a highly functional, multi-level corporate and operational hub. Retaining the raw structural expression of the warehouse, the design introduces a precise, floating mezzanine insertion and extensive steel-framed glazing grids — achieving absolute spatial efficiency while maintaining a continuous, transparent visual field across the entire facility.</p>
+<p>A custom-engineered structural mezzanine level framed with exposed IPE steel beams expands the building\'s usable footprint. Floor-to-ceiling glass systems enclosed by industrial-profile steel window grids provide acoustic isolation for administrative zones while maintaining complete management oversight of the factory floor. The material palette relies on industrial honesty: seamless polished concrete screed forms the ground flooring, softened by integrated indoor planters and warm-toned light tracks recessed into the smooth office ceilings.</p>',
         ],
     ];
 
-    foreach ( $items as $item ) {
-        // Find or create portfolio post
-        $post_id = (int) get_option( $item['option'], 0 );
+    foreach ( $projects as $item ) {
+        $post_id = wp_insert_post( [
+            'post_title'   => $item['title'],
+            'post_content' => $item['content'],
+            'post_excerpt' => $item['excerpt'],
+            'post_status'  => 'publish',
+            'post_type'    => 'portfolio',
+        ] );
 
-        if ( ! $post_id || ! get_post( $post_id ) ) {
-            $q = new WP_Query( [
-                'post_type'      => 'portfolio',
-                'title'          => $item['title'],
-                'post_status'    => 'any',
-                'posts_per_page' => 1,
-                'fields'         => 'ids',
-                'no_found_rows'  => true,
-            ] );
-            $post_id = $q->have_posts() ? $q->posts[0] : 0;
+        if ( is_wp_error( $post_id ) || ! $post_id ) continue;
 
-            if ( ! $post_id ) {
-                $post_id = wp_insert_post( [
-                    'post_title'   => $item['title'],
-                    'post_content' => $item['content'],
-                    'post_excerpt' => $item['excerpt'],
-                    'post_status'  => 'publish',
-                    'post_type'    => 'portfolio',
-                ] );
-            }
-
-            if ( ! $post_id || is_wp_error( $post_id ) ) continue;
-            update_option( $item['option'], $post_id );
-        }
-
-        // Always update meta
+        update_option( $item['option'], $post_id );
         update_post_meta( $post_id, '_portfolio_location', $item['location'] );
-        update_post_meta( $post_id, '_portfolio_concept',  $item['concept'] );
-        update_post_meta( $post_id, '_portfolio_palette',  $item['palette'] );
+        update_post_meta( $post_id, '_portfolio_year',     $item['year'] );
+        update_post_meta( $post_id, '_portfolio_concept',  $item['scope'] );
+        update_post_meta( $post_id, '_portfolio_palette',  $item['materials'] );
+        update_post_meta( $post_id, '_portfolio_typology', $item['typology'] );
+        update_post_meta( $post_id, '_portfolio_aesthetic', $item['aesthetic'] );
 
-        // Import images from folder
-        $folder = $content_dir . $item['folder'];
-        if ( ! is_dir( $folder ) ) continue;
+        // Register images already present in the uploads folder
+        $folder_path = rtrim( $projects_dir . $item['folder'], '/' ) . '/';
+        if ( ! is_dir( $folder_path ) ) continue;
 
         $files = [];
-        foreach ( scandir( $folder ) as $f ) {
-            $ext = strtolower( pathinfo( $f, PATHINFO_EXTENSION ) );
-            if ( in_array( $ext, $image_exts, true ) ) {
-                $files[] = $folder . $f;
+        foreach ( scandir( $folder_path ) as $f ) {
+            if ( strtolower( pathinfo( $f, PATHINFO_EXTENSION ) ) === 'webp' ) {
+                $files[] = $folder_path . $f;
             }
         }
         sort( $files );
@@ -650,10 +870,8 @@ function dayanarc_import_portfolio() {
 
         $att_ids = [];
         foreach ( $files as $fp ) {
-            $result = dayanarc_smart_import_file( $fp );
-            if ( ! is_wp_error( $result ) ) {
-                $att_ids[] = $result['id'];
-            }
+            $id = dayanarc_register_upload_image( $fp );
+            if ( $id ) $att_ids[] = $id;
         }
 
         if ( ! empty( $att_ids ) ) {
