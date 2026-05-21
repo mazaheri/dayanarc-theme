@@ -564,7 +564,8 @@ function dayanarc_import_pages_full() {
 }
 
 // ── Helper: register an image already present in wp-content/uploads/ ─────────
-// Does not copy or re-upload — just inserts an attachment record and generates metadata.
+// Inserts an attachment record with basic dimension metadata.
+// Skips wp_generate_attachment_metadata() (thumbnail resizing) to avoid timeouts.
 function dayanarc_register_upload_image( $file_path, $title = '' ) {
     if ( ! file_exists( $file_path ) ) return 0;
 
@@ -593,7 +594,17 @@ function dayanarc_register_upload_image( $file_path, $title = '' ) {
 
     if ( is_wp_error( $att_id ) || ! $att_id ) return 0;
 
-    wp_update_attachment_metadata( $att_id, wp_generate_attachment_metadata( $att_id, $file_path ) );
+    // Store minimal metadata (dimensions only) — avoids slow thumbnail generation
+    $size = @getimagesize( $file_path );
+    if ( $size ) {
+        wp_update_attachment_metadata( $att_id, [
+            'width'  => $size[0],
+            'height' => $size[1],
+            'file'   => str_replace( trailingslashit( $base_dir ), '', $norm ),
+            'sizes'  => [],
+        ] );
+    }
+
     update_post_meta( $att_id, '_dayan_upload_path', $norm );
 
     return (int) $att_id;
@@ -603,9 +614,7 @@ function dayanarc_register_upload_image( $file_path, $title = '' ) {
 // Deletes all existing portfolio posts, then creates 15 fresh ones.
 // Images are registered in-place from the uploads folder; no file copying needed.
 function dayanarc_import_portfolio() {
-    require_once ABSPATH . 'wp-admin/includes/image.php';
-    require_once ABSPATH . 'wp-admin/includes/file.php';
-    require_once ABSPATH . 'wp-admin/includes/media.php';
+    @set_time_limit( 300 );
 
     $upload_dir   = wp_upload_dir();
     $projects_dir = $upload_dir['basedir'] . '/dayan projects/';
