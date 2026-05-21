@@ -4,7 +4,7 @@
  */
 get_header( 'inner' );
 
-$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+$paged = max( 1, (int) get_query_var( 'paged' ), (int) get_query_var( 'page' ) );
 $portfolio_query = new WP_Query( [
     'post_type'      => 'portfolio',
     'posts_per_page' => 6,
@@ -77,8 +77,8 @@ $portfolio_query = new WP_Query( [
             <div class="archive-pagination" style="margin-top:4rem;">
                 <?php
                 echo paginate_links( [
-                    'base'      => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
-                    'format'    => '?paged=%#%',
+                    'base'      => add_query_arg( 'paged', '%#%', get_permalink() ),
+                    'format'    => '',
                     'current'   => $paged,
                     'total'     => $portfolio_query->max_num_pages,
                     'prev_text' => '← PREV',
