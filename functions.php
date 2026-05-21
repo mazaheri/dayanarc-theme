@@ -100,6 +100,15 @@ function dayanarc_flush_rewrites() {
 }
 add_action( 'after_switch_theme', 'dayanarc_flush_rewrites' );
 
+// Prevent WordPress canonical redirect from converting ?paged=2 → /portfolio/page/2/
+// (which 404s because the CPT has has_archive=>false).
+add_filter( 'redirect_canonical', function( $redirect_url ) {
+    if ( is_page( (int) get_option( 'dayanarc_portfolio_page_id' ) ) ) {
+        return false;
+    }
+    return $redirect_url;
+} );
+
 // Deferred rewrite flush — demo importer sets this option; the next page load flushes properly.
 function dayanarc_maybe_flush_rewrites() {
     if ( get_option( 'dayanarc_flush_rewrites_pending' ) ) {
