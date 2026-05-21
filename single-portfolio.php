@@ -10,25 +10,27 @@
         </h1>
 
         <?php
-        $gallery_ids  = json_decode( get_post_meta( get_the_ID(), '_portfolio_gallery', true ), true );
-        $gallery_ids  = is_array( $gallery_ids ) ? $gallery_ids : [];
-        $thumb_full   = get_the_post_thumbnail_url( get_the_ID(), 'full' );
+        $pid          = get_the_ID();
+        $thumb_full   = get_post_meta( $pid, '_portfolio_cover_url', true )
+                     ?: get_the_post_thumbnail_url( $pid, 'full' );
+        $gallery_urls = json_decode( get_post_meta( $pid, '_portfolio_gallery_urls', true ), true );
+        $gallery_urls = is_array( $gallery_urls ) ? $gallery_urls : [];
         ?>
 
         <?php if ( $thumb_full ) : ?>
             <a href="<?php echo esc_url( $thumb_full ); ?>" class="glightbox" data-gallery="portfolio-gallery" style="display:block; width:100%; aspect-ratio:16/9; overflow:hidden; margin-bottom:3rem;">
-                <?php the_post_thumbnail( 'full', [ 'style' => 'width:100%; height:100%; object-fit:cover; display:block;' ] ); ?>
+                <img src="<?php echo esc_url( $thumb_full ); ?>"
+                     alt="<?php echo esc_attr( get_the_title() ); ?>"
+                     style="width:100%; height:100%; object-fit:cover; display:block;">
             </a>
         <?php endif; ?>
 
-        <?php if ( ! empty( $gallery_ids ) ) : ?>
+        <?php if ( ! empty( $gallery_urls ) ) : ?>
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr)); gap:1rem; margin-bottom:3rem;">
-            <?php foreach ( $gallery_ids as $gid ) :
-                $img_url  = wp_get_attachment_image_url( $gid, 'large' );
-                $img_full = wp_get_attachment_image_url( $gid, 'full' );
+            <?php foreach ( $gallery_urls as $img_url ) :
                 if ( ! $img_url ) continue;
             ?>
-                <a href="<?php echo esc_url( $img_full ?: $img_url ); ?>" class="glightbox" data-gallery="portfolio-gallery"
+                <a href="<?php echo esc_url( $img_url ); ?>" class="glightbox" data-gallery="portfolio-gallery"
                    style="display:block; aspect-ratio:4/3; overflow:hidden;">
                     <img src="<?php echo esc_url( $img_url ); ?>"
                          alt=""

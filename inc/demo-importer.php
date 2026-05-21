@@ -612,10 +612,8 @@ function dayanarc_register_upload_image( $file_path, $title = '' ) {
 
 // ── 2. Portfolio projects (15 projects — images already in wp-content/uploads/dayan projects/) ──
 // Deletes all existing portfolio posts, then creates 15 fresh ones.
-// Images are registered in-place from the uploads folder; no file copying needed.
+// Images are stored as direct URLs — no attachment creation, no file processing.
 function dayanarc_import_portfolio() {
-    @set_time_limit( 300 );
-
     $upload_dir   = wp_upload_dir();
     $projects_dir = $upload_dir['basedir'] . '/dayan projects/';
 
@@ -863,29 +861,35 @@ function dayanarc_import_portfolio() {
         update_post_meta( $post_id, '_portfolio_typology', $item['typology'] );
         update_post_meta( $post_id, '_portfolio_aesthetic', $item['aesthetic'] );
 
-        // Register images already present in the uploads folder
-        $folder_path = rtrim( $projects_dir . $item['folder'], '/' ) . '/';
+        // Build image URLs directly — no attachment creation, instant, full quality
+        $folder_path = $projects_dir . $item['folder'] . '/';
         if ( ! is_dir( $folder_path ) ) continue;
 
         $files = [];
         foreach ( scandir( $folder_path ) as $f ) {
             if ( strtolower( pathinfo( $f, PATHINFO_EXTENSION ) ) === 'webp' ) {
-                $files[] = $folder_path . $f;
+                $files[] = $f;
             }
         }
         sort( $files );
 
         if ( empty( $files ) ) continue;
 
-        $att_ids = [];
-        foreach ( $files as $fp ) {
-            $id = dayanarc_register_upload_image( $fp );
-            if ( $id ) $att_ids[] = $id;
-        }
+        $base_url = $upload_dir['baseurl'];
+        $cover_url = $base_url . '/' . implode( '/', array_map( 'rawurlencode',
+            [ 'dayan projects', $item['folder'], $files[0] ]
+        ) );
+        update_post_meta( $post_id, '_portfolio_cover_url', $cover_url );
 
-        if ( ! empty( $att_ids ) ) {
-            set_post_thumbnail( $post_id, $att_ids[0] );
-            update_post_meta( $post_id, '_portfolio_gallery', json_encode( array_slice( $att_ids, 1 ) ) );
+        // Gallery only when there are multiple images
+        if ( count( $files ) > 1 ) {
+            $gallery = [];
+            foreach ( array_slice( $files, 1 ) as $f ) {
+                $gallery[] = $base_url . '/' . implode( '/', array_map( 'rawurlencode',
+                    [ 'dayan projects', $item['folder'], $f ]
+                ) );
+            }
+            update_post_meta( $post_id, '_portfolio_gallery_urls', json_encode( $gallery ) );
         }
     }
 }

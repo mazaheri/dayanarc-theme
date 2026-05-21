@@ -32,7 +32,8 @@ $portfolio_query = new WP_Query( [
                 $location = get_post_meta( get_the_ID(), '_portfolio_location', true ) ?: 'Riyadh, KSA';
                 $num      = str_pad( ( $paged - 1 ) * 6 + $item_count + 1, 2, '0', STR_PAD_LEFT ) . '/' . str_pad( $total, 2, '0', STR_PAD_LEFT );
                 $excerpt  = has_excerpt() ? get_the_excerpt() : wp_trim_words( get_the_content(), 22, '...' );
-                $img      = get_the_post_thumbnail_url( get_the_ID(), 'medium_large' );
+                $img      = get_post_meta( get_the_ID(), '_portfolio_cover_url', true )
+                         ?: get_the_post_thumbnail_url( get_the_ID(), 'medium_large' );
                 $item_count++;
             ?>
                 <a href="<?php the_permalink(); ?>" style="display:block; text-decoration:none; color:inherit;">
