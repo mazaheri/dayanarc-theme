@@ -424,7 +424,7 @@ function dayanarc_reset_content() {
 
     // Clear all theme mods set by the importer
     foreach ( [
-        'header_logo_id', 'footer_logo_id',
+        'header_logo_id', 'footer_logo_id', 'inner_header_logo_id',
         'about_image_main', 'about_image_detail',
         'our_service_image_1', 'our_service_image_2',
         'about_video_url',
@@ -558,8 +558,9 @@ function dayanarc_import_images() {
 function dayanarc_import_logo_images() {
     $dir = get_template_directory() . '/content/images/';
     foreach ( [
-        [ 'file' => 'logos/header.png', 'key' => 'header_logo_id' ],
-        [ 'file' => 'logos/footer.png', 'key' => 'footer_logo_id' ],
+        [ 'file' => 'logos/header.png',       'key' => 'header_logo_id' ],
+        [ 'file' => 'logos/footer.png',        'key' => 'footer_logo_id' ],
+        [ 'file' => 'logos/header-inner.webp', 'key' => 'inner_header_logo_id' ],
     ] as $entry ) {
         $result = dayanarc_smart_import_file( $dir . $entry['file'] );
         if ( ! is_wp_error( $result ) ) set_theme_mod( $entry['key'], $result['id'] );

@@ -16,7 +16,7 @@
 
 <nav class="inner-nav" id="inner-nav">
     <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="inner-nav-logo" style="display:inline-block;">
-        <img src="<?php echo esc_url( wp_get_attachment_image_url( get_theme_mod( 'header_logo_id', 86 ), 'full' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>" style="height:100px; width:auto;">
+        <img src="<?php echo esc_url( wp_get_attachment_image_url( get_theme_mod( 'inner_header_logo_id', get_theme_mod( 'header_logo_id', 86 ) ), 'full' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>" style="height:100px; width:auto;">
     </a>
 
     <div class="inner-nav-desktop">
