@@ -247,8 +247,7 @@ function dayanarc_get_localized_data() {
         $page          = [];
 
         foreach ( $portfolio_cpt as $i => $post ) {
-            $thumb = get_post_meta( $post->ID, '_portfolio_cover_url', true )
-                  ?: get_the_post_thumbnail_url( $post->ID, 'large' );
+            $thumb = get_the_post_thumbnail_url( $post->ID, 'full' );
             if ( ! $thumb ) {
                 $fb_name = $fallback_imgs[ $i % count( $fallback_imgs ) ];
                 $ext     = str_contains( $fb_name, 'interior' ) ? '.jpg' : '.png';

@@ -10,11 +10,10 @@
         </h1>
 
         <?php
-        $pid          = get_the_ID();
-        $thumb_full   = get_post_meta( $pid, '_portfolio_cover_url', true )
-                     ?: get_the_post_thumbnail_url( $pid, 'full' );
-        $gallery_urls = json_decode( get_post_meta( $pid, '_portfolio_gallery_urls', true ), true );
-        $gallery_urls = is_array( $gallery_urls ) ? $gallery_urls : [];
+        $pid         = get_the_ID();
+        $gallery_ids = json_decode( get_post_meta( $pid, '_portfolio_gallery', true ), true );
+        $gallery_ids = is_array( $gallery_ids ) ? $gallery_ids : [];
+        $thumb_full  = get_the_post_thumbnail_url( $pid, 'full' );
         ?>
 
         <?php if ( $thumb_full ) : ?>
@@ -25,9 +24,10 @@
             </a>
         <?php endif; ?>
 
-        <?php if ( ! empty( $gallery_urls ) ) : ?>
+        <?php if ( ! empty( $gallery_ids ) ) : ?>
         <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr)); gap:1rem; margin-bottom:3rem;">
-            <?php foreach ( $gallery_urls as $img_url ) :
+            <?php foreach ( $gallery_ids as $gid ) :
+                $img_url = wp_get_attachment_image_url( $gid, 'full' );
                 if ( ! $img_url ) continue;
             ?>
                 <a href="<?php echo esc_url( $img_url ); ?>" class="glightbox" data-gallery="portfolio-gallery"

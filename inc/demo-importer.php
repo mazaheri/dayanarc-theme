@@ -121,6 +121,66 @@ function dayanarc_demo_page() {
                 <?php submit_button( 'Sync Selected', 'primary large', 'dayanarc_sync_selected', false ); ?>
             </form>
 
+            <!-- ── Import Portfolio Images (AJAX) ──────────────────────────── -->
+            <div style="margin-top:2rem; padding:1rem; background:#f0f6fc; border-left:4px solid #0073aa;">
+                <h3 style="margin:0 0 .4rem;">Import Portfolio Images</h3>
+                <p style="color:#555;font-size:13px;margin:0 0 .75rem;">
+                    Registers portfolio images as real WordPress attachments (featured image + gallery).<br>
+                    Run this <strong>after</strong> syncing Portfolio Projects. Processes one project per request to avoid timeouts.
+                </p>
+                <button id="da-img-import-btn" class="button button-primary">Start Image Import</button>
+                <div id="da-img-progress" style="margin-top:.75rem;font-size:13px;color:#333;display:none;">
+                    <div id="da-img-bar-wrap" style="background:#ddd;border-radius:3px;overflow:hidden;height:10px;margin-bottom:.5rem;">
+                        <div id="da-img-bar" style="background:#0073aa;height:10px;width:0%;transition:width .3s;"></div>
+                    </div>
+                    <div id="da-img-log" style="max-height:140px;overflow-y:auto;font-family:monospace;font-size:12px;background:#fff;padding:.5rem;border:1px solid #ddd;border-radius:3px;"></div>
+                </div>
+            </div>
+
+            <script>
+            (function(){
+                var btn   = document.getElementById('da-img-import-btn');
+                var prog  = document.getElementById('da-img-progress');
+                var bar   = document.getElementById('da-img-bar');
+                var log   = document.getElementById('da-img-log');
+                var nonce = '<?php echo esc_js( wp_create_nonce( 'dayanarc_img_chunk_nonce' ) ); ?>';
+                var total = 15;
+                var done  = 0;
+
+                function addLog(msg){ log.innerHTML += msg + '<br>'; log.scrollTop = log.scrollHeight; }
+                function setBar(pct){ bar.style.width = pct + '%'; }
+
+                function runChunk(){
+                    fetch(ajaxurl, {
+                        method:'POST',
+                        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+                        body:'action=dayanarc_portfolio_img_chunk&nonce='+encodeURIComponent(nonce)
+                    })
+                    .then(function(r){ return r.json(); })
+                    .then(function(r){
+                        if(!r.success){ addLog('❌ Error: '+(r.data||'unknown')); btn.disabled=false; btn.textContent='Retry'; return; }
+                        var d = r.data;
+                        if(d.skipped){ addLog('⚠️ Skipped — '+d.message); }
+                        else { done++; addLog('✅ '+(d.message||d.title)); }
+                        setBar(Math.min(100, Math.round((done/total)*100)));
+                        if(d.done){ addLog('<strong>🎉 All done! All portfolio images imported.</strong>'); btn.disabled=false; btn.textContent='Done'; return; }
+                        runChunk();
+                    })
+                    .catch(function(e){ addLog('❌ Network error: '+e); btn.disabled=false; btn.textContent='Retry'; });
+                }
+
+                btn.addEventListener('click', function(){
+                    btn.disabled = true;
+                    btn.textContent = 'Importing…';
+                    prog.style.display = 'block';
+                    log.innerHTML = '';
+                    done = 0;
+                    setBar(0);
+                    runChunk();
+                });
+            })();
+            </script>
+
             <!-- ── Sync all ─────────────────────────────────────────────────── -->
             <details style="margin-top:2rem;">
                 <summary style="cursor:pointer;font-weight:600;color:#1a5c2e;font-size:14px;">▶ Sync all components at once</summary>
@@ -305,7 +365,6 @@ function dayanarc_run_import() {
 // Called before a fresh reimport so nothing is treated as "already done".
 function dayanarc_reset_content() {
     // Delete all importer-managed attachments (smart-import and legacy)
-    // This forces a clean re-import of every image on the next run.
     $managed = get_posts( [
         'post_type'      => 'attachment',
         'post_status'    => 'any',
@@ -315,10 +374,22 @@ function dayanarc_reset_content() {
             'relation' => 'OR',
             [ 'key' => '_source_file_path',    'compare' => 'EXISTS' ],
             [ 'key' => '_dayanarc_source_file', 'compare' => 'EXISTS' ],
+            [ 'key' => '_dayan_upload_path',    'compare' => 'EXISTS' ],
         ] ],
     ] );
     foreach ( $managed as $att_id ) {
         wp_delete_attachment( $att_id, true );
+    }
+
+    // Clear _portfolio_thumb_imported so AJAX importer starts fresh
+    $portfolio_posts = get_posts( [
+        'post_type'      => 'portfolio',
+        'post_status'    => 'any',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+    ] );
+    foreach ( $portfolio_posts as $pid ) {
+        delete_post_meta( $pid, '_portfolio_thumb_imported' );
     }
 
     // Clear all option IDs stored by the importer
@@ -610,13 +681,10 @@ function dayanarc_register_upload_image( $file_path, $title = '' ) {
     return (int) $att_id;
 }
 
-// ── 2. Portfolio projects (15 projects — images already in wp-content/uploads/dayan projects/) ──
-// Deletes all existing portfolio posts, then creates 15 fresh ones.
-// Images are stored as direct URLs — no attachment creation, no file processing.
+// ── 2. Portfolio projects (15 projects) ──────────────────────────────────────
+// Creates posts with text only; stores _portfolio_folder for the AJAX image importer.
+// Images are imported separately via dayanarc_ajax_portfolio_img_chunk().
 function dayanarc_import_portfolio() {
-    $upload_dir   = wp_upload_dir();
-    $projects_dir = $upload_dir['basedir'] . '/dayan projects/';
-
     // Delete all existing portfolio posts before creating fresh ones
     $existing = get_posts( [
         'post_type'      => 'portfolio',
@@ -854,44 +922,126 @@ function dayanarc_import_portfolio() {
         if ( is_wp_error( $post_id ) || ! $post_id ) continue;
 
         update_option( $item['option'], $post_id );
-        update_post_meta( $post_id, '_portfolio_location', $item['location'] );
-        update_post_meta( $post_id, '_portfolio_year',     $item['year'] );
-        update_post_meta( $post_id, '_portfolio_concept',  $item['scope'] );
-        update_post_meta( $post_id, '_portfolio_palette',  $item['materials'] );
-        update_post_meta( $post_id, '_portfolio_typology', $item['typology'] );
+        update_post_meta( $post_id, '_portfolio_location',  $item['location'] );
+        update_post_meta( $post_id, '_portfolio_year',      $item['year'] );
+        update_post_meta( $post_id, '_portfolio_concept',   $item['scope'] );
+        update_post_meta( $post_id, '_portfolio_palette',   $item['materials'] );
+        update_post_meta( $post_id, '_portfolio_typology',  $item['typology'] );
         update_post_meta( $post_id, '_portfolio_aesthetic', $item['aesthetic'] );
 
-        // Build image URLs directly — no attachment creation, instant, full quality
-        $folder_path = $projects_dir . $item['folder'] . '/';
-        if ( ! is_dir( $folder_path ) ) continue;
+        // Store folder name so the AJAX image importer knows where to find the files
+        update_post_meta( $post_id, '_portfolio_folder', $item['folder'] );
+    }
+}
 
-        $files = [];
-        foreach ( scandir( $folder_path ) as $f ) {
-            if ( strtolower( pathinfo( $f, PATHINFO_EXTENSION ) ) === 'webp' ) {
-                $files[] = $f;
-            }
-        }
-        sort( $files );
+// ── AJAX: import images for one portfolio project at a time ──────────────────
+// Called by the JS loop on the Import Demo page.
+// Finds the next project without imported images, registers its files as
+// proper WP attachments, sets the featured image, and saves the gallery.
+add_action( 'wp_ajax_dayanarc_portfolio_img_chunk', 'dayanarc_ajax_portfolio_img_chunk' );
+function dayanarc_ajax_portfolio_img_chunk() {
+    check_ajax_referer( 'dayanarc_img_chunk_nonce', 'nonce' );
+    if ( ! current_user_can( 'manage_options' ) ) wp_send_json_error( 'Unauthorized', 403 );
 
-        if ( empty( $files ) ) continue;
+    require_once ABSPATH . 'wp-admin/includes/image.php';
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+    require_once ABSPATH . 'wp-admin/includes/media.php';
 
-        $base_url = $upload_dir['baseurl'];
-        $cover_url = $base_url . '/' . implode( '/', array_map( 'rawurlencode',
-            [ 'dayan projects', $item['folder'], $files[0] ]
-        ) );
-        update_post_meta( $post_id, '_portfolio_cover_url', $cover_url );
+    @set_time_limit( 120 );
 
-        // Gallery only when there are multiple images
-        if ( count( $files ) > 1 ) {
-            $gallery = [];
-            foreach ( array_slice( $files, 1 ) as $f ) {
-                $gallery[] = $base_url . '/' . implode( '/', array_map( 'rawurlencode',
-                    [ 'dayan projects', $item['folder'], $f ]
-                ) );
-            }
-            update_post_meta( $post_id, '_portfolio_gallery_urls', json_encode( $gallery ) );
+    $upload_dir   = wp_upload_dir();
+    $projects_dir = $upload_dir['basedir'] . '/dayan projects/';
+
+    // Find the next post that has a folder but no thumbnail yet
+    $posts = get_posts( [
+        'post_type'      => 'portfolio',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'meta_query'     => [
+            [ 'key' => '_portfolio_folder', 'compare' => 'EXISTS' ],
+            [ 'key' => '_portfolio_thumb_imported', 'compare' => 'NOT EXISTS' ],
+        ],
+    ] );
+
+    if ( empty( $posts ) ) {
+        wp_send_json_success( [ 'done' => true, 'message' => 'All images imported.' ] );
+    }
+
+    $post_id = (int) $posts[0];
+    $folder  = get_post_meta( $post_id, '_portfolio_folder', true );
+    $title   = get_the_title( $post_id );
+
+    $folder_path = $projects_dir . $folder . '/';
+    if ( ! is_dir( $folder_path ) ) {
+        // Mark as done so the loop doesn't get stuck
+        update_post_meta( $post_id, '_portfolio_thumb_imported', '1' );
+        wp_send_json_success( [
+            'done'    => false,
+            'skipped' => true,
+            'title'   => $title,
+            'message' => "Folder not found: $folder",
+        ] );
+    }
+
+    $files = [];
+    foreach ( scandir( $folder_path ) as $f ) {
+        if ( strtolower( pathinfo( $f, PATHINFO_EXTENSION ) ) === 'webp' ) {
+            $files[] = $f;
         }
     }
+    sort( $files );
+
+    if ( empty( $files ) ) {
+        update_post_meta( $post_id, '_portfolio_thumb_imported', '1' );
+        wp_send_json_success( [
+            'done'    => false,
+            'skipped' => true,
+            'title'   => $title,
+            'message' => "No WebP files in folder: $folder",
+        ] );
+    }
+
+    // Register cover image as WP attachment and set as featured image
+    $cover_path = $folder_path . $files[0];
+    $cover_id   = dayanarc_register_upload_image( $cover_path, $title );
+    if ( $cover_id ) {
+        set_post_thumbnail( $post_id, $cover_id );
+    }
+
+    // Register remaining images as gallery
+    $gallery_ids = [];
+    foreach ( array_slice( $files, 1 ) as $f ) {
+        $img_id = dayanarc_register_upload_image( $folder_path . $f );
+        if ( $img_id ) {
+            $gallery_ids[] = $img_id;
+        }
+    }
+    if ( ! empty( $gallery_ids ) ) {
+        update_post_meta( $post_id, '_portfolio_gallery', json_encode( $gallery_ids ) );
+    }
+
+    update_post_meta( $post_id, '_portfolio_thumb_imported', '1' );
+
+    // Count remaining
+    $remaining = count( get_posts( [
+        'post_type'      => 'portfolio',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'fields'         => 'ids',
+        'meta_query'     => [
+            [ 'key' => '_portfolio_folder', 'compare' => 'EXISTS' ],
+            [ 'key' => '_portfolio_thumb_imported', 'compare' => 'NOT EXISTS' ],
+        ],
+    ] ) );
+
+    wp_send_json_success( [
+        'done'      => ( $remaining === 0 ),
+        'title'     => $title,
+        'images'    => count( $files ),
+        'remaining' => $remaining,
+        'message'   => "Imported " . count( $files ) . " image(s) for: $title",
+    ] );
 }
 
 // ── 3. Blog posts (journal — 3 posts) ────────────────────────────────────────
