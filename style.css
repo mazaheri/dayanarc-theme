@@ -1427,19 +1427,6 @@ html.admin-bar .inner-nav {
     flex-shrink: 0;
     transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.about-img-small {
-    width: 35%;
-    height: 55%;
-    flex-shrink: 0;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-/* When hovering the small image, swap sizes — full size exchange */
-.about-images-wrapper:has(.about-img-small:hover) .about-img-big {
-    width: 35%;
-}
-.about-images-wrapper:has(.about-img-small:hover) .about-img-small {
-    width: 62%;
-}
 
 /* ── Video play button ───────────────────────────────────────────────────── */
 .about-video-trigger {
@@ -1655,21 +1642,6 @@ html.admin-bar .inner-nav {
         height: auto !important;
         aspect-ratio: 9 / 16;
         transition: none !important;
-    }
-
-    .about-img-small {
-        display: block !important;
-        width: 100% !important;
-        height: auto !important;
-        aspect-ratio: 9 / 16;
-        margin-top: 0 !important;
-        transition: none !important;
-    }
-
-    /* Disable the size-swap hover effect on mobile */
-    .about-images-wrapper:has(.about-img-small:hover) .about-img-big,
-    .about-images-wrapper:has(.about-img-small:hover) .about-img-small {
-        width: 100% !important;
     }
 
     /* Portfolio cards: cap heights on phones */

@@ -112,7 +112,7 @@
             $detail_img  = get_theme_mod( 'about_image_detail', 'https://images.unsplash.com/photo-1631679706909-1844bbd07221?q=80&w=800&auto=format&fit=crop' );
             $thumb_src   = $video_thumb ?: $main_img;
             ?>
-            <div class="col-span-1 lg:col-span-7 about-images-wrapper items-start justify-end h-[300px] md:h-[600px] lg:h-[700px] relative lg:-mt-16">
+            <div class="col-span-1 lg:col-span-7 about-images-wrapper items-start justify-center h-[300px] md:h-[600px] lg:h-[700px] relative lg:-mt-16">
 
                 <!-- Big image / video thumbnail — play button always visible -->
                 <div class="about-img-big curtain-container">
@@ -132,11 +132,6 @@
                         </div>
                     </a>
                 </div>
-
-                <!-- Small detail image — opens in lightbox -->
-                <a href="<?php echo esc_url( $detail_img ); ?>" class="about-img-small curtain-container glightbox hidden lg:block" data-gallery="about-media" data-type="image" style="margin-top:6rem;">
-                    <img src="<?php echo esc_url( $detail_img ); ?>" alt="Interior detail" class="curtain-img" style="transition-delay: 500ms, 500ms;">
-                </a>
 
             </div>
         </div>
