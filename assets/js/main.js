@@ -175,7 +175,7 @@
         container.innerHTML =
             '<div class="grid grid-cols-1 lg:grid-cols-2 gap-x-10 gap-y-6">' +
                 '<div class="order-2 lg:order-1">' +
-                    '<div class="curtain-container" style="aspect-ratio:4/3;overflow:hidden;background:#f5f4f2;">' +
+                    '<div class="curtain-container" style="aspect-ratio:4/3;overflow:hidden;">' +
                         '<img src="' + escHtml(data.img) + '" class="curtain-img-portfolio active" alt="' + escHtml(data.title) + '" style="width:100%;height:100%;object-fit:contain;">' +
                     '</div>' +
                 '</div>' +
