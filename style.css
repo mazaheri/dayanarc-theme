@@ -266,7 +266,7 @@ body::-webkit-scrollbar {
 }
 
 .nav-link {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     transition: all 0.3s ease;
@@ -962,7 +962,7 @@ body.inner-page {
 
 .inner-nav-link {
     color: #231f20;
-    font-size: 11px;
+    font-size: 13px;
 }
 
 .inner-menu-btn {
