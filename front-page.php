@@ -250,14 +250,14 @@
                     $img_d     = $img_delays[ $svc_i ] ?? 'delay-300';
                     ?>
             <a href="<?php echo esc_url( get_permalink() ); ?>" class="lg:col-span-3 card-wrapper <?php echo esc_attr( $card_d ); ?><?php echo $svc_i >= 3 ? ' card-row2' : ''; ?>" style="text-decoration:none; color:inherit; display:block;">
-                <div class="service-card group bg-white text-[#231f20] p-5 lg:p-6 relative cursor-pointer shadow-2xl">
+                <div class="service-card group text-[#231f20] p-5 lg:p-6 relative cursor-pointer shadow-2xl" style="background-color: #f6f0da;">
                     <div class="flex justify-between items-start w-full">
                         <span class="text-[11px] text-[#585058] tracking-widest"><?php echo esc_html( $svc_num ); ?></span>
                         <div class="img-container curtain-container">
                             <img src="<?php echo esc_url( $svc_thumb ); ?>" alt="<?php echo esc_attr( get_the_title() ); ?>" class="curtain-img <?php echo esc_attr( $img_d ); ?> object-cover w-full h-full">
                         </div>
                     </div>
-                    <div class="mt-auto w-full pt-6 bg-white relative z-10">
+                    <div class="mt-auto w-full pt-6 relative z-10" style="background-color: #f6f0da;">
                         <h3 class="title-text text-2xl lg:text-3xl text-[#231f20] tracking-tight"><?php echo esc_html( strtoupper( get_the_title() ) ); ?></h3>
                         <div class="card-content-grid">
                             <div class="card-inner-content">
@@ -312,12 +312,12 @@
 
                 <div class="relative md:absolute md:bottom-12 md:right-0 flex flex-col items-end gap-3 z-20 mt-6 md:mt-0">
                     <div class="flex gap-3">
-                        <button onclick="changePage(-1)" class="w-10 h-10 border border-[#e5e5e5] rounded-full flex items-center justify-center hover:border-[#231f20] transition-all bg-white shadow-sm">
+                        <button onclick="changePage(-1)" class="w-10 h-10 border border-[#e5e5e5] rounded-full flex items-center justify-center hover:border-[#231f20] transition-all shadow-sm" style="background-color: #f6f0da;">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M19 12H5M5 12L12 19M5 12L12 5"/>
                             </svg>
                         </button>
-                        <button onclick="changePage(1)" class="w-10 h-10 border border-[#e5e5e5] rounded-full flex items-center justify-center hover:border-[#231f20] transition-all bg-white shadow-sm">
+                        <button onclick="changePage(1)" class="w-10 h-10 border border-[#e5e5e5] rounded-full flex items-center justify-center hover:border-[#231f20] transition-all shadow-sm" style="background-color: #f6f0da;">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M5 12H19M19 12L12 5M19 12L12 19"/>
                             </svg>

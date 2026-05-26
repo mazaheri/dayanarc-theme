@@ -127,7 +127,7 @@ $form_id = dayanarc_get_contact_form_id();
                     <div style="position:relative;">
                         <button class="pin-toggle" onclick="dayanarc_togglePin(this)" aria-label="Germany"
                                 style="background:none; border:none; cursor:pointer; padding:0;">
-                            <span style="position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#231f20; background:#fff; border:1px solid #d1ccc8; padding:2px 8px; white-space:nowrap; margin-bottom:4px; letter-spacing:0.08em;">GERMANY</span>
+                            <span style="position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#231f20; background:#f6f0da; border:1px solid #d1ccc8; padding:2px 8px; white-space:nowrap; margin-bottom:4px; letter-spacing:0.08em;">GERMANY</span>
                             <svg width="26" height="26" fill="#231f20" viewBox="0 0 20 20" style="display:block; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
                                 <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                             </svg>
@@ -153,7 +153,7 @@ $form_id = dayanarc_get_contact_form_id();
                     <div style="position:relative;">
                         <button class="pin-toggle" onclick="dayanarc_togglePin(this)" aria-label="Georgia"
                                 style="background:none; border:none; cursor:pointer; padding:0;">
-                            <span style="position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#231f20; background:#fff; border:1px solid #d1ccc8; padding:2px 8px; white-space:nowrap; margin-bottom:4px; letter-spacing:0.08em;">GEORGIA</span>
+                            <span style="position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#231f20; background:#f6f0da; border:1px solid #d1ccc8; padding:2px 8px; white-space:nowrap; margin-bottom:4px; letter-spacing:0.08em;">GEORGIA</span>
                             <svg width="26" height="26" fill="#231f20" viewBox="0 0 20 20" style="display:block; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
                                 <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                             </svg>
@@ -179,7 +179,7 @@ $form_id = dayanarc_get_contact_form_id();
                     <div style="position:relative;">
                         <button class="pin-toggle" onclick="dayanarc_togglePin(this)" aria-label="Dubai"
                                 style="background:none; border:none; cursor:pointer; padding:0;">
-                            <span style="position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#231f20; background:#fff; border:1px solid #d1ccc8; padding:2px 8px; white-space:nowrap; margin-bottom:4px; letter-spacing:0.08em;">DUBAI</span>
+                            <span style="position:absolute; bottom:100%; left:50%; transform:translateX(-50%); font-size:9px; font-weight:700; color:#231f20; background:#f6f0da; border:1px solid #d1ccc8; padding:2px 8px; white-space:nowrap; margin-bottom:4px; letter-spacing:0.08em;">DUBAI</span>
                             <svg width="26" height="26" fill="#231f20" viewBox="0 0 20 20" style="display:block; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.25));">
                                 <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                             </svg>
