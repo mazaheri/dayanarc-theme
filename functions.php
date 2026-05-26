@@ -1007,6 +1007,24 @@ add_action( 'customize_register', function ( $wp_customize ) {
         'panel'    => 'dayanarc_general',
         'priority' => 5,
     ] );
+    // Logo image controls
+    foreach ( [
+        'header_logo_id'       => [ 'label' => 'Homepage Header Logo', 'default' => 86 ],
+        'footer_logo_id'       => [ 'label' => 'Footer Logo',           'default' => 87 ],
+        'inner_header_logo_id' => [ 'label' => 'Inner Pages Logo',      'default' => 86 ],
+    ] as $key => $field ) {
+        $wp_customize->add_setting( $key, [
+            'default'           => $field['default'],
+            'sanitize_callback' => 'absint',
+            'transport'         => 'refresh',
+        ] );
+        $wp_customize->add_control( new WP_Customize_Media_Control( $wp_customize, $key, [
+            'label'     => $field['label'],
+            'section'   => 'dayanarc_brand',
+            'mime_type' => 'image',
+        ] ) );
+    }
+
     $wp_customize->add_setting( 'footer_tagline', [
         'default'           => 'Bringing together creativity, expertise, and passion to deliver exceptional design solutions.',
         'sanitize_callback' => 'sanitize_textarea_field',
