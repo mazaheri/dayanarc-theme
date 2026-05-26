@@ -17,6 +17,20 @@
         });
     }
 
+    // ── Mobile header: transparent on hero, dark after scroll ──────────────────
+    var mobileHeader = document.querySelector('.hero-section .content-layer > header');
+    if (mobileHeader && window.innerWidth < 768) {
+        function updateMobileHeader() {
+            var heroHeight = document.querySelector('.hero-section') ? document.querySelector('.hero-section').offsetHeight : window.innerHeight;
+            if (window.scrollY > heroHeight * 0.15) {
+                mobileHeader.classList.add('header-dark');
+            } else {
+                mobileHeader.classList.remove('header-dark');
+            }
+        }
+        window.addEventListener('scroll', updateMobileHeader, { passive: true });
+    }
+
     // ── Services shine ──────────────────────────────────────────────────────────
     const servicesSection = document.getElementById('services-section');
     const servicesShine   = document.getElementById('services-shine');
