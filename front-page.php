@@ -74,7 +74,7 @@
 
     <!-- ===== SECTION 2: ABOUT ===== -->
     <div class="section about-section relative w-full max-w-[1440px] mx-auto px-6 md:px-16 lg:px-20 pt-32 pb-20 flex flex-col justify-center" id="about">
-        <div class="absolute top-10 md:top-20 left-6 md:left-16 lg:left-20 text-[10px] tracking-[0.15em] text-[#585058] uppercase font-medium">
+        <div class="absolute top-10 md:top-20 left-6 md:left-16 lg:left-20 text-[11px] tracking-[0.15em] text-[#585058] uppercase font-semibold">
             <span class="reveal-mask block"><span class="reveal-text delay-100">ABOUT US</span></span>
         </div>
 
@@ -140,7 +140,7 @@
     <!-- ===== SECTION 3: OUR SERVICE ===== -->
     <div class="section our-service-section relative w-full max-w-[1440px] mx-auto px-6 md:px-16 lg:px-20 pt-24 pb-16 flex flex-col justify-center" id="ourservice">
 
-        <div class="absolute top-10 md:top-20 left-6 md:left-16 lg:left-20 text-[10px] tracking-[0.15em] text-[#585058] uppercase font-medium">
+        <div class="absolute top-10 md:top-20 left-6 md:left-16 lg:left-20 text-[11px] tracking-[0.15em] text-[#585058] uppercase font-semibold">
             <span class="reveal-mask block"><span class="reveal-text delay-100">WHAT WE DO</span></span>
         </div>
 
@@ -187,7 +187,7 @@
         <div class="services-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 lg:gap-8 w-full max-w-[1600px] mx-auto">
             <div class="lg:col-span-3 flex flex-col pt-4">
                 <span class="reveal-mask block mb-6">
-                    <span class="reveal-text text-[10px] tracking-[0.2em] text-gray-400 uppercase font-medium">SERVICES</span>
+                    <span class="reveal-text text-[11px] tracking-[0.2em] text-gray-400 uppercase font-semibold">SERVICES</span>
                 </span>
                 <?php
                 $sh1 = get_theme_mod( 'services_heading_line1', 'CORE DESIGN' );
@@ -286,7 +286,7 @@
         <div class="relative w-full max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16 py-16 lg:py-20 flex flex-col justify-center">
             <div class="text-center mb-12 lg:mb-16">
                 <span class="reveal-mask block mb-4">
-                    <span class="reveal-text text-[10px] tracking-[0.2em] text-[#585058] uppercase font-medium">PROJECTS</span>
+                    <span class="reveal-text text-[11px] tracking-[0.2em] text-[#585058] uppercase font-semibold">PROJECTS</span>
                 </span>
                 <?php $ph5 = get_theme_mod( 'portfolio_heading', 'OUR WORKS' ); ?>
                 <h1 class="title-text text-3xl md:text-4xl lg:text-5xl leading-tight text-[#231f20]">
@@ -330,7 +330,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
                 <div class="flex flex-col">
                     <span class="reveal-mask block mb-6">
-                        <span class="reveal-text delay-100 text-[10px] tracking-[0.15em] text-[#585058] uppercase font-medium">CONTACT US</span>
+                        <span class="reveal-text delay-100 text-[11px] tracking-[0.15em] text-[#585058] uppercase font-semibold">CONTACT US</span>
                     </span>
                     <?php
                     $fch1 = get_theme_mod( 'fp_contact_heading_line1', "LET'S BEGIN A" );
@@ -381,7 +381,7 @@
         <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 pt-10 pb-14">
             <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 md:gap-0 mb-8">
                 <div>
-                    <span class="text-[10px] tracking-[0.2em] text-[#585058] uppercase font-medium block mb-2">JOURNAL</span>
+                    <span class="text-[11px] tracking-[0.2em] text-[#585058] uppercase font-semibold block mb-2">JOURNAL</span>
                     <?php $jh7 = get_theme_mod( 'journal_heading', 'DESIGN INSIGHTS' ); ?>
                     <h2 class="title-text text-3xl md:text-4xl text-[#231f20] leading-tight uppercase tracking-tight">
                         <?php echo esc_html( $jh7 ); ?>
