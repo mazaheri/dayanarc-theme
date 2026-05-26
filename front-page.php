@@ -405,7 +405,7 @@
             <div class="w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-10 mb-12">
 
                 <!-- Col 1: Logo + social icons -->
-                <div class="flex flex-col justify-between">
+                <div class="flex flex-col gap-6">
                     <a href="<?php echo esc_url( home_url( '/' ) ); ?>" style="display:inline-block; text-decoration:none;">
                         <img src="<?php echo esc_url( wp_get_attachment_image_url( get_theme_mod( 'footer_logo_id', 87 ), 'full' ) ); ?>" alt="<?php bloginfo( 'name' ); ?>" class="footer-logo-img" style="height:195px; width:auto;">
                     </a>
