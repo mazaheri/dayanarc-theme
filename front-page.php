@@ -325,7 +325,7 @@
     </div>
 
     <!-- ===== SECTION 6: CONTACT ===== -->
-    <div class="section" id="contact">
+    <div class="section contact-section" id="contact">
         <div class="relative w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 h-full flex flex-col justify-center py-16">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
                 <div class="flex flex-col">

@@ -600,6 +600,9 @@ header {
 }
 
 /* === BLOG SECTION === */
+#journal-section {
+    background-color: #f6f0da;
+}
 .blog-section {
     background-color: #f6f0da;
     color: #231f20;
